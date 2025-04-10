@@ -1,8 +1,9 @@
 import React from "react";
-import { DefaultButton } from "@fluentui/react";
+import { Button } from "@fluentui/react-components";
 import { signOut } from "next-auth/react";
 import SettingsLayout from "../../components/settings/layout";
 import { getLayout } from "../../components/home/layout";
+import { ArrowImportRegular } from "@fluentui/react-icons";
 
 interface Props {}
 
@@ -14,15 +15,11 @@ function Account({}: Props) {
     <SettingsLayout
       title="账户"
       tailElem={
-        <DefaultButton
-          onClick={onClickSignout}
-          iconProps={{ iconName: "Leave" }}
-        >
+        <Button onClick={onClickSignout} icon={<ArrowImportRegular />} iconPosition="after">
           退出登录
-        </DefaultButton>
+        </Button>
       }
-    >
-    </SettingsLayout>
+    ></SettingsLayout>
   );
 }
 

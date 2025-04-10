@@ -1,10 +1,29 @@
 import React, { useMemo, useContext } from "react";
 import { useRouter } from "next/router";
 import qs from "query-string";
-import { Stack, Text, INavLink, Nav, IRenderFunction } from "@fluentui/react";
-
+import { makeStyles, mergeClasses, Tooltip } from "@fluentui/react-components";
+import {
+  AppItem,
+  Hamburger,
+  NavCategory,
+  NavCategoryItem,
+  NavDivider,
+  NavDrawer,
+  NavDrawerBody,
+  NavDrawerHeader,
+  NavItem,
+  NavSectionHeader,
+  NavSubItem,
+  NavSubItemGroup,
+} from "@fluentui/react-nav-preview";
+import {
+  Folder20Filled,
+  Folder20Regular,
+  bundleIcon,
+  SettingsRegular,
+} from "@fluentui/react-icons";
 import SubscriptionNavTreeBuilder from "../../utils/subscriptionNavTreeBuilder";
-import { GlobalNavigationCtx } from './../home/layout';
+import { GlobalNavigationCtx } from "./../home/layout";
 import {
   useStreamPreferencesQuery,
   useSubscriptionsListQuery,
@@ -16,9 +35,22 @@ export interface Props {
   className?: string;
 }
 
+const useStyles = makeStyles({
+  root: {},
+  nav: {},
+  navItem: {
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
+  },
+});
+
+const Folder = bundleIcon(Folder20Filled, Folder20Regular);
+
 const SourcesPanel = ({ className, userId }: Props) => {
   const router = useRouter();
-  const { setIsOpen } = useContext(GlobalNavigationCtx);
+  const classes = useStyles();
+  const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
   const streamPreferencesQuery = useStreamPreferencesQuery();
   const folderQuery = useFolderQuery();
   const subscriptionsListQuery = useSubscriptionsListQuery();
@@ -46,44 +78,70 @@ const SourcesPanel = ({ className, userId }: Props) => {
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
-    item?: INavLink
+    item?: { key: string }
   ) => {
     e?.preventDefault();
     const query = qs.stringify({ ...router.query, streamId: item?.key });
     const href = `/?${query}`;
     router.push(href, href, { shallow: true });
-    setIsOpen(false);
-  };
-
-  const onRenderLink: IRenderFunction<INavLink> = (props, defaultRender) => {
-    if (!props) return null;
-
-    return (
-      <Stack horizontal verticalAlign="center" className="w-full mx-2">
-        <Text block nowrap className="flex-1 text-left">
-          {props.name}
-        </Text>
-        {props.type !== "feed" && props.unreadCount !== 0 ? (
-          <span className="text-sm text-gray-400">{props.unreadCount}</span>
-        ) : null}
-      </Stack>
-    );
+    // setIsOpen(false);
   };
 
   return (
-    <Stack className={`${className} min-h-0`}>
-      <Nav
-        styles={{
-          root: "px-2",
-          chevronButton: "left-auto right-4",
-          link: "pl-4 pr-12",
-        }}
-        groups={groups}
-        onRenderLink={onRenderLink}
-        onLinkClick={handleLinkClick}
-        onRenderGroupHeader={() => null}
-      />
-    </Stack>
+    <NavDrawer
+      defaultSelectedValue="2"
+      defaultSelectedCategoryValue=""
+      open={isOpen}
+      type="inline"
+      className={mergeClasses(classes.root, className)}
+    >
+      <NavDrawerHeader>
+        <Tooltip content="Close Navigation" relationship="label">
+          <Hamburger onClick={() => setIsOpen(!isOpen)} />
+        </Tooltip>
+      </NavDrawerHeader>
+
+      <NavDrawerBody>
+        {groups?.map((group, groupIndex) => (
+          <React.Fragment key={groupIndex}>
+            <NavSectionHeader>订阅源</NavSectionHeader>
+            {group.links.map((link, linkIndex) =>
+              link.type === "feed" ? (
+                <NavItem
+                  key={linkIndex}
+                  icon={<Folder />}
+                  value={link.key!}
+                  onClick={(e) => handleLinkClick(e, link)}
+                >
+                  {link.name}
+                </NavItem>
+              ) : link.type === "folder" ? (
+                <NavCategory key={linkIndex} value={link.key!}>
+                  <NavCategoryItem icon={<Folder />}>
+                    {link.name}
+                  </NavCategoryItem>
+                  <NavSubItemGroup>
+                    {link.links?.map((subLink, subLinkIndex) => (
+                      <NavSubItem
+                        key={subLinkIndex}
+                        value={subLink.key!}
+                        onClick={(e) => handleLinkClick(e, subLink)}
+                      >
+                        {subLink.name}
+                      </NavSubItem>
+                    ))}
+                  </NavSubItemGroup>
+                </NavCategory>
+              ) : null
+            )}
+          </React.Fragment>
+        ))}
+      </NavDrawerBody>
+      <NavDivider />
+      <AppItem icon={<SettingsRegular />} as="a" href="/settings">
+        设置
+      </AppItem>
+    </NavDrawer>
   );
 };
 

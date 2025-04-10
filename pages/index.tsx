@@ -7,19 +7,8 @@ import React, {
   useContext,
 } from "react";
 import { useRouter } from "next/router";
-import {
-  IconButton,
-  Spinner,
-  Stack,
-  StackItem,
-  List,
-  Image,
-  ImageFit,
-  Text,
-  DefaultButton,
-  IList,
-  OverflowSet,
-} from "@fluentui/react";
+import { Button, Spinner, Text, Image, List, ListItem, mergeClasses, makeStyles } from "@fluentui/react-components";
+import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
 import { Waypoint } from "react-waypoint";
 import { produce } from "immer";
 import Head from "next/head";
@@ -40,8 +29,10 @@ import { GlobalSettingsCtx } from "./_app";
 import { getLayout } from "../components/home/layout";
 import { GlobalNavigationCtx } from "./../components/home/layout";
 import Swipeout from "../components/swipeout";
+import { Circle20Filled, Circle20Regular, Dismiss20Regular, WindowNew20Regular } from "@fluentui/react-icons";
+import { Hamburger } from "@fluentui/react-nav-preview";
 
-interface Props {}
+interface Props { }
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
@@ -55,7 +46,17 @@ const getQueryParma = (query: string | string[] | undefined) => {
   }
 };
 
-function Home({}: Props) {
+const useStyles = makeStyles({
+  articlePanelOpen: {
+    transform: "translateX(0px)"
+  },
+  articlePanelClose: {
+    transform: "translateX(100%)"
+  }
+});
+
+function Home({ }: Props) {
+  const classes = useStyles()
   const {
     globalSettings: { showFeedThumbnail },
   } = useContext(GlobalSettingsCtx);
@@ -79,7 +80,7 @@ function Home({}: Props) {
   });
   const streamContentQuery = useStreamContent(streamContentQueryKey);
   const articleScrollContainerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<IList>(null);
+  const listRef = useRef<any>(null);
   const queryClient = useQueryClient();
 
   const streamContentListItems = useMemo(() => {
@@ -129,7 +130,7 @@ function Home({}: Props) {
           })
         );
         await server.inoreader.markArticleAsRead(target.id, target.isRead);
-      } catch (error) {}
+      } catch (error) { }
     },
     [queryClient, streamContentQueryKey]
   );
@@ -170,149 +171,11 @@ function Home({}: Props) {
           })
         );
         await server.inoreader.markArticleAsRead(pendingIds, !isRead);
-      } catch (error) {}
+      } catch (error) { }
     },
     [queryClient, streamContentQueryKey]
   );
 
-  const onRenderCell = useCallback(
-    (
-      item?: StreamContentItemWithPageIndex,
-      index?: number
-    ): React.ReactNode => {
-      if (!item) return null;
-      const { title } = item;
-
-      const isSelected = curArticle?.id === item.id;
-      const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        markAsRead(item);
-      };
-
-      const onReadAbove: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.preventDefault();
-        markAboveAsRead(item, true);
-      };
-
-      const onClickTitle = () => {
-        const href = `/?articleId=${item.id}`;
-        router.push(href, href, { shallow: true });
-        setCurArticle(item);
-        setIsArticlePanelOpen(true);
-        if (!item.isRead) {
-          markAsRead(item);
-        }
-      };
-
-      return (
-        <>
-          <Swipeout
-            className="mb-3"
-            leftBtnsProps={[
-              {
-                className: "bg-yellow-300 text-white font-medium",
-                text: "已读",
-                onClick: onRead,
-              },
-              {
-                className: "bg-yellow-400 text-white font-medium",
-                text: "上方已读",
-                onClick: onReadAbove,
-              },
-            ]}
-            overswipeRatio={0.3}
-            btnWidth={96}
-          >
-            <div
-              data-is-focusable={true}
-              className={`flex space-x-4 px-4 cursor-pointer break-all hover:bg-blue-100 transition ${
-                !isSelected && item?.isRead ? "opacity-30" : ""
-              } ${isSelected ? "bg-white" : ""} ${
-                showFeedThumbnail ? "py-3" : "items-center"
-              }`}
-              onClick={onClickTitle}
-            >
-              {showFeedThumbnail ? (
-                <>
-                  <div className="shrink-0">
-                    <Image
-                      src={filterImgSrcfromHtmlStr(item.summary.content)}
-                      width={80}
-                      height={80}
-                      imageFit={ImageFit.cover}
-                      className="bg-gray-300 rounded-md"
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex-1 flex flex-col">
-                    <div className="flex-1">
-                      <Text className="cursor-pointer" block>
-                        {title}
-                      </Text>
-                    </div>
-                    <div className="flex items-center">
-                      <Text className="text-xs text-gray-400 flex-1">
-                        {`${item.origin.title}/ ${dayjs(
-                          item?.published * 1000
-                        ).fromNow()}`}
-                      </Text>
-                      <div className="hidden shrink-0 sm:block">
-                        <IconButton
-                          iconProps={{
-                            iconName: item.isRead
-                              ? "CompletedSolid"
-                              : "Completed",
-                          }}
-                          onClick={onRead}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Text className="flex-1 cursor-pointer" block nowrap>
-                    {title}
-                  </Text>
-                  <Text
-                    className="shrink-0 basis-48 text-xs text-gray-400 break-all"
-                    block
-                    nowrap
-                  >
-                    {`${item.origin.title}/ ${dayjs(
-                      item?.published * 1000
-                    ).fromNow()}`}
-                  </Text>
-                  <div className="hidden shrink-0 sm:block">
-                    <IconButton
-                      iconProps={{
-                        iconName: item.isRead ? "CompletedSolid" : "Completed",
-                      }}
-                      onClick={onRead}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-          </Swipeout>
-
-          {index === streamContentListItems.length - 1 ? (
-            <Waypoint onEnter={onEnterWaypoint} />
-          ) : null}
-        </>
-      );
-    },
-    [
-      curArticle?.id,
-      markAsRead,
-      markAboveAsRead,
-      onEnterWaypoint,
-      streamContentListItems.length,
-      showFeedThumbnail,
-      router,
-    ]
-  );
 
   const onRenderList = () => {
     if (streamContentQuery.isFetched) {
@@ -324,13 +187,132 @@ function Home({}: Props) {
     }
 
     return (
-      <List
-        items={streamContentListItems}
-        onRenderCell={onRenderCell}
-        onShouldVirtualize={() => false}
-        componentRef={listRef}
-        version={[onRenderCell]}
-      />
+      <List>
+        {streamContentListItems.map((item, index) => {
+          if (!item) return null;
+          const { title } = item;
+
+          const isSelected = curArticle?.id === item.id;
+          const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            markAsRead(item);
+          };
+
+          const onReadAbove: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+            e.preventDefault();
+            markAboveAsRead(item, true);
+          };
+
+          const onClickTitle = () => {
+            const href = `/?articleId=${item.id}`;
+            router.push(href, href, { shallow: true });
+            setCurArticle(item);
+            setIsArticlePanelOpen(true);
+            if (!item.isRead) {
+              markAsRead(item);
+            }
+          };
+
+          return (
+            <ListItem key={item.id}>
+              <Swipeout
+                className="mb-3"
+                leftBtnsProps={[
+                  {
+                    className: "bg-yellow-300 text-white font-medium",
+                    text: "已读",
+                    onClick: onRead,
+                  },
+                  {
+                    className: "bg-yellow-400 text-white font-medium",
+                    text: "上方已读",
+                    onClick: onReadAbove,
+                  },
+                ]}
+                overswipeRatio={0.3}
+                btnWidth={96}
+              >
+                <div
+                  data-is-focusable={true}
+                  className={`flex space-x-4 px-4 cursor-pointer break-all hover:bg-blue-100 transition ${!isSelected && item?.isRead ? "opacity-30" : ""
+                    } ${isSelected ? "bg-white" : ""} ${showFeedThumbnail ? "py-3" : "items-center"
+                    }`}
+                  onClick={onClickTitle}
+                >
+                  {showFeedThumbnail ? (
+                    <>
+                      <div className="shrink-0">
+                        <Image
+                          src={filterImgSrcfromHtmlStr(item.summary.content)}
+                          width={80}
+                          height={80}
+                          fit="cover"
+                          className="bg-gray-300 rounded-md"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex-1">
+                          <Text className="cursor-pointer" block>
+                            {title}
+                          </Text>
+                        </div>
+                        <div className="flex items-center">
+                          <Text className="text-xs text-gray-400 flex-1">
+                            {`${item.origin.title}/ ${dayjs(
+                              item?.published * 1000
+                            ).fromNow()}`}
+                          </Text>
+                          <div className="hidden shrink-0 sm:block">
+                            <Button
+                              icon={
+                                item.isRead ? (
+                                  <Circle20Regular />
+                                ) : (
+                                  <Circle20Filled />
+                                )
+                              }
+                              onClick={onRead}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Text className="flex-1 cursor-pointer" block wrap={false}>
+                        {title}
+                      </Text>
+                      <Text
+                        className="shrink-0 basis-48 text-xs text-gray-400 break-all"
+                        block
+                        wrap={false}
+                      >
+                        {`${item.origin.title}/ ${dayjs(
+                          item?.published * 1000
+                        ).fromNow()}`}
+                      </Text>
+                      <div className="hidden shrink-0 sm:block">
+                        <Button
+                          icon={
+                            item.isRead ? <Circle20Regular /> : <Circle20Filled />
+                          }
+                          onClick={onRead}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </Swipeout>
+
+              {index === streamContentListItems.length - 1 ? (
+                <Waypoint onEnter={onEnterWaypoint} />
+              ) : null}
+            </ListItem>
+          )
+        })}
+      </List>
     );
   };
 
@@ -344,7 +326,7 @@ function Home({}: Props) {
   };
 
   const midElem = (
-    <Stack
+    <div
       className={`overflow-y-scroll scrollbar bg-gray-50 transition-all`}
       style={{
         transform: isArticlePanelOpen
@@ -354,27 +336,23 @@ function Home({}: Props) {
       }}
     >
       {/* head */}
-      <Stack className="sticky -top-12 bg-inherit z-10 pt-16 pb-4 px-6 sm:px-12">
-        <Stack className="flex sm:hidden mb-2" horizontal>
-          <IconButton
-            iconProps={{ iconName: "GlobalNavButton" }}
-            onClick={() => setIsOpen(true)}
-            className="mr-3"
-          />
-        </Stack>
-        <Stack
+      <StackShim className="sticky -top-12 bg-inherit z-10 pt-16 pb-4 px-6 sm:px-12">
+        <StackShim className="flex sm:hidden mb-2" horizontal>
+          <Hamburger onClick={() => setIsOpen(true)} className="mr-3" />
+        </StackShim>
+        <StackShim
           className=""
           horizontal
           verticalAlign="center"
           horizontalAlign="space-between"
         >
-          <StackItem grow>
+          <StackItemShim grow>
             <Text className="text-lg font-bold mr-auto">
               {unreadOnly ? "未读文章" : "全部文章"}
             </Text>
-          </StackItem>
-          <StackItem disableShrink>
-            <OverflowSet
+          </StackItemShim>
+          <StackItemShim disableShrink>
+            {/* <OverflowSet
               items={[
                 {
                   key: "filter",
@@ -395,14 +373,14 @@ function Home({}: Props) {
                 },
               ]}
               overflowItems={[]}
-              onRenderItem={(item) => <DefaultButton {...item} />}
+              onRenderItem={(item) => <Button {...item} />}
               onRenderOverflowButton={(props, defaultRender) =>
                 defaultRender!(props)
               }
-            />
-          </StackItem>
-        </Stack>
-      </Stack>
+            /> */}
+          </StackItemShim>
+        </StackShim>
+      </StackShim>
 
       {/* content */}
       <div className="sm:px-10" data-is-scrollable="true">
@@ -411,85 +389,13 @@ function Home({}: Props) {
           {streamContentQuery.isFetching && <Spinner />}
         </div>
       </div>
-    </Stack>
+    </div>
   );
 
   const handleCloseArticle = () => {
-    router.back();
+    // router.back();
+    setIsArticlePanelOpen(false)
   };
-
-  const articlePaneElem = (
-    <Stack
-      className="absolute inset-0 h-full z-10 bg-gray-50 transition-all ease-in"
-      style={{
-        transform: isArticlePanelOpen ? "translateX(0)" : "translateX(100%)",
-      }}
-    >
-      <Stack
-        className="px-6 sm:px-12 py-4"
-        horizontal
-        verticalAlign="center"
-        tokens={{ childrenGap: 12 }}
-      >
-        <StackItem className="overflow-hidden" grow>
-          {isAritleTitleShow && (
-            <Text
-              className="text-lg font-bold block truncate cursor-pointer"
-              onClick={() =>
-                articleScrollContainerRef.current?.scrollTo({ top: 0 })
-              }
-            >
-              {curArticle?.title}
-            </Text>
-          )}
-        </StackItem>
-        <StackItem className="ml-3 mr-0" disableShrink>
-          <IconButton
-            iconProps={{ iconName: "Cancel" }}
-            onClick={handleCloseArticle}
-          />
-        </StackItem>
-      </Stack>
-
-      <Stack className="relative" disableShrink grow>
-        <div
-          className="overflow-y-scroll scrollbar w-full h-full absolute top-0 left-0  px-6 sm:px-12 "
-          ref={articleScrollContainerRef}
-        >
-          {curArticle ? (
-            <article className="prose mx-auto mt-24">
-              <h1>{curArticle?.title}</h1>
-              <Waypoint
-                key={curArticle?.title}
-                onEnter={() => setIsAritleTitleShow(false)}
-                onLeave={() => setIsAritleTitleShow(true)}
-              />
-              <Stack horizontal verticalAlign="center">
-                <StackItem grow>
-                  <Text className="text-gray-400 text-sm">{`${
-                    curArticle?.origin.title
-                  }/${dayjs(curArticle?.published * 1000).fromNow()}`}</Text>
-                </StackItem>
-                <StackItem>
-                  <IconButton
-                    iconProps={{ iconName: "OpenInNewWindow" }}
-                    onClick={() => window.open(curArticle?.canonical[0].href)}
-                    title="在新标签页打开"
-                  />
-                </StackItem>
-              </Stack>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: curArticle?.summary.content ?? "",
-                }}
-              />
-            </article>
-          ) : null}
-          <hr className="mt-12 mb-16" />
-        </div>
-      </Stack>
-    </Stack>
-  );
 
   return (
     <>
@@ -501,7 +407,73 @@ function Home({}: Props) {
         </title>
       </Head>
       {midElem}
-      {articlePaneElem}
+      <StackShim
+        className={mergeClasses("absolute inset-0 h-full z-10 bg-gray-50 transition-all ease-in", isArticlePanelOpen ? classes.articlePanelOpen : classes.articlePanelClose)}
+      >
+        <StackShim
+          className="px-6 sm:px-12 py-4"
+          horizontal
+          verticalAlign="center"
+          tokens={{ childrenGap: 12 }}
+        >
+          <StackItemShim className="overflow-hidden" grow>
+            {isAritleTitleShow && (
+              <Text
+                className="text-lg font-bold block truncate cursor-pointer"
+                onClick={() =>
+                  articleScrollContainerRef.current?.scrollTo({ top: 0 })
+                }
+              >
+                {curArticle?.title}
+              </Text>
+            )}
+          </StackItemShim>
+          <StackItemShim className="ml-3 mr-0" disableShrink>
+            <Button
+              appearance="transparent"
+              icon={<Dismiss20Regular />}
+              onClick={handleCloseArticle}
+            />
+          </StackItemShim>
+        </StackShim>
+
+        <StackShim className="relative" disableShrink grow>
+          <div
+            className="overflow-y-scroll scrollbar w-full h-full absolute top-0 left-0  px-6 sm:px-12 "
+            ref={articleScrollContainerRef}
+          >
+            {curArticle ? (
+              <article className="prose mx-auto mt-24">
+                <h1>{curArticle?.title}</h1>
+                <Waypoint
+                  key={curArticle?.title}
+                  onEnter={() => setIsAritleTitleShow(false)}
+                  onLeave={() => setIsAritleTitleShow(true)}
+                />
+                <StackShim horizontal verticalAlign="center">
+                  <StackItemShim grow>
+                    <Text className="text-gray-400 text-sm">{`${curArticle?.origin.title
+                      }/${dayjs(curArticle?.published * 1000).fromNow()}`}</Text>
+                  </StackItemShim>
+                  <StackItemShim>
+                    <Button
+                      icon={<WindowNew20Regular />}
+                      onClick={() => window.open(curArticle?.canonical[0].href)}
+                      title="在新标签页打开"
+                    />
+                  </StackItemShim>
+                </StackShim>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: curArticle?.summary.content ?? "",
+                  }}
+                />
+              </article>
+            ) : null}
+            <hr className="mt-12 mb-16" />
+          </div>
+        </StackShim>
+      </StackShim>
     </>
   );
 }

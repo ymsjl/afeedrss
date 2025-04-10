@@ -3,15 +3,17 @@ import Head from "next/head";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { initializeIcons, ThemeProvider } from "@fluentui/react";
 import "../styles/globals.css";
-import { lightTheme, darkTheme } from "../theme";
 import { NextPageWithLayout } from "../types";
 import { StorageKeys } from "../constants";
-import { FluentProvider, webLightTheme } from "@fluentui/react-components";
-
-initializeIcons();
-const isDarkMode = false;
+import {
+  RendererProvider,
+  SSRProvider,
+  FluentProvider,
+  GriffelRenderer,
+  webLightTheme,
+  createDOMRenderer,
+} from "@fluentui/react-components";
 
 interface GlobalSettings {
   showFeedThumbnail: boolean;
@@ -23,11 +25,17 @@ export const GlobalSettingsCtx = React.createContext<{
   setGlobalSettings: React.Dispatch<React.SetStateAction<GlobalSettings>>;
   globalSettings: GlobalSettings;
 }>({
-  setGlobalSettings: () => {},
+  setGlobalSettings: () => { },
   globalSettings: defaultGlobalSettings,
 });
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+type EnhancedAppProps = AppProps & { renderer?: GriffelRenderer };
+
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+  renderer,
+}: EnhancedAppProps) {
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -68,7 +76,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     }
   }, [globalSettings]);
 
-  const theme = isDarkMode ? darkTheme : lightTheme;
   const getLayout =
     (Component as NextPageWithLayout).getLayout ||
     ((pageComponent: typeof Component) => pageComponent);
@@ -79,7 +86,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <meta name="referrer" content="no-referrer" />
       </Head>
       <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
+        <RendererProvider renderer={renderer || createDOMRenderer()}>
+          <SSRProvider>
             <FluentProvider theme={webLightTheme}>
               <GlobalSettingsCtx.Provider
                 value={{ globalSettings, setGlobalSettings }}
@@ -87,7 +95,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
                 {getLayout(<Component {...pageProps} />)}
               </GlobalSettingsCtx.Provider>
             </FluentProvider>
-          </ThemeProvider>
+          </SSRProvider>
+        </RendererProvider>
       </QueryClientProvider>
     </SessionProvider>
   );

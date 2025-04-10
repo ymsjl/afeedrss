@@ -1,6 +1,76 @@
-import { INavLink, INavLinkGroup } from "@fluentui/react";
 import { IdValuePair, SystemStreamIDs } from "../server/inoreader";
 import { Subscription, Folder, Sortable, KeyValuePair, Tag } from "../types";
+
+interface INavLink {
+    /**
+     * Text to render for this link
+     */
+    name: string;
+    /**
+     * URL to navigate to for this link
+     */
+    url: string;
+    /**
+     * Unique, stable key for the link, used when rendering the list of links and for tracking
+     * the currently selected link.
+     */
+    key?: string;
+    /**
+     * Child links to this link, if any
+     */
+    links?: INavLink[];
+    /**
+     * Callback invoked when this link is clicked. Providing this callback will cause the link
+     * to render as a button (rather than an anchor) unless forceAnchor is set to true.
+     */
+    onClick?: (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => void;
+    /**
+     * The name to use for functional automation tests
+     */
+    automationId?: string;
+    /**
+     * Whether or not the link is in an expanded state
+     */
+    isExpanded?: boolean;
+    /**
+     * Aria-current token for active nav links. Must be a valid token value, and defaults to 'page'.
+     */
+    ariaCurrent?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true';
+    /**
+     * Aria label for nav link. Ignored if `collapseAriaLabel` or `expandAriaLabel` is provided.
+     */
+    ariaLabel?: string;
+    /**
+     * Text for title tooltip and ARIA description.
+     */
+    title?: string;
+    /**
+     * Link <a> target.
+     */
+    target?: string;
+    /**
+     * Whether or not the link is disabled.
+     */
+    disabled?: boolean;
+    /**
+     * (Optional) By default, any link with onClick defined will render as a button.
+     * Set this property to true to override that behavior. (Links without onClick defined
+     * will render as anchors by default.)
+     */
+    forceAnchor?: boolean;
+    /**
+     * ARIA label when group is collapsed and can be expanded.
+     */
+    expandAriaLabel?: string;
+    /**
+     * ARIA label when group is collapsed and can be expanded.
+     */
+    collapseAriaLabel?: string;
+    /**
+     * (Optional) Any additional properties to apply to the rendered links.
+     */
+    [propertyName: string]: any;
+}
 
 export const getTagNameFromId = (tagId: string): string => {
   const slice: string[] = tagId.split("/");
@@ -14,9 +84,6 @@ const createLink = (subscription: Subscription): INavLink => {
     url: "",
     type: "feed",
     iconUrl: subscription.iconUrl,
-    iconProps: {
-      iconName: "CircleRing",
-    },
   };
 };
 
@@ -34,10 +101,6 @@ export const createBuildInNavLink = ({
     key: id,
     url: "",
     type: "buildIn",
-    iconName,
-    iconProps: {
-      iconName,
-    }
   };
 };
 
@@ -47,10 +110,6 @@ const createTagLink = (tag: Tag): INavLink => {
     key: tag.id,
     url: "",
     type: "tag",
-    iconName: "Tag",
-    iconProps: {
-      iconName: "Tag",
-    },
     unreadCount: tag.unread_count,
   };
 };
@@ -68,10 +127,6 @@ const createFolderLink = (
       key: id,
       url: "",
       type: "folder",
-      iconName: "FolderHorizontal",
-      iconProps: {
-        iconName: "FolderHorizontal",
-      }
     };
   } else {
     const name = getTagNameFromId(tag.id);
@@ -81,10 +136,6 @@ const createFolderLink = (
       key: tag.id,
       url: "",
       type: "folder",
-      iconName: "FolderHorizontal",
-      iconProps: {
-        iconName: "FolderHorizontal",
-      },
       unreadCount: tag?.unread_count,
     };
   }

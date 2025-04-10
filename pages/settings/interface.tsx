@@ -1,5 +1,7 @@
 import React from "react";
-import { Stack, Label, Toggle } from "@fluentui/react";
+import { Label, Switch, SwitchOnChangeData } from "@fluentui/react-components";
+import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
+
 import { GlobalSettingsCtx } from "./../_app";
 import SettingsLayout from "../../components/settings/layout";
 import { getLayout } from "../../components/home/layout";
@@ -10,8 +12,8 @@ function Interface({}: Props) {
   const { globalSettings, setGlobalSettings } =
     React.useContext(GlobalSettingsCtx);
   const handleOnShowFeedThumbnailToggleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    checked?: boolean
+    ev: React.ChangeEvent<HTMLInputElement>,
+    { checked }: SwitchOnChangeData
   ) => {
     setGlobalSettings((prevState) => ({
       ...prevState,
@@ -20,21 +22,16 @@ function Interface({}: Props) {
   };
   return (
     <SettingsLayout title="界面">
-      <Stack>
+      <StackShim>
         <Label className="text-lg">文章列表</Label>
-        <Stack horizontal verticalAlign="center">
-          <Toggle
-            onText="是"
-            offText="否"
+        <StackShim horizontal verticalAlign="center">
+          <StackItemShim grow >显示缩略图</StackItemShim>
+          <Switch
             checked={globalSettings.showFeedThumbnail}
-            label="显示缩略图"
             onChange={handleOnShowFeedThumbnailToggleChange}
-            styles={{
-              root: 'flex items-center justify-between w-full'
-            }}
           />
-        </Stack>
-      </Stack>
+        </StackShim>
+      </StackShim>
     </SettingsLayout>
   );
 }
