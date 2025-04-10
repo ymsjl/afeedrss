@@ -1,11 +1,9 @@
 import React from "react";
-import {
-  Text,
-  Stack,
-  Nav,
-  IRenderFunction,
-  INavLink,
-} from "@fluentui/react";
+import { IRenderFunction, INavLink } from "@fluentui/react";
+
+import { Text } from "@fluentui/react-components";
+import { StackShim } from "@fluentui/react-migration-v8-v9";
+import { Nav } from "@fluentui/react-nav-preview";
 import Link from "next/link";
 
 import { NAV_LIST } from "./constants";
@@ -18,11 +16,11 @@ export default function SettingsNav() {
 
     return (
       <Link href={props.url} passHref replace>
-        <Stack horizontal verticalAlign="center" className="w-full mx-2">
-          <Text block nowrap className="flex-1 text-left">
+        <StackShim horizontal verticalAlign="center" className="w-full mx-2">
+          <Text block wrap={false} className="flex-1 text-left">
             {props.name}
           </Text>
-        </Stack>
+        </StackShim>
       </Link>
     );
   };

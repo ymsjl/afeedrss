@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@fluentui/react": "^8.66.2",
+    "@fluentui/react-components": "^9.61.6",
+    "@fluentui/react-migration-v8-v9": "^9.7.8",
+    "@fluentui/react-nav-preview": "^0.13.5",
     "@tailwindcss/typography": "^0.5.2",
     "@types/lodash.keyby": "^4.6.7",
     "@types/oauth": "^0.9.1",

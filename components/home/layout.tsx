@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { IconButton, Stack, StackItem, Image, Text } from "@fluentui/react";
+import { Button, Image, Text } from "@fluentui/react-components";
+import { SettingsRegular } from "@fluentui/react-icons";
+import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
 
 import SourcesPanel from "../sourcePanel";
 import { useSession } from "next-auth/react";
@@ -33,7 +35,7 @@ export default function Layout({ children }: Props) {
         setIsOpen: setIsNavigationPanelOpen,
       }}
     >
-      <Stack
+      <StackShim
         horizontal
         className="relative h-screen overflow-hidden bg-gray-100 sm:pl-[288px]"
       >
@@ -43,55 +45,55 @@ export default function Layout({ children }: Props) {
             onClick={() => setIsNavigationPanelOpen(false)}
           />
         )}
-        <Stack
+        <StackShim
           grow
           className={`fixed left-0 top-0 bottom-0 z-20 bg-gray-100 w-[calc(100% - 64px)] sm:w-[288px] transition-transform sm:translate-x-0 delay-100 ${
             isNavigationPanelOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <Stack
+          <StackShim
             disableShrink
             className="px-4 py-4"
             horizontal
             verticalAlign="center"
             horizontalAlign="space-between"
           >
-            <StackItem disableShrink>
+            <StackItemShim disableShrink>
               <Image
                 src=""
                 alt=""
                 className="w-12 h-12 rounded-full bg-gray-400 mr-4"
               />
-            </StackItem>
-            <StackItem grow disableShrink>
+            </StackItemShim>
+            <StackItemShim grow disableShrink>
               <Text className="text-lg font-bold" block>
                 {session?.user?.name}
               </Text>
               <Text className="text-base text-gray-400">
                 {session?.user?.email}
               </Text>
-            </StackItem>
-            <StackItem disableShrink>
+            </StackItemShim>
+            <StackItemShim disableShrink>
               <Link href="/settings" passHref>
                 <a>
-                  <IconButton iconProps={{ iconName: "Settings" }} />
+                  <Button appearance="transparent" icon={<SettingsRegular />} />
                 </a>
               </Link>
-            </StackItem>
-          </Stack>
+            </StackItemShim>
+          </StackShim>
 
-          <Stack className="sticky top-0 overflow-y-hidden" grow>
+          <StackShim className="sticky top-0 overflow-y-hidden" grow>
             <div className="overflow-y-scroll scrollbar flex-1">
               <SourcesPanel userId={userId} />
             </div>
-          </Stack>
-        </Stack>
-        <Stack className="bg-gray-200" grow horizontalAlign="center">
-          <Stack className="w-full max-w-4xl 2xl:max-w-5xl  bg-gray-50 relative h-full overflow-x-hidden">
+          </StackShim>
+        </StackShim>
+        <StackShim className="bg-gray-200" grow horizontalAlign="center">
+          <StackShim className="w-full max-w-4xl 2xl:max-w-5xl  bg-gray-50 relative h-full overflow-x-hidden">
             {children}
-          </Stack>
-        </Stack>
-      </Stack>
+          </StackShim>
+        </StackShim>
+      </StackShim>
     </GlobalNavigationCtx.Provider>
   );
 }

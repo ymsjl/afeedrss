@@ -7,7 +7,7 @@ import Document, {
   NextScript,
 } from "next/document";
 import { Stylesheet, InjectionMode } from "@fluentui/merge-styles";
-import { resetIds } from "@fluentui/utilities";
+// import { resetIds } from "@fluentui/utilities";
 
 const stylesheet = Stylesheet.getInstance();
 
@@ -16,7 +16,7 @@ export default class MyDocument extends Document<{
   serializedStylesheet: any;
 }> {
   static async getInitialProps(ctx: DocumentContext) {
-    resetIds();
+    // resetIds();
     const initialProps = await Document.getInitialProps(ctx);
     return {
       ...initialProps,

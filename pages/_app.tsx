@@ -8,6 +8,7 @@ import "../styles/globals.css";
 import { lightTheme, darkTheme } from "../theme";
 import { NextPageWithLayout } from "../types";
 import { StorageKeys } from "../constants";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
 initializeIcons();
 const isDarkMode = false;
@@ -78,13 +79,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <meta name="referrer" content="no-referrer" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <GlobalSettingsCtx.Provider
-            value={{ globalSettings, setGlobalSettings }}
-          >
-            {getLayout(<Component {...pageProps} />)}
-          </GlobalSettingsCtx.Provider>
-        </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <FluentProvider theme={webLightTheme}>
+              <GlobalSettingsCtx.Provider
+                value={{ globalSettings, setGlobalSettings }}
+              >
+                {getLayout(<Component {...pageProps} />)}
+              </GlobalSettingsCtx.Provider>
+            </FluentProvider>
+          </ThemeProvider>
       </QueryClientProvider>
     </SessionProvider>
   );
