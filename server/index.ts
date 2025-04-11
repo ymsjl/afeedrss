@@ -1,6 +1,5 @@
 import * as inoreader from "./inoreader";
 
 export { default as fetch } from "./fetch";
-export default {
-  inoreader,
-};
+const api = { inoreader };
+export default api;

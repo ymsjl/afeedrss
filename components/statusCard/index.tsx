@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { makeStyles } from "@fluentui/react-components";
 
 interface Props {
   content?: React.ReactNode;
@@ -16,9 +17,24 @@ const StatusImageMap = {
   [Status.ERROR]: "/images/3d-fluency-bandage.png",
 };
 
+const useStyles = makeStyles({
+  container: {
+    paddingTop: "5rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  content: {
+    fontSize: "0.875rem",
+    color: "#6b7280",
+    marginTop: "1.5rem",
+  }
+});
+
 export default function StatusCard({ content, status }: Props) {
+  const classes = useStyles();
   return (
-    <div className="pt-20 flex flex-col items-center">
+    <div className={classes.container}>
       <Image
         src={StatusImageMap[status]}
         width={120}
@@ -26,7 +42,7 @@ export default function StatusCard({ content, status }: Props) {
         alt=""
         objectFit="contain"
       />
-      <div className="text-sm text-gray-500 mt-6">{content}</div>
+      <div className={classes.content}>{content}</div>
     </div>
   );
 }

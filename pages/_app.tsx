@@ -15,6 +15,18 @@ import {
   createDOMRenderer,
 } from "@fluentui/react-components";
 
+// async function initMocks() {
+//   if (typeof window === "undefined") return;
+//   const { worker } = await import("../server/inoreader/msw-browser-worker");
+//   return worker.start({
+//     onUnhandledRequest: "bypass",
+//   });
+// }
+
+// if (process.env.NODE_ENV === "development") {
+//   initMocks();
+// }
+
 interface GlobalSettings {
   showFeedThumbnail: boolean;
 }
@@ -25,7 +37,7 @@ export const GlobalSettingsCtx = React.createContext<{
   setGlobalSettings: React.Dispatch<React.SetStateAction<GlobalSettings>>;
   globalSettings: GlobalSettings;
 }>({
-  setGlobalSettings: () => { },
+  setGlobalSettings: () => {},
   globalSettings: defaultGlobalSettings,
 });
 

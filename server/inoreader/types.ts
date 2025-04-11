@@ -50,6 +50,10 @@ export enum FeedActionType {
   edit = "edit",
   subscribe = "subscribe",
   unsubscribe = "unsubscribe",
+  markAsRead = "user/-/state/com.google/read",
+  markAsUnread = "user/-/state/com.google/unread",
+  markAsStar = "user/-/state/com.google/starred",
+  markAsUnstar = "user/-/state/com.google/unstarred"
 }
 
 export enum SystemStreamIDs {

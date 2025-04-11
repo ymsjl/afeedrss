@@ -47,9 +47,9 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     gap: "4px",
-    ":not(:last-child)":{
+    ":not(:last-child)": {
       marginBottom: "16px",
-    }
+    },
   },
 });
 function SubscriptionSource({}: Props) {
@@ -138,6 +138,13 @@ function SubscriptionSource({}: Props) {
   return (
     <SettingsLayout
       title="订阅源"
+      breadcrumbItems={[
+        {
+          title: "订阅源",
+          key: "subscription_source",
+          href: "/settings/subscription_source",
+        },
+      ]}
       tailElem={
         <Button icon={<Add20Regular />} onClick={() => setIsDialogOpen(true)}>
           添加订阅源

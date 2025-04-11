@@ -1,5 +1,7 @@
+import qs from "query-string";
 import { fetch } from "../index";
-import { StreamContentsResponse } from "./types";
+import { StreamContentsResponse, IdValuePair } from "./types";
+import { MarkArticleParmas, SystemStreamIDs } from "./types";
 
 /**
  * 获取 Feed 流的文章列表
@@ -25,4 +27,65 @@ export function getStreamContents(
       },
     }
   );
+}
+
+export interface StreamPreferenceListResponse {
+  streamprefs: {
+    [key: string]: IdValuePair[];
+  };
+}
+
+/**
+ * 获取文章流偏好列表
+ * @returns
+ */
+export function getStreamPreferenceList() {
+  return fetch.get<StreamPreferenceListResponse>(
+    `/reader/api/0/preference/stream/list`
+  );
+}
+
+/**
+ * 添加/移除某个源下的所有文章的已读标记
+ * @params
+ * @returns 
+ */
+export function markAllAsRead(streamId: string) {
+  return fetch.post(`/reader/api/0/mark-all-as-read`, null, {
+    params: {
+      ts: Date.now(),
+      s: streamId,
+    },
+  });
+}
+
+/**
+ * 添加/移除文章的收藏标记
+ * @params
+ * @returns 
+ */
+export function markArticleAsStar(id: string, isStar?: boolean) {
+  const params: MarkArticleParmas = { i: id };
+  params[isStar ? "r" : "a"] = SystemStreamIDs.STARRED;
+  return fetch.post(`/reader/api/0/edit-tag`, null, {
+    params: params,
+  });
+}
+
+
+/**
+ * 添加/移除文章的已读标记
+ * @params
+ * @returns 
+ */
+export function markArticleAsRead(id: string | string[], asUnread?: boolean){
+  const params: MarkArticleParmas = { i: id };
+  params[asUnread ? "r" : "a"] = SystemStreamIDs.READ;
+  return fetch.post(`/reader/api/0/edit-tag`, null, {
+    params: params,
+    paramsSerializer: (params) => {
+      const result = qs.stringify(params);
+      return result;
+    },
+  });
 }

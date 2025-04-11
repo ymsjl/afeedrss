@@ -14,8 +14,19 @@ function Account({}: Props) {
   return (
     <SettingsLayout
       title="账户"
+      breadcrumbItems={[
+        {
+          title: "账户",
+          key: "account",
+          href: "/settings/account",
+        },
+      ]}
       tailElem={
-        <Button onClick={onClickSignout} icon={<ArrowImportRegular />} iconPosition="after">
+        <Button
+          onClick={onClickSignout}
+          icon={<ArrowImportRegular />}
+          iconPosition="after"
+        >
           退出登录
         </Button>
       }

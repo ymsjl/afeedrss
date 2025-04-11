@@ -22,7 +22,9 @@ import {
   bundleIcon,
   SettingsRegular,
 } from "@fluentui/react-icons";
-import SubscriptionNavTreeBuilder from "../../utils/subscriptionNavTreeBuilder";
+import SubscriptionNavTreeBuilder, {
+  INavLink,
+} from "../../utils/subscriptionNavTreeBuilder";
 import { GlobalNavigationCtx } from "./../home/layout";
 import {
   useStreamPreferencesQuery,
@@ -36,7 +38,9 @@ export interface Props {
 }
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+    flexShrink: 0,
+  },
   nav: {},
   navItem: {
     display: "flex",
@@ -78,7 +82,7 @@ const SourcesPanel = ({ className, userId }: Props) => {
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
-    item?: { key: string }
+    item?: INavLink
   ) => {
     e?.preventDefault();
     const query = qs.stringify({ ...router.query, streamId: item?.key });

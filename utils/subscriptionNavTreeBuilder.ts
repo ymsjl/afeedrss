@@ -1,7 +1,7 @@
 import { IdValuePair, SystemStreamIDs } from "../server/inoreader";
 import { Subscription, Folder, Sortable, KeyValuePair, Tag } from "../types";
 
-interface INavLink {
+export interface INavLink {
     /**
      * Text to render for this link
      */

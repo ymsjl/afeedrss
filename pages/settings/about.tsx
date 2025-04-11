@@ -12,7 +12,16 @@ const useStyles = makeStyles({
 function Account({}: Props) {
   const classes = useStyles();
   return (
-    <SettingsLayout title="关于">
+    <SettingsLayout
+      title="关于"
+      breadcrumbItems={[
+        {
+          title: "关于",
+          key: "about",
+          href: "/settings/about",
+        },
+      ]}
+    >
       <div className={classes.root}>
         <Image
           src="/images/3d-fluency-newspaper.png"

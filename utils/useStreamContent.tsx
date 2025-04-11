@@ -1,27 +1,9 @@
-import { useCallback, useMemo } from "react";
-import produce from "immer";
-import { normalize } from "normalizr";
-import keyby from "lodash.keyby";
 import { FeedItem } from "../types";
-import {
-  QueryKey,
-  useInfiniteQuery,
-  UseInfiniteQueryResult,
-  useQueryClient,
-} from "react-query";
+import { useInfiniteQuery } from "react-query";
 import server from "../server";
 import { StreamContentsResponse, SystemStreamIDs } from "../server/inoreader";
 import { Dayjs, default as dayjs } from "dayjs";
 import { filterImgSrcfromHtmlStr } from "./filterImgSrcfromHtmlStr";
-import {
-  getStreamContentQueryKey,
-  StreamContentQueryKeyParmas,
-} from "./getStreamContentQueryKey";
-import {
-  InfiniteNormalizedArticles,
-  ArticleEntitySchema,
-  article,
-} from "../types/feed";
 
 function resolveResponse(data: StreamContentsResponse): FeedItem[] {
   return data.items.map((item, index) => {

@@ -1,16 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
-import { Text } from "@fluentui/react-components";
+import { List, ListItem, Text } from "@fluentui/react-components";
 import SettingsLayout from "../../components/settings/layout";
 import { getLayout } from "../../components/home/layout";
-import { 
+import {
   PersonAccounts20Regular,
   EyeLines20Regular,
   News20Regular,
   Info20Regular,
-  ChevronRight20Regular
-} from '@fluentui/react-icons';
+  ChevronRight20Regular,
+} from "@fluentui/react-icons";
+import { useListClasses } from "../../components/home/ArticleListItem";
 
 export interface NavListItem {
   key: string;
@@ -52,10 +53,16 @@ export const NAV_LIST: NavListItem[] = [
 ];
 
 function Settings() {
+  const listClasses = useListClasses();
+
   const onRenderNavItem = ({ icon, name, url, desc }: NavListItem) => (
     <Link href={url}>
       <a>
-        <StackShim horizontal verticalAlign="center" tokens={{ childrenGap: 16 }}>
+        <StackShim
+          horizontal
+          verticalAlign="center"
+          tokens={{ childrenGap: 16 }}
+        >
           <StackItemShim disableShrink>{icon}</StackItemShim>
           <StackShim grow>
             <Text className="text-black">{name}</Text>
@@ -71,15 +78,16 @@ function Settings() {
 
   return (
     <SettingsLayout title="设置">
-      <ul className=" space-y-4">
+      <List className={listClasses.list}>
         {NAV_LIST.map((item) => (
-          <li key={item.key}>{onRenderNavItem(item)}</li>
+          <ListItem key={item.key} className={listClasses.listItem}>
+            {onRenderNavItem(item)}
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </SettingsLayout>
   );
 }
-
 
 Settings.getLayout = getLayout;
 
