@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { makeStyles, mergeClasses, Tooltip } from "@fluentui/react-components";
 import {
   AppItem,
@@ -45,14 +45,17 @@ export function SourceNavPanel({ className }: Props) {
     item?: INavLink
   ) => {
     e?.preventDefault();
-    const params: { [key: string]: string } = {};
-    if(item?.key){
+    const params: { [key: string]: string } = searchParams
+      .entries()
+      .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as { [key: string]: string });
+
+    if (item?.key) {
       params.streamId = item.key;
     }
-    searchParams.forEach((value, key) => {
-      params[key] = value;
-    });
-    router.push(`/home?${new URLSearchParams(params).toString()}`);
+    router.push(`/home?${(new URLSearchParams(params)).toString()}`);
   };
 
   return (
