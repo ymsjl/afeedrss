@@ -1,0 +1,102 @@
+import { InfiniteData, useInfiniteQuery, useQueryClient } from "react-query";
+import server from "../../server";
+import {
+  StreamContentItem,
+  StreamContentsResponse,
+  SystemStreamIDs,
+} from "../../server/inoreader";
+import { useCallback, useMemo } from "react";
+import produce from "immer";
+import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
+
+export async function fetchStreamContent({
+  queryKey,
+  pageParam = "",
+}: {
+  queryKey: any;
+  pageParam?: string;
+}) {
+  const [, streamId, unreadOnly] = queryKey;
+  const exclude = !!unreadOnly ? SystemStreamIDs.READ : "";
+  const res = await server.inoreader.getStreamContents(String(streamId), {
+    exclude: exclude,
+    continuation: pageParam,
+  });
+  return res.data;
+}
+
+export function useStreamContentQuery() {
+  const queryKey = useStreamContentQueryKey();
+  return useInfiniteQuery<StreamContentsResponse>(queryKey, fetchStreamContent, {
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.continuation;
+    },
+  });
+}
+
+export interface StreamContentItemWithPageIndex extends StreamContentItem {
+  pageIndex: number;
+}
+
+export const useStreamItemAction = () => {
+  const queryClient = useQueryClient();
+  const queryKey = useStreamContentQueryKey();
+
+  const markItemAsRead = useCallback(
+    async (target: StreamContentItemWithPageIndex) => {
+      await server.inoreader.markArticleAsRead(target.id, target.isRead);
+      queryClient.setQueryData(
+        queryKey,
+        produce<InfiniteData<StreamContentsResponse>>((draft) => {
+          const { items } = draft.pages[target.pageIndex];
+          const draftTarget = items.find(({ id }) => id === target.id);
+          if (draftTarget) {
+            draftTarget!.isRead = !target.isRead;
+          }
+        })
+      );
+    },
+    [queryClient, queryKey]
+  );
+
+  const markAboveAsRead = useCallback(
+    async (target: StreamContentItemWithPageIndex, isRead: boolean) => {
+      const pendingIds: string[] = [];
+      queryClient.setQueryData(
+        queryKey,
+        produce<InfiniteData<StreamContentsResponse>>((draft) => {
+          const itemsToUpdate = [];
+          for (const pageIndex in draft.pages) {
+            if (!Object.prototype.hasOwnProperty.call(draft.pages, pageIndex))
+              return;
+            const { items } = draft.pages[pageIndex];
+            if (Number(pageIndex) < target.pageIndex) {
+              itemsToUpdate.push(...items);
+            } else if (Number(pageIndex) === target.pageIndex) {
+              const targetIndex = items.findIndex(({ id }) => id === target.id);
+              itemsToUpdate.push(...items.slice(0, targetIndex));
+            }
+          }
+          itemsToUpdate
+            .filter(({ isRead }) => !isRead)
+            .forEach((item) => {
+              item.isRead = true;
+              pendingIds.push(item.id);
+            });
+        })
+      );
+      await server.inoreader.markArticleAsRead(pendingIds, !isRead);
+    },
+    [queryClient, queryKey]
+  );
+
+  const markItemAsStar = useCallback(() => {}, []);
+
+  return useMemo(() => {
+    return {
+      markItemAsRead,
+      markAboveAsRead,
+      markItemAsStar,
+    };
+  }, [markAboveAsRead, markItemAsRead, markItemAsStar]);
+};

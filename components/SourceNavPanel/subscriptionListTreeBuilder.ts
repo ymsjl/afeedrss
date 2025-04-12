@@ -1,5 +1,5 @@
-import { IdValuePair } from "../server/inoreader";
-import { KeyValuePair, Subscription, Folder } from "../types";
+import { IdValuePair } from "../../server/inoreader";
+import { KeyValuePair, Subscription, Folder } from "../../types";
 import SubscriptionNavTreeBuilder, {
   getTagNameFromId,
 } from "./subscriptionNavTreeBuilder";

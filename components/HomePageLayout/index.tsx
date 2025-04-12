@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { mergeClasses, shorthands, tokens } from "@fluentui/react-components";
+import { tokens } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
 
-import SourcesPanel from "../sourcePanel";
+import SourceNavPanel from "../SourceNavPanel";
 import { useSession } from "next-auth/react";
 
 interface Props {
@@ -36,7 +36,7 @@ export default function Layout({ children }: Props) {
       }}
     >
       <div className={classes.root}>
-        <SourcesPanel userId={userId} />
+        <SourceNavPanel userId={userId} />
         <div className={classes.mainContent}>
           <div className={classes.mainContentInner}>{children}</div>
         </div>
@@ -48,7 +48,6 @@ export default function Layout({ children }: Props) {
 export const getLayout = (page: React.ReactElement): React.ReactElement => (
   <Layout>{page}</Layout>
 );
-
 
 const useStyles = makeStyles({
   root: {

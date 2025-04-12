@@ -75,6 +75,34 @@ export const useTextClasses = makeStyles({
   textRight: { textAlign: "right" },
   underline: { textDecorationLine: "underline" },
   lineThrough: { textDecorationLine: "line-through" },
+
+  // 语义化文本样式
+  textPrimary: { color: tokens.colorNeutralForeground1 },
+  textSecondary: { color: tokens.colorNeutralForeground2 },
+  textTertiary: { color: tokens.colorNeutralForeground3 },
+  textQuaternary: { color: tokens.colorNeutralForeground4 },
+  textDisabled: { color: tokens.colorNeutralForegroundDisabled },
+  textBrand: { color: tokens.colorBrandForeground1 },
+  textSuccess: { color: tokens.colorStatusSuccessForeground1 },
+  textWarning: { color: tokens.colorStatusWarningForeground1 },
+  textError: { color: tokens.colorStatusDangerForeground1 },
+
+  // 语言特定样式
+  textChinese: {
+    fontFamily: tokens.fontFamilyBase,
+    lineHeight: tokens.lineHeightBase400,
+    letterSpacing: "0.05em",
+  },
+  textEnglish: {
+    fontFamily: tokens.fontFamilyBase,
+    lineHeight: tokens.lineHeightBase300,
+    letterSpacing: "0.01em",
+  },
+  textCode: {
+    fontFamily: "Monaco, Consolas, monospace",
+    fontSize: tokens.fontSizeBase300,
+    lineHeight: tokens.lineHeightBase300,
+  },
 });
 
 export const useCommonClasses = makeStyles({
@@ -85,12 +113,18 @@ export const useCommonClasses = makeStyles({
   mt1: { marginTop: tokens.spacingVerticalXS },
   mt2: { marginTop: tokens.spacingVerticalS },
   mt4: { marginTop: tokens.spacingVerticalM },
+  mt5: { marginTop: tokens.spacingVerticalL },
+  mt6: { marginTop: tokens.spacingVerticalXL },
+  mt7: { marginTop: tokens.spacingVerticalXXL },
+  mt8: { marginTop: tokens.spacingVerticalXXXL },
+
   mb1: { marginBottom: tokens.spacingVerticalXS },
   mb2: { marginBottom: tokens.spacingVerticalS },
   mb4: { marginBottom: tokens.spacingVerticalM },
   mx1: { ...shorthands.margin(0, tokens.spacingHorizontalXS) },
   mx2: { ...shorthands.margin(0, tokens.spacingHorizontalS) },
   mx4: { ...shorthands.margin(0, tokens.spacingHorizontalM) },
+  mxAuto: { marginInline: "auto" },
   my1: { ...shorthands.margin(tokens.spacingVerticalXS, 0) },
   my2: { ...shorthands.margin(tokens.spacingVerticalS, 0) },
   my4: { ...shorthands.margin(tokens.spacingVerticalM, 0) },

@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "@fluentui/react-components";
 import { signOut } from "next-auth/react";
-import SettingsLayout from "../../components/settings/layout";
-import { getLayout } from "../../components/home/layout";
+import SettingsLayout from "../../components/SettingsPageLayout";
+import { getLayout } from "../../components/HomePageLayout";
 import { ArrowImportRegular } from "@fluentui/react-icons";
 
 interface Props {}

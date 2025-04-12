@@ -9,7 +9,7 @@ import {
 } from "@fluentui/react-components";
 import { Circle20Regular, Circle20Filled } from "@fluentui/react-icons";
 import { StreamContentItem } from "../../server/inoreader";
-import Swipeout from "../swipeout";
+import Swipeout from "../Swipeout";
 import { filterImgSrcfromHtmlStr } from "../../utils/filterImgSrcfromHtmlStr";
 import dayjs from "../../utils/dayjs";
 import { tokens } from "@fluentui/react-components";
@@ -39,8 +39,9 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
   onSelectArticle,
 }) => {
   const { title } = item;
-  const classes = useStyles();
+  const classes = useClasses();
   const listItemClasses = useListClasses();
+
   const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -162,7 +163,7 @@ export const useListClasses = makeStyles({
   },
 });
 
-const useStyles = makeStyles({
+const useClasses = makeStyles({
   thumbnail: {
     width: "80px",
     height: "80px",

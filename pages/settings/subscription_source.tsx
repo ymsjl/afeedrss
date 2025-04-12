@@ -18,42 +18,27 @@ import {
   TreeItemLayout,
   makeStyles,
 } from "@fluentui/react-components";
-import {
-  Rename20Regular,
-  Add20Regular,
-  ChevronRight20Regular,
-  ChevronDown20Regular,
-} from "@fluentui/react-icons";
+import { Add20Regular } from "@fluentui/react-icons";
 import { useSession } from "next-auth/react";
-import React, { FormEventHandler, useMemo, useRef, useState } from "react";
+import React, { FormEventHandler, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import SettingsLayout from "../../components/settings/layout";
+import SettingsLayout from "../../components/SettingsPageLayout";
 import {
   useSubscriptionsListQuery,
   useFolderQuery,
   useStreamPreferencesQuery,
-} from "../../components/sourcePanel/utils";
+} from "../../components/SourceNavPanel/utils";
 import { QUERY_KEYS } from "../../constants";
 import server from "../../server";
-import { Subscription } from "../../types";
-import { getTagNameFromId } from "../../utils/subscriptionNavTreeBuilder";
-import SubscriptionGroupedListBuilder from "./../../utils/subscriptionListTreeBuilder";
-import { getLayout } from "../../components/home/layout";
+import { getTagNameFromId } from "../../components/SourceNavPanel/subscriptionNavTreeBuilder";
+import SubscriptionGroupedListBuilder from "../../components/SourceNavPanel/subscriptionListTreeBuilder";
+import { getLayout } from "../../components/HomePageLayout";
 
 interface Props {}
-const useStyles = makeStyles({
-  formItem: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-    ":not(:last-child)": {
-      marginBottom: "16px",
-    },
-  },
-});
+
 function SubscriptionSource({}: Props) {
-  const classes = useStyles();
+  const classes = useClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>();
   const { data: session } = useSession();
@@ -195,7 +180,7 @@ function SubscriptionSource({}: Props) {
                 </div>
                 <DialogActions>
                   <Button
-                    className="w-full"
+                    className={classes.fullWidth}
                     onClick={() => setIsDialogOpen(false)}
                   >
                     取消
@@ -203,7 +188,7 @@ function SubscriptionSource({}: Props) {
                   <DialogTrigger disableButtonEnhancement>
                     <Button
                       appearance="primary"
-                      className="w-full"
+                      className={classes.fullWidth}
                       disabled={addFeedMutation.isLoading}
                       type="submit"
                     >
@@ -223,3 +208,17 @@ function SubscriptionSource({}: Props) {
 SubscriptionSource.getLayout = getLayout;
 
 export default SubscriptionSource;
+
+const useClasses = makeStyles({
+  formItem: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+    ":not(:last-child)": {
+      marginBottom: "16px",
+    },
+  },
+  fullWidth: {
+    width: "100%",
+  },
+});

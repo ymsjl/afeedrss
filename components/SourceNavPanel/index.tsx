@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import { makeStyles, mergeClasses, Tooltip } from "@fluentui/react-components";
@@ -22,22 +22,16 @@ import {
   bundleIcon,
   SettingsRegular,
 } from "@fluentui/react-icons";
-import SubscriptionNavTreeBuilder, {
-  INavLink,
-} from "../../utils/subscriptionNavTreeBuilder";
-import { GlobalNavigationCtx } from "./../home/layout";
-import {
-  useStreamPreferencesQuery,
-  useSubscriptionsListQuery,
-  useFolderQuery,
-} from "./utils";
+import { INavLink } from "./subscriptionNavTreeBuilder";
+import { GlobalNavigationCtx } from "../HomePageLayout";
+import { useSourcePanelData } from "./useSourcePanelData";
 
 export interface Props {
   userId?: string;
   className?: string;
 }
 
-const useStyles = makeStyles({
+const useClasses = makeStyles({
   root: {
     flexShrink: 0,
   },
@@ -51,34 +45,11 @@ const useStyles = makeStyles({
 
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
 
-const SourcesPanel = ({ className, userId }: Props) => {
+export function SourceNavPanel({ className, userId }: Props) {
+  const classes = useClasses();
   const router = useRouter();
-  const classes = useStyles();
   const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
-  const streamPreferencesQuery = useStreamPreferencesQuery();
-  const folderQuery = useFolderQuery();
-  const subscriptionsListQuery = useSubscriptionsListQuery();
-
-  const subscriptionsListData = subscriptionsListQuery.data;
-  const folderData = folderQuery.data;
-  const streamPreferencesData = streamPreferencesQuery.data;
-
-  const groups = useMemo(() => {
-    if (
-      !userId ||
-      !subscriptionsListData ||
-      !folderData ||
-      !streamPreferencesData
-    ) {
-      return null;
-    }
-    return new SubscriptionNavTreeBuilder({
-      userId,
-      subscriptionById: subscriptionsListData.entities.subscription,
-      tagsById: folderData.entities.folder,
-      streamPrefById: streamPreferencesData.streamprefs,
-    }).build();
-  }, [userId, subscriptionsListData, folderData, streamPreferencesData]);
+  const { data } = useSourcePanelData({ userId });
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
@@ -88,7 +59,6 @@ const SourcesPanel = ({ className, userId }: Props) => {
     const query = qs.stringify({ ...router.query, streamId: item?.key });
     const href = `/?${query}`;
     router.push(href, href, { shallow: true });
-    // setIsOpen(false);
   };
 
   return (
@@ -106,7 +76,7 @@ const SourcesPanel = ({ className, userId }: Props) => {
       </NavDrawerHeader>
 
       <NavDrawerBody>
-        {groups?.map((group, groupIndex) => (
+        {data?.map((group, groupIndex) => (
           <React.Fragment key={groupIndex}>
             <NavSectionHeader>订阅源</NavSectionHeader>
             {group.links.map((link, linkIndex) =>
@@ -147,6 +117,6 @@ const SourcesPanel = ({ className, userId }: Props) => {
       </AppItem>
     </NavDrawer>
   );
-};
+}
 
-export default React.memo(SourcesPanel);
+export default React.memo(SourceNavPanel);

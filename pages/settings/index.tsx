@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
-import { List, ListItem, Text } from "@fluentui/react-components";
-import SettingsLayout from "../../components/settings/layout";
-import { getLayout } from "../../components/home/layout";
+import { List, ListItem, Text, makeStyles } from "@fluentui/react-components";
+import SettingsLayout from "../../components/SettingsPageLayout";
+import { getLayout } from "../../components/HomePageLayout";
 import {
   PersonAccounts20Regular,
   EyeLines20Regular,
@@ -11,7 +11,7 @@ import {
   Info20Regular,
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
-import { useListClasses } from "../../components/home/ArticleListItem";
+import { useTextClasses } from "../../theme/commonStyles";
 
 export interface NavListItem {
   key: string;
@@ -53,7 +53,8 @@ export const NAV_LIST: NavListItem[] = [
 ];
 
 function Settings() {
-  const listClasses = useListClasses();
+  const classes = useClasses();
+  const textClasses = useTextClasses();
 
   const onRenderNavItem = ({ icon, name, url, desc }: NavListItem) => (
     <Link href={url}>
@@ -65,8 +66,8 @@ function Settings() {
         >
           <StackItemShim disableShrink>{icon}</StackItemShim>
           <StackShim grow>
-            <Text className="text-black">{name}</Text>
-            <Text className="text-black text-opacity-50 text-sm">{desc}</Text>
+            <Text className={classes.navText}>{name}</Text>
+            <Text className={`${classes.navDescText} ${textClasses.textSm}`}>{desc}</Text>
           </StackShim>
           <StackItemShim disableShrink>
             <ChevronRight20Regular />
@@ -78,9 +79,9 @@ function Settings() {
 
   return (
     <SettingsLayout title="设置">
-      <List className={listClasses.list}>
+      <List>
         {NAV_LIST.map((item) => (
-          <ListItem key={item.key} className={listClasses.listItem}>
+          <ListItem key={item.key}>
             {onRenderNavItem(item)}
           </ListItem>
         ))}
@@ -92,3 +93,13 @@ function Settings() {
 Settings.getLayout = getLayout;
 
 export default Settings;
+
+const useClasses = makeStyles({
+  navText: {
+    color: "var(--colorNeutralForeground1)",
+  },
+  navDescText: {
+    color: "var(--colorNeutralForeground1)",
+    opacity: 0.5,
+  },
+});

@@ -10,6 +10,7 @@ import { BuiltInProviderType } from "next-auth/providers";
 import Image from "next/image";
 import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
 import { Button, makeStyles } from "@fluentui/react-components";
+import { useCommonClasses } from "../../theme/commonStyles";
 
 interface Props {
   providers: Record<
@@ -19,34 +20,37 @@ interface Props {
 }
 
 const useStyles = makeStyles({
-  root: {
+  container: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     width: "100vw",
     minHeight: "100vh",
+    backgroundColor: "var(--colorNeutralBackground2)",
   },
-  content: {
-    width: "100%",
-    height: "100%",
-    position: "relative",
-    overflowX: "hidden",
+  authCard: {
+    backgroundColor: "var(--colorNeutralBackground1)",
+    borderRadius: "8px",
+    boxShadow: "var(--shadow8)",
+    padding: "48px",
   },
 });
 
 export default function SignIn({ providers }: Props) {
   const classes = useStyles();
+  const commonStyles = useCommonClasses();
+  
   return (
     <StackShim
-      className="w-screen min-h-screen bg-gray-100 "
+      className={classes.container}
       horizontalAlign="center"
       verticalAlign="center"
     >
       <StackShim
-        className="rounded-lg bg-gray-50 shadow-lg p-12"
+        className={classes.authCard}
         horizontalAlign="center"
       >
-        <StackItemShim className="mb-4" disableShrink>
+        <StackItemShim className={commonStyles.mb4} disableShrink>
           <Image
             src="/images/3d-fluency-airplane-take-off.png"
             width={200}

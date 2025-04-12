@@ -1,5 +1,5 @@
-import { IdValuePair, SystemStreamIDs } from "../server/inoreader";
-import { Subscription, Folder, Sortable, KeyValuePair, Tag } from "../types";
+import { IdValuePair, SystemStreamIDs } from "../../server/inoreader";
+import { Subscription, Folder, Sortable, KeyValuePair, Tag } from "../../types";
 
 export interface INavLink {
     /**

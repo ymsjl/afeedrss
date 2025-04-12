@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import StatusCard, { Status } from "../statusCard";
-import { GlobalNavigationCtx } from "../home/layout";
+import StatusCard, { Status } from "../StatusCard";
+import { GlobalNavigationCtx } from "../HomePageLayout";
 import {
   Breadcrumb,
   BreadcrumbButton,
@@ -17,7 +17,55 @@ interface Props {
   breadcrumbItems?: { title: string; key: string; href?: string }[];
 }
 
-const useStyles = makeStyles({
+export default function Layout({
+  title,
+  children,
+  breadcrumbItems,
+  tailElem,
+}: Props) {
+  const { setIsOpen } = useContext(GlobalNavigationCtx);
+  const classes = useClasses();
+
+  return (
+    <div className={classes.container}>
+      <div className={classes.header}>
+        <div className={classes.iconButtonContainer}>
+          <Hamburger
+            onClick={() => setIsOpen(true)}
+            className={classes.iconButton}
+          />
+        </div>
+        <div className={classes.breadcrumbContainer}>
+          <div className={classes.breadcrumbGrow}>
+            <Breadcrumb size="large">
+              <BreadcrumbItem>
+                <BreadcrumbButton href="/settings">设置</BreadcrumbButton>
+              </BreadcrumbItem>
+              {breadcrumbItems?.map((item) => (
+                <React.Fragment key={item.key}>
+                  <BreadcrumbDivider />
+                  <BreadcrumbItem key={item.key}>
+                    <BreadcrumbButton href={item.href}>
+                      {item.title}
+                    </BreadcrumbButton>
+                  </BreadcrumbItem>
+                </React.Fragment>
+              ))}
+            </Breadcrumb>
+          </div>
+          <div>{tailElem}</div>
+        </div>
+      </div>
+      <div className={classes.content}>
+        {children ?? (
+          <StatusCard status={Status.EMPTY} content="这里空无一物" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+const useClasses = makeStyles({
   container: {
     padding: "0 1.5rem",
     "@media (min-width: 640px)": {
@@ -51,51 +99,3 @@ const useStyles = makeStyles({
     flexGrow: 1,
   },
 });
-
-export default function Layout({
-  title,
-  children,
-  breadcrumbItems,
-  tailElem,
-}: Props) {
-  const { setIsOpen } = useContext(GlobalNavigationCtx);
-  const styles = useStyles();
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.iconButtonContainer}>
-          <Hamburger
-            onClick={() => setIsOpen(true)}
-            className={styles.iconButton}
-          />
-        </div>
-        <div className={styles.breadcrumbContainer}>
-          <div className={styles.breadcrumbGrow}>
-            <Breadcrumb size="large">
-              <BreadcrumbItem>
-                <BreadcrumbButton href="/settings">设置</BreadcrumbButton>
-              </BreadcrumbItem>
-              {breadcrumbItems?.map((item) => (
-                <React.Fragment key={item.key}>
-                  <BreadcrumbDivider />
-                  <BreadcrumbItem key={item.key}>
-                    <BreadcrumbButton href={item.href}>
-                      {item.title}
-                    </BreadcrumbButton>
-                  </BreadcrumbItem>
-                </React.Fragment>
-              ))}
-            </Breadcrumb>
-          </div>
-          <div>{tailElem}</div>
-        </div>
-      </div>
-      <div className={styles.content}>
-        {children ?? (
-          <StatusCard status={Status.EMPTY} content="这里空无一物" />
-        )}
-      </div>
-    </div>
-  );
-}
