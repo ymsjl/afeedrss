@@ -151,17 +151,17 @@ export const useCommonClasses = makeStyles({
 
   // 过渡动画
   transition: {
-    ...shorthands.transition("all"),
+    transitionProperty: "all",
     transitionDuration: "200ms",
     transitionTimingFunction: "ease-in-out",
   },
   transitionFast: {
-    ...shorthands.transition("all"),
+    transitionProperty: "all",
     transitionDuration: "100ms",
     transitionTimingFunction: "ease-in-out",
   },
   transitionSlow: {
-    ...shorthands.transition("all"),
+    transitionProperty: "all",
     transitionDuration: "300ms",
     transitionTimingFunction: "ease-in-out",
   },
@@ -213,7 +213,7 @@ export const useCommonClasses = makeStyles({
     boxShadow: tokens.shadow4,
     ...shorthands.borderRadius(tokens.borderRadiusMedium),
     ...shorthands.padding(tokens.spacingHorizontalM),
-    ...shorthands.transition("all"),
+    transitionProperty: "all",
     transitionDuration: "200ms",
     ":hover": {
       boxShadow: tokens.shadow8,

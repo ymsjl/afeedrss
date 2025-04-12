@@ -5,21 +5,17 @@ import Document, {
   Html,
   Main,
   NextScript,
+  DocumentInitialProps,
 } from "next/document";
-import { Stylesheet } from "@fluentui/merge-styles";
 import {
   createDOMRenderer,
   renderToStyleElements,
 } from "@fluentui/react-components";
 
-const stylesheet = Stylesheet.getInstance();
-
-export default class MyDocument extends Document<{
-  styleTags: any;
-  serializedStylesheet: any;
-}> {
-  static async getInitialProps(ctx: DocumentContext) {
-    // resetIds();
+export default class MyDocument extends Document<DocumentInitialProps> {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
     const renderer = createDOMRenderer();
     const originalRenderPage = ctx.renderPage;
 
@@ -29,7 +25,6 @@ export default class MyDocument extends Document<{
           function EnhancedApp(props) {
             const enhancedProps = {
               ...props,
-              // 👇 this is required to provide a proper renderer instance
               renderer,
             };
 
@@ -38,20 +33,11 @@ export default class MyDocument extends Document<{
       });
 
     const initialProps = await Document.getInitialProps(ctx);
-
     const styles = renderToStyleElements(renderer);
 
     return {
       ...initialProps,
-      styles: (
-        <>
-          {initialProps.styles}
-          {/* 👇 adding Fluent UI styles elements to output */}
-          {styles}
-        </>
-      ),
-      styleTags: stylesheet.getRules(true),
-      serializedStylesheet: stylesheet.serialize(),
+      styles: [initialProps.styles, styles],
     };
   }
 
@@ -59,19 +45,6 @@ export default class MyDocument extends Document<{
     return (
       <Html>
         <Head>
-          <style
-            type="text/css"
-            dangerouslySetInnerHTML={{ __html: this.props.styleTags }}
-          />
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.FabricConfig = window.FabricConfig || {};
-            window.FabricConfig.serializedStylesheet = ${this.props.serializedStylesheet};
-          `,
-            }}
-          />
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>

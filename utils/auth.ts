@@ -45,7 +45,7 @@ export async function getAccessToken(code: string) {
         grant_type: "authorization_code",
       },
       function (err, accessToken, refreshToken, result) {
-        if (err) {
+        if (err || !accessToken || !refreshToken) {
           reject(err);
         } else {
           resolve({ accessToken, refreshToken, result });
