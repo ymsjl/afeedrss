@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo } from "react";
-import { Spinner, List, ListItem } from "@fluentui/react-components";
+import { Spinner, List, ListItem, mergeClasses } from "@fluentui/react-components";
 import { StreamContentItem } from "../../server/inoreader";
 import {
   StreamContentItemWithPageIndex,
@@ -9,12 +9,11 @@ import {
 import { GlobalSettingsCtx } from "../../pages/_app";
 import StatusCard, { Status } from "../StatusCard";
 import ArticleListItem, { useListClasses } from "./ArticleListItem";
+import { useCommonClasses, useFlexClasses } from './../../theme/commonStyles';
 
 interface StreamContentPanelProps {
-  unreadOnly: boolean;
   curArticleId: string | null;
   onStreamContentItemClick: (item: StreamContentItem) => void;
-  onUnreadOnlyChange: (unreadOnly: boolean) => void;
 }
 
 export function StreamContentPanel(props: StreamContentPanelProps) {
@@ -25,6 +24,8 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const {
     globalSettings: { showFeedThumbnail },
   } = useContext(GlobalSettingsCtx);
+  const commonClasses = useCommonClasses()
+  const flexClasses = useFlexClasses()
 
   const queryData = streamContentQuery.data;
   const items = useMemo(() => {
@@ -76,7 +77,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
           );
         })}
       </List>
-      <div className="flex justify-center w-full p-4">
+      <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, commonClasses.p4)}>
         {streamContentQuery.isFetching && <Spinner />}
       </div>
     </>

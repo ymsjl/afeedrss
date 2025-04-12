@@ -114,7 +114,9 @@ export default function Swipeout({
 
   const openBtnsContainer = () => {
     if (swipeoutContainerRef.current) {
-      swipeoutContainerRef.current.classList.add(styles["swipeout-transitioning"]);
+      swipeoutContainerRef.current.classList.add(
+        styles["swipeout-transitioning"]
+      );
     }
     const openedContainerWidth = getOpenedContainerWidth();
     setTranslate(
@@ -127,7 +129,9 @@ export default function Swipeout({
 
   const closeBtnsContainer = () => {
     if (swipeoutContainerRef.current) {
-      swipeoutContainerRef.current.classList.add(styles["swipeout-transitioning"]);
+      swipeoutContainerRef.current.classList.add(
+        styles["swipeout-transitioning"]
+      );
     }
     setTranslate(0);
     setIsOpened(false);
@@ -147,7 +151,9 @@ export default function Swipeout({
       contentContainerWidth.current = contentContainerRef.current.offsetWidth;
     }
 
-    swipeoutContainerRef.current?.classList.remove(styles["swipeout-transitioning"]);
+    swipeoutContainerRef.current?.classList.remove(
+      styles["swipeout-transitioning"]
+    );
   };
 
   const getTranslate = (touchTranslate: number) => {
@@ -344,36 +350,34 @@ export default function Swipeout({
   };
 
   return (
-    <>
+    <div
+      className={`${styles["swipeout-container"]} ${className}`}
+      ref={swipeoutContainerRef}
+    >
       <div
-        className={`${styles["swipeout-container"]} ${className}`}
-        ref={swipeoutContainerRef}
+        ref={contentContainerRef}
+        style={{ transform: `translate3d(${translate}px, 0, 0)` }}
+        className={styles["swipeout-content"]}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
-        <div
-          ref={contentContainerRef}
-          style={{ transform: `translate3d(${translate}px, 0, 0)` }}
-          className={styles["swipeout-content"]}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        >
-          {children}
-        </div>
-        <div
-          className={styles["swipeout-left-btns-container"]}
-          style={{ transform: `translate3d(-100%, 0, 0)` }}
-          ref={leftBtnsContainerRef}
-        >
-          {leftBtnsRender()}
-        </div>
-        <div
-          className={styles["swipeout-right-btns-container"]}
-          style={{ transform: `translate3d(100%, 0, 0)` }}
-          ref={rightBtnsContainerRef}
-        >
-          {rightBtnsRender()}
-        </div>
+        {children}
       </div>
-    </>
+      <div
+        className={styles["swipeout-left-btns-container"]}
+        style={{ transform: `translate3d(-100%, 0, 0)` }}
+        ref={leftBtnsContainerRef}
+      >
+        {leftBtnsRender()}
+      </div>
+      <div
+        className={styles["swipeout-right-btns-container"]}
+        style={{ transform: `translate3d(100%, 0, 0)` }}
+        ref={rightBtnsContainerRef}
+      >
+        {rightBtnsRender()}
+      </div>
+    </div>
   );
 }

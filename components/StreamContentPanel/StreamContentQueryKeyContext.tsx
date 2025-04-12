@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { extractFirst } from "../../utils";
 import { QUERY_KEYS } from "../../constants";
+
 export function getRootStreamId(userId: string) {
   return `user/${userId}/state/com.google/root`;
 }

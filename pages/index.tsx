@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useCallback,
-} from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
   mergeClasses,
@@ -55,12 +51,15 @@ function Home({}: Props) {
     setTimeout(() => setCurArticle(null), 500);
   };
 
-  const onStreamContentItemClick = useCallback((item: StreamContentItem) => {
-    const href = `/?articleId=${item.id}`;
-    router.push(href, href, { shallow: true });
-    setCurArticle(item);
-    setIsArticlePanelOpen(true);
-  }, [router]);
+  const onStreamContentItemClick = useCallback(
+    (item: StreamContentItem) => {
+      const href = `/?articleId=${item.id}`;
+      router.push(href, href, { shallow: true });
+      setCurArticle(item);
+      setIsArticlePanelOpen(true);
+    },
+    [router]
+  );
 
   return (
     <>
@@ -111,8 +110,6 @@ function Home({}: Props) {
             <StreamContentPanel
               curArticleId={curArticle?.id ?? null}
               onStreamContentItemClick={onStreamContentItemClick}
-              unreadOnly={unreadOnly}
-              onUnreadOnlyChange={setUnreadOnly}
             />
           </StreamContentQueryKeyProvider>
         </div>
@@ -162,7 +159,6 @@ export const getServerSideProps: GetServerSideProps<
 Home.getLayout = getLayout;
 
 export default Home;
-
 
 const useClasses = makeStyles({
   body: {
