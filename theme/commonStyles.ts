@@ -22,7 +22,7 @@ export const useFlexClasses = makeStyles({
   },
   flexWrap: {
     display: "flex",
-    ...shorthands.flex("wrap"),
+    flexWrap: 'wrap'
   },
   flexGrow: {
     flexGrow: 1,

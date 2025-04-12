@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Tree,
   Dialog,
@@ -22,22 +24,20 @@ import { Add20Regular } from "@fluentui/react-icons";
 import { useSession } from "next-auth/react";
 import React, { FormEventHandler, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-
-import SettingsLayout from "../../components/SettingsPageLayout";
 import {
   useSubscriptionsListQuery,
   useFolderQuery,
   useStreamPreferencesQuery,
-} from "../../components/SourceNavPanel/utils";
-import { QUERY_KEYS } from "../../constants";
-import server from "../../server";
-import { getTagNameFromId } from "../../components/SourceNavPanel/subscriptionNavTreeBuilder";
-import SubscriptionGroupedListBuilder from "../../components/SourceNavPanel/subscriptionListTreeBuilder";
-import { getLayout } from "../../components/HomePageLayout";
+} from "@components/SourceNavPanel/utils";
+import { QUERY_KEYS } from "@/constants";
+import server from "@server/index";
+import { SettingsPageLayout } from "@/components/SettingsPageLayout";
+import { getTagNameFromId } from "@components/SourceNavPanel/subscriptionNavTreeBuilder";
+import SubscriptionGroupedListBuilder from "@components/SourceNavPanel/subscriptionListTreeBuilder";
 
 interface Props {}
 
-function SubscriptionSource({}: Props) {
+export default function SubscriptionSource({}: Props) {
   const classes = useClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>();
@@ -121,13 +121,13 @@ function SubscriptionSource({}: Props) {
   }, [folderData]);
 
   return (
-    <SettingsLayout
+    <SettingsPageLayout
       title="订阅源"
       breadcrumbItems={[
         {
           title: "订阅源",
           key: "subscription_source",
-          href: "/settings/subscription_source",
+          href: "/home/settings/subscriptions",
         },
       ]}
       tailElem={
@@ -201,13 +201,9 @@ function SubscriptionSource({}: Props) {
           </DialogBody>
         </DialogSurface>
       </Dialog>
-    </SettingsLayout>
+    </SettingsPageLayout>
   );
 }
-
-SubscriptionSource.getLayout = getLayout;
-
-export default SubscriptionSource;
 
 const useClasses = makeStyles({
   formItem: {

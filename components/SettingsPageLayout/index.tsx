@@ -1,6 +1,7 @@
+'use client'
 import React, { useContext } from "react";
-import StatusCard, { Status } from "../StatusCard";
-import { GlobalNavigationCtx } from "../HomePageLayout";
+import StatusCard, { Status } from "@components/StatusCard";
+import { GlobalNavigationCtx } from "@components/HomePageLayout/GlobalNavigationCtx";
 import {
   Breadcrumb,
   BreadcrumbButton,
@@ -17,8 +18,7 @@ interface Props {
   breadcrumbItems?: { title: string; key: string; href?: string }[];
 }
 
-export default function Layout({
-  title,
+export function SettingsPageLayout({
   children,
   breadcrumbItems,
   tailElem,
@@ -39,7 +39,7 @@ export default function Layout({
           <div className={classes.breadcrumbGrow}>
             <Breadcrumb size="large">
               <BreadcrumbItem>
-                <BreadcrumbButton href="/settings">设置</BreadcrumbButton>
+                <BreadcrumbButton href="/home/settings">设置</BreadcrumbButton>
               </BreadcrumbItem>
               {breadcrumbItems?.map((item) => (
                 <React.Fragment key={item.key}>

@@ -1,6 +1,7 @@
+"use client";
+
 import React, { useContext } from "react";
-import { useRouter } from "next/router";
-import qs from "query-string";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { makeStyles, mergeClasses, Tooltip } from "@fluentui/react-components";
 import {
   AppItem,
@@ -23,42 +24,35 @@ import {
   SettingsRegular,
 } from "@fluentui/react-icons";
 import { INavLink } from "./subscriptionNavTreeBuilder";
-import { GlobalNavigationCtx } from "../HomePageLayout";
+import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
 import { useSourcePanelData } from "./useSourcePanelData";
 
 export interface Props {
-  userId?: string;
   className?: string;
 }
 
-const useClasses = makeStyles({
-  root: {
-    flexShrink: 0,
-  },
-  nav: {},
-  navItem: {
-    display: "flex",
-    width: "100%",
-    alignItems: "center",
-  },
-});
-
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
 
-export function SourceNavPanel({ className, userId }: Props) {
+export function SourceNavPanel({ className }: Props) {
   const classes = useClasses();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
-  const { data } = useSourcePanelData({ userId });
+  const { data } = useSourcePanelData();
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavLink
   ) => {
     e?.preventDefault();
-    const query = qs.stringify({ ...router.query, streamId: item?.key });
-    const href = `/?${query}`;
-    router.push(href, href, { shallow: true });
+    const params: { [key: string]: string } = {};
+    if(item?.key){
+      params.streamId = item.key;
+    }
+    searchParams.forEach((value, key) => {
+      params[key] = value;
+    });
+    router.push(`/home?${new URLSearchParams(params).toString()}`);
   };
 
   return (
@@ -112,7 +106,7 @@ export function SourceNavPanel({ className, userId }: Props) {
         ))}
       </NavDrawerBody>
       <NavDivider />
-      <AppItem icon={<SettingsRegular />} as="a" href="/settings">
+      <AppItem icon={<SettingsRegular />} as="a" href="/home/settings">
         设置
       </AppItem>
     </NavDrawer>
@@ -120,3 +114,15 @@ export function SourceNavPanel({ className, userId }: Props) {
 }
 
 export default React.memo(SourceNavPanel);
+
+const useClasses = makeStyles({
+  root: {
+    flexShrink: 0,
+  },
+  nav: {},
+  navItem: {
+    display: "flex",
+    width: "100%",
+    alignItems: "center",
+  },
+});

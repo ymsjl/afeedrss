@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { extractFirst } from "../../utils";
 import { QUERY_KEYS } from "../../constants";
+import { useSearchParams } from "next/navigation";
 
 export function getRootStreamId(userId: string) {
   return `user/${userId}/state/com.google/root`;
@@ -46,11 +46,12 @@ export function StreamContentQueryKeyProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user?.id || "";
-  const streamId = getRootStreamId(userId);
-  const unreadOnly = !!extractFirst(router.query.unreadOnly);
+  const searchParams = useSearchParams();
+  const streamId =
+    extractFirst(searchParams.get("streamId")) || getRootStreamId(userId);
+  const unreadOnly = !!extractFirst(searchParams.get("unreadOnly"));
 
   const streamContentQueryKey = getStreamContentQueryKey({
     unreadOnly,

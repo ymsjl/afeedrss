@@ -53,6 +53,8 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
     onMarkAboveAsRead(item, true);
   };
 
+  const src = filterImgSrcfromHtmlStr(item.summary.content);
+
   return (
     <Swipeout
       className={classes.swipeoutContainer}
@@ -85,12 +87,14 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
         {showFeedThumbnail ? (
           <>
             <div className={classes.thumbnailWrapper}>
-              <Image
-                src={filterImgSrcfromHtmlStr(item.summary.content)}
-                fit="cover"
-                className={classes.thumbnail}
-                alt=""
-              />
+              {src && (
+                <Image
+                  src={src}
+                  fit="cover"
+                  className={classes.thumbnail}
+                  alt=""
+                />
+              )}
             </div>
             <div className={classes.contentWrapper}>
               <div className={classes.titleWrapper}>

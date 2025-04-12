@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import SubscriptionNavTreeBuilder from "./subscriptionNavTreeBuilder";
 import { useStreamPreferencesQuery, useSubscriptionsListQuery, useFolderQuery } from "./utils";
+import { useSession } from "next-auth/react";
 
-export const useSourcePanelData = ({ userId }: { userId?: string }) => {
+export const useSourcePanelData = () => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id || "";
   const streamPreferencesQuery = useStreamPreferencesQuery();
   const folderQuery = useFolderQuery();
   const subscriptionsListQuery = useSubscriptionsListQuery();

@@ -1,21 +1,4 @@
-/** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa');
-
-const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['www.inoreader.com', 'do-cdn.appinn.com'],
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/api/inoreader/:path*',
-        destination: `${process.env.INOREADER_SERVER_URL}/:path*`,
-      }]
-  }
-}
-
-module.exports = withPWA({
+const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
@@ -24,22 +7,11 @@ module.exports = withPWA({
       urlPattern: /^https?.*/,
       handler: 'NetworkFirst',
       options: {
-        cacheName: 'all-cache',
+        cacheName: 'https-calls',
+        networkTimeoutSeconds: 15,
         expiration: {
-          maxAgeSeconds: 60 * 20, // 20分钟
-        },
-        cacheableResponse: {
-          statuses: [0, 200]
-        }
-      }
-    },
-    {
-      urlPattern: /\/api\/.*/,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'api-cache',
-        expiration: {
-          maxAgeSeconds: 60 * 20, // 20分钟
+          maxEntries: 150,
+          maxAgeSeconds: 60 * 20 // 20分钟
         },
         cacheableResponse: {
           statuses: [0, 200]
@@ -47,4 +19,25 @@ module.exports = withPWA({
       }
     }
   ]
-})(nextConfig);
+});
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['www.inoreader.com'],
+  },
+  swcMinify: true,
+  compiler: {
+    styledComponents: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/inoreader/:path*',
+        destination: `${process.env.INOREADER_SERVER_URL}/:path*`,
+      }
+    ];
+  }
+};
+
+module.exports = withPWA(nextConfig);

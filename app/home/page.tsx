@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState, useContext, useCallback } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   mergeClasses,
   makeStyles,
@@ -11,26 +13,23 @@ import {
   BreadcrumbDivider,
 } from "@fluentui/react-components";
 
-import { StreamContentQueryKeyProvider } from "../components/StreamContentPanel/StreamContentQueryKeyContext";
-import { StreamContentItem } from "../server/inoreader";
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import { StreamContentQueryKeyProvider } from "@components/StreamContentPanel/StreamContentQueryKeyContext";
+import { StreamContentItem } from "@server/inoreader";
 
-import { getLayout } from "../components/HomePageLayout";
-import { GlobalNavigationCtx } from "../components/HomePageLayout";
-import { StreamContentPanel } from "../components/StreamContentPanel";
-import { ArticleReadPanel } from "../components/ArticleReadPanel";
+import { GlobalNavigationCtx } from "@components/HomePageLayout/GlobalNavigationCtx";
+import { StreamContentPanel } from "@components/StreamContentPanel";
+import { ArticleReadPanel } from "@components/ArticleReadPanel";
 import { Hamburger } from "@fluentui/react-nav-preview";
 import {
   useCommonClasses,
   useFlexClasses,
   useTextClasses,
-} from "../theme/commonStyles";
-import { extractFirst } from "../utils";
+} from "@/theme/commonStyles";
+import { extractFirst } from "@utils/index";
 
 interface Props {}
 
-function Home({}: Props) {
+export default function Home({}: Props) {
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
@@ -41,9 +40,10 @@ function Home({}: Props) {
   const [isArticlePanelOpen, setIsArticlePanelOpen] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [unreadOnly, setUnreadOnly] = useState(() => {
-    return !!extractFirst(router.query.unreadOnly);
+    return !!extractFirst(searchParams.get("unreadOnly"));
   });
 
   const handleCloseArticle = () => {
@@ -53,8 +53,7 @@ function Home({}: Props) {
 
   const onStreamContentItemClick = useCallback(
     (item: StreamContentItem) => {
-      const href = `/?articleId=${item.id}`;
-      router.push(href, href, { shallow: true });
+      router.push(`/home?articleId=${item.id}`);
       setCurArticle(item);
       setIsArticlePanelOpen(true);
     },
@@ -132,33 +131,6 @@ function Home({}: Props) {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<
-  any,
-  {
-    unreadOnly: string;
-    userId: string;
-    streamId: string;
-  }
-> = async (context) => {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin",
-      },
-      props: {},
-    };
-  }
-
-  return {
-    props: {},
-  };
-};
-
-Home.getLayout = getLayout;
-
-export default Home;
 
 const useClasses = makeStyles({
   body: {

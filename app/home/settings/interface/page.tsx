@@ -1,11 +1,12 @@
+"use client";
+
 import React from "react";
 import { Label, Switch, SwitchOnChangeData } from "@fluentui/react-components";
 import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
-import { useTextClasses } from "../../theme/commonStyles";
+import { useTextClasses } from "@/theme/commonStyles";
+import { SettingsPageLayout } from "@/components/SettingsPageLayout";
 
-import { GlobalSettingsCtx } from "./../_app";
-import SettingsLayout from "../../components/SettingsPageLayout";
-import { getLayout } from "../../components/HomePageLayout";
+import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 
 interface Props {}
 
@@ -13,7 +14,7 @@ function Interface({}: Props) {
   const textClasses = useTextClasses();
   const { globalSettings, setGlobalSettings } =
     React.useContext(GlobalSettingsCtx);
-  
+
   const handleOnShowFeedThumbnailToggleChange = (
     ev: React.ChangeEvent<HTMLInputElement>,
     { checked }: SwitchOnChangeData
@@ -23,9 +24,17 @@ function Interface({}: Props) {
       showFeedThumbnail: Boolean(checked),
     }));
   };
-  
+
   return (
-    <SettingsLayout title="界面">
+    <SettingsPageLayout
+      breadcrumbItems={[
+        {
+          title: "界面",
+          key: "interface",
+          href: "/home/settings/interface",
+        },
+      ]}
+    >
       <StackShim>
         <Label className={textClasses.textLg}>文章列表</Label>
         <StackShim horizontal verticalAlign="center">
@@ -36,10 +45,8 @@ function Interface({}: Props) {
           />
         </StackShim>
       </StackShim>
-    </SettingsLayout>
+    </SettingsPageLayout>
   );
 }
-
-Interface.getLayout = getLayout;
 
 export default Interface;

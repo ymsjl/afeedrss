@@ -1,23 +1,23 @@
+"use client";
+
 import React from "react";
 import { Image, Text, makeStyles } from "@fluentui/react-components";
-import SettingsLayout from "../../components/SettingsPageLayout";
-import { getLayout } from "../../components/HomePageLayout";
-import { useTextClasses } from "../../theme/commonStyles";
+import { SettingsPageLayout } from "@components/SettingsPageLayout";
+import { useTextClasses } from "@/theme/commonStyles";
 
 interface Props {}
 
-function Account({}: Props) {
+export default function Account({}: Props) {
   const classes = useClasses();
   const textClasses = useTextClasses();
-  
+
   return (
-    <SettingsLayout
-      title="关于"
+    <SettingsPageLayout
       breadcrumbItems={[
         {
           title: "关于",
           key: "about",
-          href: "/settings/about",
+          href: "/home/settings/about",
         },
       ]}
     >
@@ -27,7 +27,10 @@ function Account({}: Props) {
           className={classes.image}
           alt=""
         />
-        <Text className={`${textClasses.textLg} ${textClasses.fontSemibold}`} block>
+        <Text
+          className={`${textClasses.textLg} ${textClasses.fontSemibold}`}
+          block
+        >
           Afeedrss 1.0.0
         </Text>
         <Text className={textClasses.textBase} block>
@@ -41,20 +44,12 @@ function Account({}: Props) {
         >
           项目仓库
         </a>
-        <a className={classes.link}>
-          使用条款
-        </a>
-        <a className={classes.link}>
-          隐私策略
-        </a>
+        <a className={classes.link}>使用条款</a>
+        <a className={classes.link}>隐私策略</a>
       </div>
-    </SettingsLayout>
+    </SettingsPageLayout>
   );
 }
-
-Account.getLayout = getLayout;
-
-export default Account;
 
 const useClasses = makeStyles({
   root: {

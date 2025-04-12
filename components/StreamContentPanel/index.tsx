@@ -1,15 +1,15 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { Spinner, List, ListItem, mergeClasses } from "@fluentui/react-components";
-import { StreamContentItem } from "../../server/inoreader";
+import { StreamContentItem } from "@server/inoreader";
 import {
   StreamContentItemWithPageIndex,
   useStreamContentQuery,
   useStreamItemAction,
 } from "./useStreamContent";
-import { GlobalSettingsCtx } from "../../pages/_app";
+import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 import StatusCard, { Status } from "../StatusCard";
 import ArticleListItem, { useListClasses } from "./ArticleListItem";
-import { useCommonClasses, useFlexClasses } from './../../theme/commonStyles';
+import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 
 interface StreamContentPanelProps {
   curArticleId: string | null;

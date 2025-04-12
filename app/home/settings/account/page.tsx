@@ -1,19 +1,18 @@
+"use client";
+
 import React from "react";
 import { Button } from "@fluentui/react-components";
 import { signOut } from "next-auth/react";
-import SettingsLayout from "../../components/SettingsPageLayout";
-import { getLayout } from "../../components/HomePageLayout";
 import { ArrowImportRegular } from "@fluentui/react-icons";
+import { SettingsPageLayout } from "@/components/SettingsPageLayout";
 
 interface Props {}
 
-function Account({}: Props) {
-  const onClickSignout = () => {
-    signOut({ callbackUrl: "/auth/signin" });
-  };
+export default function Account({}: Props) {
+  const onClickSignout = () => signOut({ callbackUrl: "/auth/signin" });
+
   return (
-    <SettingsLayout
-      title="账户"
+    <SettingsPageLayout
       breadcrumbItems={[
         {
           title: "账户",
@@ -30,10 +29,6 @@ function Account({}: Props) {
           退出登录
         </Button>
       }
-    ></SettingsLayout>
+    ></SettingsPageLayout>
   );
 }
-
-Account.getLayout = getLayout;
-
-export default Account;
