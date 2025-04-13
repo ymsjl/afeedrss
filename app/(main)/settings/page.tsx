@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { StackShim, StackItemShim } from "@fluentui/react-migration-v8-v9";
 import {
   List,
   ListItem,

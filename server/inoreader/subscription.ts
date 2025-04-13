@@ -1,10 +1,22 @@
-import { fetch } from "../index";
-import { Subscription } from "./../../types";
+import { fetch, } from "../index";
+import { Subscription } from "../../types";
 import { FeedActionType } from "./types";
 import { InoreaderTag } from "../../types";
 
 export interface SubscriptionListResponse {
   subscriptions: Subscription[];
+}
+
+interface SubscriptionEditParams {
+  ac: FeedActionType;
+  s: string;
+  a?: string;
+  t?: string;
+}
+
+interface FolderTagListParams {
+  types?: number;
+  counts?: number;
 }
 
 /**
@@ -13,13 +25,12 @@ export interface SubscriptionListResponse {
  * @returns
  */
 export function addSubscription(url: string, folder?: string) {
-  return fetch.get(`/reader/api/0/subscription/edit`, {
-    params: {
-      ac: FeedActionType.subscribe,
-      s: url,
-      a: folder || "",
-    },
-  });
+  const params: SubscriptionEditParams = {
+    ac: FeedActionType.subscribe,
+    s: url,
+    a: folder || "",
+  };
+  return fetch.get(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
@@ -28,12 +39,11 @@ export function addSubscription(url: string, folder?: string) {
  * @returns 
  */
 export function unsubscription(streamId: string) {
-  return fetch.get(`/reader/api/0/subscription/edit`, {
-    params: {
-      ac: FeedActionType.unsubscribe,
-      s: streamId,
-    },
-  });
+  const params: SubscriptionEditParams = {
+    ac: FeedActionType.unsubscribe,
+    s: streamId,
+  };
+  return fetch.get(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
@@ -42,13 +52,12 @@ export function unsubscription(streamId: string) {
  * @returns 
  */
 export function renameSubscription(streamId: string, title: string) {
-  return fetch.get(`/reader/api/0/subscription/edit`, {
-    params: {
-      ac: FeedActionType.edit,
-      s: streamId,
-      t: title,
-    },
-  });
+  const params: SubscriptionEditParams = {
+    ac: FeedActionType.edit,
+    s: streamId,
+    t: title,
+  };
+  return fetch.get(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
@@ -59,7 +68,6 @@ export function getSubscriptionList() {
   return fetch.get<SubscriptionListResponse>(`/reader/api/0/subscription/list`);
 }
 
-
 export interface InoreaderTagListResponse {
   tags: InoreaderTag[];
 }
@@ -69,11 +77,6 @@ export interface InoreaderTagListResponse {
  * @params
  * @returns 
  */
-export function getFolderOrTagList(types?: number, counts?: number) {
-  return fetch.get<InoreaderTagListResponse>(`/reader/api/0/tag/list`, {
-    params: {
-      types: types,
-      counts: counts,
-    },
-  });
+export function getFolderOrTagList(params?: FolderTagListParams) {
+  return fetch.get<InoreaderTagListResponse>(`/reader/api/0/tag/list`, { params });
 }

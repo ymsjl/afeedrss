@@ -1,37 +1,18 @@
-import { InfiniteData, useInfiniteQuery, useQueryClient } from "react-query";
-import server from "../../server";
 import {
-  StreamContentItem,
-  StreamContentsResponse,
-  SystemStreamIDs,
-} from "../../server/inoreader";
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import service from "@server/index";
+import { StreamContentItem, StreamContentsResponse } from "@server/inoreader";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
 import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
-
-export async function fetchStreamContent({
-  queryKey,
-  pageParam = "",
-}: {
-  queryKey: any;
-  pageParam?: string;
-}) {
-  const [, streamId, unreadOnly] = queryKey;
-  const exclude = !!unreadOnly ? SystemStreamIDs.READ : "";
-  const res = await server.inoreader.getStreamContents(String(streamId), {
-    exclude: exclude,
-    continuation: pageParam,
-  });
-  return res.data;
-}
+import { makeStreamContentQueryOptions } from "@server/inoreader/stream.rquery";
 
 export function useStreamContentQuery() {
   const queryKey = useStreamContentQueryKey();
-  return useInfiniteQuery<StreamContentsResponse>(queryKey, fetchStreamContent, {
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage.continuation;
-    },
-  });
+  return useInfiniteQuery(makeStreamContentQueryOptions(queryKey));
 }
 
 export interface StreamContentItemWithPageIndex extends StreamContentItem {
@@ -44,8 +25,8 @@ export const useStreamItemAction = () => {
 
   const markItemAsRead = useCallback(
     async (target: StreamContentItemWithPageIndex) => {
-      await server.inoreader.markArticleAsRead(target.id, target.isRead);
-      queryClient.setQueryData(
+      await service.inoreader.markArticleAsRead(target.id, target.isRead);
+      queryClient.setQueryData<InfiniteData<StreamContentsResponse>>(
         queryKey,
         produce<InfiniteData<StreamContentsResponse>>((draft) => {
           const { items } = draft.pages[target.pageIndex];
@@ -85,7 +66,7 @@ export const useStreamItemAction = () => {
             });
         })
       );
-      await server.inoreader.markArticleAsRead(pendingIds, !isRead);
+      await service.inoreader.markArticleAsRead(pendingIds, !isRead);
     },
     [queryClient, queryKey]
   );

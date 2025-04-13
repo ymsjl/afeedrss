@@ -1,7 +1,18 @@
-import qs from "query-string";
 import { fetch } from "../index";
 import { StreamContentsResponse, IdValuePair } from "./types";
 import { MarkArticleParmas, SystemStreamIDs } from "./types";
+
+interface StreamContentsParams {
+  n?: number; // Number of items to return (default 20, max 1000)
+  r?: string; // Order. By default, it is newest first. You can pass o here to get oldest first
+  ot?: number; // Start time (unix timestamp)
+  xt?: string; // Exclude Target
+  it?: string; // Include Target
+  c?: string; // Continuation
+  output?: string;
+  includeAllDirectStreamIds?: boolean;
+  annotations?: boolean;
+}
 
 /**
  * 获取 Feed 流的文章列表
@@ -9,7 +20,10 @@ import { MarkArticleParmas, SystemStreamIDs } from "./types";
  */
 export function getStreamContents(
   streamId: string,
+
   { number, order, startTime, exclude, include, continuation }: any | undefined
+
+
 ) {
   return fetch.get<StreamContentsResponse>(
     `/reader/api/0/stream/contents/${encodeURIComponent(streamId)}`,
@@ -78,14 +92,10 @@ export function markArticleAsStar(id: string, isStar?: boolean) {
  * @params
  * @returns 
  */
-export function markArticleAsRead(id: string | string[], asUnread?: boolean){
+export function markArticleAsRead(id: string | string[], asUnread?: boolean) {
   const params: MarkArticleParmas = { i: id };
   params[asUnread ? "r" : "a"] = SystemStreamIDs.READ;
   return fetch.post(`/reader/api/0/edit-tag`, null, {
     params: params,
-    paramsSerializer: (params) => {
-      const result = qs.stringify(params);
-      return result;
-    },
   });
 }

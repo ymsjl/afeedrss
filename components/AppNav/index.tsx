@@ -33,7 +33,6 @@ export function AppNav({ className }: Props) {
   const classes = useClasses();
   const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
   const pathname = usePathname()
-  console.log('pathname', pathname)
   return (
     <NavDrawer
       open

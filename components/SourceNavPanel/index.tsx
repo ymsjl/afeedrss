@@ -67,7 +67,7 @@ export function SourceNavPanel({ className }: Props) {
           <React.Fragment key={groupIndex}>
             <NavSectionHeader>订阅源</NavSectionHeader>
             {group.links.map((link, linkIndex) =>
-              link.type === "feed" ? (
+              link.type !== "folder" ? (
                 <NavItem
                   key={linkIndex}
                   icon={<RssIcon />}

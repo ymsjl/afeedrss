@@ -23,12 +23,12 @@ import {
 import { Add20Regular } from "@fluentui/react-icons";
 import { useSession } from "next-auth/react";
 import React, { FormEventHandler, useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {
-  useSubscriptionsListQuery,
-  useFolderQuery,
-  useStreamPreferencesQuery,
-} from "@components/SourceNavPanel/utils";
+  streamPreferencesQueryOptions,
+  subscriptionsQueryOptions,
+  folderQueryOptions,
+} from "@server/inoreader/subscription.rquery";
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
@@ -44,18 +44,18 @@ export default function SubscriptionSource({}: Props) {
   const { data: session } = useSession();
   const userId = session?.user?.id || "";
   const queryClient = useQueryClient();
-  const subscriptionsListQuery = useSubscriptionsListQuery();
-  const streamPreferencesQuery = useStreamPreferencesQuery();
-  const folderQuery = useFolderQuery();
+  const subscriptionsQuery = useQuery(subscriptionsQueryOptions);
+  const streamPreferencesQuery = useQuery(streamPreferencesQueryOptions);
+  const folderQuery = useQuery(folderQueryOptions);
 
-  const subscriptionsListData = subscriptionsListQuery.data;
+  const subscriptionsData = subscriptionsQuery.data;
   const folderData = folderQuery.data;
   const streamPreferencesData = streamPreferencesQuery.data;
 
   const { items, groups } = useMemo(() => {
     if (
       !userId ||
-      !subscriptionsListData ||
+      !subscriptionsData ||
       !folderData ||
       !streamPreferencesData
     ) {
@@ -66,26 +66,24 @@ export default function SubscriptionSource({}: Props) {
     }
     return new SubscriptionGroupedListBuilder({
       userId,
-      subscriptionById: subscriptionsListData.entities.subscription,
+      subscriptionById: subscriptionsData.entities.subscription,
       tagsById: folderData.entities.folder,
       streamPrefById: streamPreferencesData.streamprefs,
     }).buildGroupedList();
-  }, [userId, subscriptionsListData, folderData, streamPreferencesData]);
+  }, [userId, subscriptionsData, folderData, streamPreferencesData]);
 
-  const addFeedMutation = useMutation(
-    ({ feedUrl, folderId }: { feedUrl: string; folderId: string }) =>
+  const addFeedMutation = useMutation({
+    mutationFn: ({ feedUrl, folderId }: { feedUrl: string; folderId: string }) =>
       server.inoreader.addSubscription(`feed/${feedUrl}`, folderId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEYS.SUBSCRIPTIONS_LIST);
-        queryClient.invalidateQueries(QUERY_KEYS.STREAM_PREFERENCES);
-        queryClient.invalidateQueries(QUERY_KEYS.FOLDER);
-      },
-      onError: (error) => {
-        alert("Failed");
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SUBSCRIPTIONS_LIST] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STREAM_PREFERENCES] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.FOLDER] });
+    },
+    onError: (error: unknown) => {
+      alert("Failed");
+    },
+  });
 
   const handleDropdownChange = (
     event: SelectionEvents,
@@ -100,7 +98,9 @@ export default function SubscriptionSource({}: Props) {
       feedUrl: { value: string };
     };
     const feedUrl = form["feedUrl"].value;
-    addFeedMutation.mutate({ feedUrl, folderId: String(selectedFolder) });
+    if (selectedFolder) {
+      addFeedMutation.mutate({ feedUrl, folderId: selectedFolder });
+    }
   };
 
   const dropdownOptions: { key: string; text: string }[] = useMemo(() => {
@@ -110,8 +110,8 @@ export default function SubscriptionSource({}: Props) {
         result,
       } = folderData;
       return result
-        .filter((key) => folder[key].type === "folder")
-        .map((key) => ({
+        .filter((key: string) => folder[key].type === "folder")
+        .map((key: string) => ({
           key: folder[key].id,
           text: getTagNameFromId(folder[key].id),
         }));
@@ -189,7 +189,7 @@ export default function SubscriptionSource({}: Props) {
                     <Button
                       appearance="primary"
                       className={classes.fullWidth}
-                      disabled={addFeedMutation.isLoading}
+                      disabled={addFeedMutation.isPending}
                       type="submit"
                     >
                       添加
