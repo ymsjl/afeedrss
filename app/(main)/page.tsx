@@ -26,11 +26,13 @@ import {
 } from "@/theme/commonStyles";
 import { extractFirst } from "@utils/index";
 import { SourceNavPanel } from "@/components/SourceNavPanel";
+import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 
 interface Props { }
 
 export default function Home({ }: Props) {
   const classes = useClasses();
+  const pageLayoutClasses = usePageLayoutClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
@@ -63,9 +65,9 @@ export default function Home({ }: Props) {
   return (
     <div className={classes.root}>
       <SourceNavPanel />
-      <div className={classes.main}>
-        <div className={classes.content}>
-          <div className={classes.header}>
+      <div className={pageLayoutClasses.main}>
+        <div className={pageLayoutClasses.content}>
+          <div className={pageLayoutClasses.header}>
             <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
               <Breadcrumb size="large">
                 <BreadcrumbItem>
@@ -130,47 +132,16 @@ export default function Home({ }: Props) {
   );
 }
 
-export const useClasses = makeStyles({
+const useClasses = makeStyles({
   root: {
     display: "flex",
     height: "100%",
     flex: 1,
     gap: tokens.spacingHorizontalM,
   },
-  main: {
-    flex: 1,
-    height: '100%',
-    marginBlockStart: tokens.spacingVerticalM,
-    backgroundColor: tokens.colorNeutralBackground3,
-    border: `1px solid ${tokens.colorNeutralStroke2}`,
-    ...shorthands.borderRadius(
-      tokens.borderRadiusXLarge,
-      0,
-      0,
-      0
-    ),
-  },
-  content: {
-    marginInline: "auto",
-    maxWidth: "64rem",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    paddingInlineEnd: tokens.spacingHorizontalL,
-  },
   body: {
     position: "relative",
     overflow: "hidden",
-  },
-  header: {
-    position: "sticky",
-    top: 0,
-    zIndex: 10,
-    display: "flex",
-    alignItems: "center",
-    background: "inherit",
-    ...shorthands.padding(tokens.spacingVerticalL, tokens.spacingHorizontalXS, tokens.spacingVerticalM),
   },
   title: {
     flexShrink: 0,

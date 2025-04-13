@@ -6,13 +6,10 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbItem,
-  makeStyles,
   mergeClasses,
-  shorthands,
-  tokens,
 } from "@fluentui/react-components";
-import { useClasses as useHomePageClasses } from '@/app/(main)/page'
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
+import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 
 interface Props {
   title?: string;
@@ -28,12 +25,12 @@ export function SettingsPageLayout({
 }: Props) {
   const textClasses = useTextClasses();
   const flexClasses = useFlexClasses();
-  const homePageClasses = useHomePageClasses();
+  const pageLayoutClasses = usePageLayoutClasses();
 
   return (
-    <div className={homePageClasses.main}>
-      <div className={homePageClasses.content}>
-        <div className={mergeClasses(homePageClasses.header, flexClasses.justifyBetween)}>
+    <div className={pageLayoutClasses.main}>
+      <div className={pageLayoutClasses.content}>
+        <div className={mergeClasses(pageLayoutClasses.header, flexClasses.justifyBetween)}>
           <div className={flexClasses.flexGrow}>
             <Breadcrumb size="large">
               <BreadcrumbItem>
