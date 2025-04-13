@@ -1,6 +1,7 @@
 import {
   InfiniteData,
   useInfiniteQuery,
+  useSuspenseInfiniteQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import service from "@server/index";
@@ -8,12 +9,6 @@ import { StreamContentItem, StreamContentsResponse } from "@server/inoreader";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
 import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
-import { makeStreamContentQueryOptions } from "@server/inoreader/stream.rquery";
-
-export function useStreamContentQuery() {
-  const queryKey = useStreamContentQueryKey();
-  return useInfiniteQuery(makeStreamContentQueryOptions(queryKey));
-}
 
 export interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
@@ -71,7 +66,7 @@ export const useStreamItemAction = () => {
     [queryClient, queryKey]
   );
 
-  const markItemAsStar = useCallback(() => {}, []);
+  const markItemAsStar = useCallback(() => { }, []);
 
   return useMemo(() => {
     return {

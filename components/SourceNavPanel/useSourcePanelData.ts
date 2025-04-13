@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import SubscriptionNavTreeBuilder from "./subscriptionNavTreeBuilder";
 import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
 import { useSession } from "next-auth/react";
@@ -7,9 +7,9 @@ import { useSession } from "next-auth/react";
 export const useSourcePanelData = () => {
   const { data: session } = useSession();
   const userId = session?.user?.id || "";
-  const streamPreferencesQuery = useQuery(streamPreferencesQueryOptions);
-  const folderQuery = useQuery(folderQueryOptions);
-  const subscriptionsQuery = useQuery(subscriptionsQueryOptions);
+  const streamPreferencesQuery = useSuspenseQuery(streamPreferencesQueryOptions);
+  const folderQuery = useSuspenseQuery(folderQueryOptions);
+  const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);
 
   const subscriptionsData = subscriptionsQuery.data;
   const folderData = folderQuery.data;
@@ -23,7 +23,7 @@ export const useSourcePanelData = () => {
     ) {
       return null;
     }
-  
+
     return new SubscriptionNavTreeBuilder({
       userId,
       subscriptionById: subscriptionsData.entities.subscription,

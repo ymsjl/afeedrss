@@ -3,13 +3,15 @@ import { Spinner, List, ListItem, mergeClasses, makeStyles } from "@fluentui/rea
 import { StreamContentItem } from "@server/inoreader";
 import {
   StreamContentItemWithPageIndex,
-  useStreamContentQuery,
   useStreamItemAction,
 } from "./useStreamContent";
 import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 import StatusCard, { Status } from "../StatusCard";
 import ArticleListItem, { useListClasses } from "./ArticleListItem";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
+import { makeStreamContentQueryOptions } from "@/server/inoreader/stream.rquery";
+import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
 interface StreamContentPanelProps {
   curArticleId: string | null;
@@ -19,7 +21,8 @@ interface StreamContentPanelProps {
 export function StreamContentPanel(props: StreamContentPanelProps) {
   const { curArticleId, onStreamContentItemClick } = props;
   const listClasses = useListClasses();
-  const streamContentQuery = useStreamContentQuery();
+  const queryKey = useStreamContentQueryKey();
+  const streamContentQuery = useSuspenseInfiniteQuery(makeStreamContentQueryOptions(queryKey));
   const { markAboveAsRead, markItemAsRead } = useStreamItemAction();
   const {
     globalSettings: { showFeedThumbnail },
