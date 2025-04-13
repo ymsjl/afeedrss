@@ -53,7 +53,7 @@ export default function Home({}: Props) {
 
   const onStreamContentItemClick = useCallback(
     (item: StreamContentItem) => {
-      router.push(`/home?articleId=${item.id}`);
+      router.push(`/?articleId=${item.id}`);
       setCurArticle(item);
       setIsArticlePanelOpen(true);
     },

@@ -39,7 +39,7 @@ export function SettingsPageLayout({
           <div className={classes.breadcrumbGrow}>
             <Breadcrumb size="large">
               <BreadcrumbItem>
-                <BreadcrumbButton href="/home/settings">设置</BreadcrumbButton>
+                <BreadcrumbButton href="/settings">设置</BreadcrumbButton>
               </BreadcrumbItem>
               {breadcrumbItems?.map((item) => (
                 <React.Fragment key={item.key}>

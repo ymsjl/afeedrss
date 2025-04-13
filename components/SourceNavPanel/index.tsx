@@ -55,7 +55,7 @@ export function SourceNavPanel({ className }: Props) {
     if (item?.key) {
       params.streamId = item.key;
     }
-    router.push(`/home?${(new URLSearchParams(params)).toString()}`);
+    router.push(`/?${(new URLSearchParams(params)).toString()}`);
   };
 
   return (
@@ -109,7 +109,7 @@ export function SourceNavPanel({ className }: Props) {
         ))}
       </NavDrawerBody>
       <NavDivider />
-      <AppItem icon={<SettingsRegular />} as="a" href="/home/settings">
+      <AppItem icon={<SettingsRegular />} as="a" href="/settings">
         设置
       </AppItem>
     </NavDrawer>

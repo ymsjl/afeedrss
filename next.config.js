@@ -34,7 +34,7 @@ const nextConfig = {
     return [
       {
         source: '/api/inoreader/:path*',
-        destination: `${process.env.INOREADER_SERVER_URL}/:path*`,
+        destination: `${process.env.INOREADER_SERVER_URL || 'https://api.inoreader.com'}/:path*`,
       }
     ];
   }

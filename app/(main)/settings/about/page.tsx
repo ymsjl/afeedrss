@@ -17,7 +17,7 @@ export default function Account({}: Props) {
         {
           title: "关于",
           key: "about",
-          href: "/home/settings/about",
+          href: "/settings/about",
         },
       ]}
     >

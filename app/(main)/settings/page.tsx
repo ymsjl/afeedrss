@@ -36,28 +36,28 @@ const NAV_LIST: NavListItem[] = [
     name: "账户",
     desc: "注销登录",
     icon: <PersonAccounts20Regular />,
-    url: "/home/settings/account",
+    url: "/settings/account",
   },
   {
     key: "interface",
     name: "界面",
     desc: "自定义界面",
     icon: <EyeLines20Regular />,
-    url: "/home/settings/interface",
+    url: "/settings/interface",
   },
   {
     key: "subscription_source",
     name: "订阅源",
     desc: "管理订阅源,订阅新的 RSS 源",
     icon: <News20Regular />,
-    url: "/home/settings/subscriptions",
+    url: "/settings/subscriptions",
   },
   {
     key: "about",
     name: "关于",
     desc: "关于此应用的基本信息",
     icon: <Info20Regular />,
-    url: "/home/settings/about",
+    url: "/settings/about",
   },
 ];
 

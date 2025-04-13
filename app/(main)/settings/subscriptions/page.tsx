@@ -127,7 +127,7 @@ export default function SubscriptionSource({}: Props) {
         {
           title: "订阅源",
           key: "subscription_source",
-          href: "/home/settings/subscriptions",
+          href: "/settings/subscriptions",
         },
       ]}
       tailElem={

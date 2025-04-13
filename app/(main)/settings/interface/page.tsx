@@ -31,7 +31,7 @@ function Interface({}: Props) {
         {
           title: "界面",
           key: "interface",
-          href: "/home/settings/interface",
+          href: "/settings/interface",
         },
       ]}
     >
