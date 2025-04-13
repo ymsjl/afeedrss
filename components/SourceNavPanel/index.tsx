@@ -2,16 +2,12 @@
 
 import React, { useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { makeStyles, mergeClasses, Tooltip } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, tokens, } from "@fluentui/react-components";
 import {
-  AppItem,
-  Hamburger,
   NavCategory,
   NavCategoryItem,
-  NavDivider,
   NavDrawer,
   NavDrawerBody,
-  NavDrawerHeader,
   NavItem,
   NavSectionHeader,
   NavSubItem,
@@ -20,8 +16,9 @@ import {
 import {
   Folder20Filled,
   Folder20Regular,
+  Rss20Regular,
+  Rss20Filled,
   bundleIcon,
-  SettingsRegular,
 } from "@fluentui/react-icons";
 import { INavLink } from "./subscriptionNavTreeBuilder";
 import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
@@ -32,46 +29,39 @@ export interface Props {
 }
 
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
+const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
 
 export function SourceNavPanel({ className }: Props) {
   const classes = useClasses();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
+  const { isOpen } = useContext(GlobalNavigationCtx);
   const { data } = useSourcePanelData();
+  const [actviedItem, setActivedItem] = React.useState<string>('');
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavLink
   ) => {
     e?.preventDefault();
-    const params: { [key: string]: string } = searchParams
-      .entries()
-      .reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {} as { [key: string]: string });
-
+    const params: { [key: string]: string } = {}
+    for (let [key, value] of searchParams.entries()) {
+      params[key] = value;
+    }
     if (item?.key) {
-      params.streamId = item.key;
+      params['streamId'] = item.key;
+      setActivedItem(item.key);
     }
     router.push(`/?${(new URLSearchParams(params)).toString()}`);
   };
 
   return (
     <NavDrawer
-      defaultSelectedValue="2"
-      defaultSelectedCategoryValue=""
       open={isOpen}
       type="inline"
-      className={mergeClasses(classes.root, className)}
+      selectedValue={actviedItem}
+      className={mergeClasses(classes.nav, className)}
     >
-      <NavDrawerHeader>
-        <Tooltip content="Close Navigation" relationship="label">
-          <Hamburger onClick={() => setIsOpen(!isOpen)} />
-        </Tooltip>
-      </NavDrawerHeader>
-
       <NavDrawerBody>
         {data?.map((group, groupIndex) => (
           <React.Fragment key={groupIndex}>
@@ -80,7 +70,7 @@ export function SourceNavPanel({ className }: Props) {
               link.type === "feed" ? (
                 <NavItem
                   key={linkIndex}
-                  icon={<Folder />}
+                  icon={<RssIcon />}
                   value={link.key!}
                   onClick={(e) => handleLinkClick(e, link)}
                 >
@@ -108,10 +98,6 @@ export function SourceNavPanel({ className }: Props) {
           </React.Fragment>
         ))}
       </NavDrawerBody>
-      <NavDivider />
-      <AppItem icon={<SettingsRegular />} as="a" href="/settings">
-        设置
-      </AppItem>
     </NavDrawer>
   );
 }
@@ -119,10 +105,12 @@ export function SourceNavPanel({ className }: Props) {
 export default React.memo(SourceNavPanel);
 
 const useClasses = makeStyles({
-  root: {
+
+  nav: {
     flexShrink: 0,
+    backgroundColor: tokens.colorNeutralBackground4,
+    paddingBlockStart: tokens.spacingVerticalS,
   },
-  nav: {},
   navItem: {
     display: "flex",
     width: "100%",

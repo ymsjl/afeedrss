@@ -19,7 +19,7 @@ import {
   Info20Regular,
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
-import { useTextClasses } from "@/theme/commonStyles";
+import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { useListClasses } from "@components/StreamContentPanel/ArticleListItem";
 
 export interface NavListItem {
@@ -65,23 +65,24 @@ export default function Settings() {
   const classes = useClasses();
   const textClasses = useTextClasses();
   const listClasses = useListClasses();
+  const flexClasses = useFlexClasses();
 
   const onRenderNavItem = ({ icon, name, url, desc }: NavListItem) => (
     <Link href={url} passHref>
-      <StackShim horizontal verticalAlign="center" tokens={{ childrenGap: 16 }}>
-        <StackItemShim disableShrink>{icon}</StackItemShim>
-        <StackShim grow>
+      <div className={classes.itemFlexContainer}>
+        <div className={flexClasses.flexDisableShrink}>{icon}</div>
+        <div className={mergeClasses(flexClasses.flexGrow, flexClasses.flexCol)}>
           <Text>{name}</Text>
           <Text
             className={mergeClasses(classes.navDescText, textClasses.textSm)}
           >
             {desc}
           </Text>
-        </StackShim>
-        <StackItemShim disableShrink>
+        </div>
+        <div className={flexClasses.flexDisableShrink}>
           <ChevronRight20Regular />
-        </StackItemShim>
-      </StackShim>
+        </div>
+      </div>
     </Link>
   );
 
@@ -102,5 +103,10 @@ const useClasses = makeStyles({
   navDescText: {
     color: tokens.colorNeutralForeground1,
     opacity: 0.5,
+  },
+  itemFlexContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: tokens.spacingHorizontalL,
   },
 });

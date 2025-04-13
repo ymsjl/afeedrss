@@ -57,7 +57,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
 
   return (
     <Swipeout
-      className={classes.swipeoutContainer}
+      className={mergeClasses(listItemClasses.listItem, classes.swipeoutContainer)}
       rightBtnsProps={[
         {
           className: classes.leftButton,
@@ -77,7 +77,6 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
         data-is-focusable={true}
         className={mergeClasses(
           classes.articleContainer,
-          listItemClasses.listItem,
           !isSelected && item?.isRead && classes.readArticle,
           isSelected && classes.selectedArticle,
           showFeedThumbnail ? classes.withThumbnail : classes.withoutThumbnail
@@ -152,17 +151,26 @@ export default ArticleListItem;
 
 export const useListClasses = makeStyles({
   list: {
+    marginBlockStart: tokens.spacingVerticalXS,
+
+    "> li": {
+      marginInline: tokens.spacingVerticalXS,
+    },
+
     "> li:not(:last-child)": {
-      marginBottom: tokens.spacingVerticalXS,
+      marginBlockEnd: tokens.spacingVerticalS,
     },
   },
   listItem: {
     transition: "all",
+    boxShadow: tokens.shadow2,
     ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
     ...shorthands.borderRadius(tokens.borderRadiusMedium),
     backgroundColor: tokens.colorNeutralBackground1,
     "&:hover": {
-      backgroundColor: tokens.colorNeutralBackground1Hover,
+      boxShadow: tokens.shadow4,
+
+      backgroundColor: tokens.colorBrandBackgroundInvertedHover,
     },
   },
 });

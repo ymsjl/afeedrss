@@ -30,6 +30,9 @@ export const useFlexClasses = makeStyles({
   flexShrink: {
     flexShrink: 1,
   },
+  flexDisableShrink: {
+    flexShrink: 0,
+  },
   itemsCenter: {
     alignItems: "center",
   },
@@ -44,6 +47,9 @@ export const useFlexClasses = makeStyles({
   },
   justifyEnd: {
     justifyContent: "flex-end",
+  },
+  justifyBetween: {
+    justifyContent: "space-between",
   },
 })
 

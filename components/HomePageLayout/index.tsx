@@ -1,10 +1,10 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { tokens } from "@fluentui/react-components";
+import { shorthands, tokens } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
 
-import SourceNavPanel from "../SourceNavPanel";
+import AppNav from "../AppNav";
 import { GlobalNavigationCtxProvider } from "./GlobalNavigationCtx";
 
 interface Props {
@@ -17,19 +17,13 @@ export default function Layout({ children }: Props) {
     <GlobalNavigationCtxProvider>
       <Suspense fallback={<div>Loading...</div>}>
         <div className={classes.root}>
-          <SourceNavPanel />
-          <div className={classes.mainContent}>
-            <div className={classes.mainContentInner}>{children}</div>
-          </div>
+          <AppNav />
+          {children}
         </div>
       </Suspense>
     </GlobalNavigationCtxProvider>
   );
 }
-
-export const getLayout = (page: React.ReactElement): React.ReactElement => (
-  <Layout>{page}</Layout>
-);
 
 const useClasses = makeStyles({
   root: {
@@ -38,18 +32,5 @@ const useClasses = makeStyles({
     height: "100vh",
     overflow: "hidden",
     backgroundColor: tokens.colorNeutralBackground4,
-  },
-  mainContent: {
-    display: "flex",
-    justifyContent: "center",
-    flexGrow: 1,
-  },
-  mainContentInner: {
-    maxWidth: "64rem",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    paddingInlineEnd: tokens.spacingHorizontalL,
   },
 });

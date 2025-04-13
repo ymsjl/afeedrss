@@ -19,17 +19,17 @@ import { StreamContentItem } from "@server/inoreader";
 import { GlobalNavigationCtx } from "@components/HomePageLayout/GlobalNavigationCtx";
 import { StreamContentPanel } from "@components/StreamContentPanel";
 import { ArticleReadPanel } from "@components/ArticleReadPanel";
-import { Hamburger } from "@fluentui/react-nav-preview";
 import {
   useCommonClasses,
   useFlexClasses,
   useTextClasses,
 } from "@/theme/commonStyles";
 import { extractFirst } from "@utils/index";
+import { SourceNavPanel } from "@/components/SourceNavPanel";
 
-interface Props {}
+interface Props { }
 
-export default function Home({}: Props) {
+export default function Home({ }: Props) {
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
@@ -61,78 +61,104 @@ export default function Home({}: Props) {
   );
 
   return (
-    <>
-      <div className={classes.header}>
-        <Hamburger
-          onClick={() => setIsOpen(!isOpen)}
-          className={mergeClasses(
-            classes.hamburger,
-            isOpen && classes.hamburgerHiden
-          )}
-        />
-        <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
-          <Breadcrumb size="large">
-            <BreadcrumbItem>
-              <BreadcrumbButton
-                onClick={handleCloseArticle}
-                className={textClasses.textLg}
-              >
-                {unreadOnly ? "未读文章" : "全部文章"}
-              </BreadcrumbButton>
-            </BreadcrumbItem>
-            {curArticle ? (
-              <>
-                <BreadcrumbDivider />
+    <div className={classes.root}>
+      <SourceNavPanel />
+      <div className={classes.main}>
+        <div className={classes.content}>
+          <div className={classes.header}>
+            <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
+              <Breadcrumb size="large">
                 <BreadcrumbItem>
-                  <BreadcrumbButton className={textClasses.textLg}>
-                    {curArticle?.title}
+                  <BreadcrumbButton
+                    onClick={handleCloseArticle}
+                    className={textClasses.textLg}
+                  >
+                    {unreadOnly ? "未读文章" : "全部文章"}
                   </BreadcrumbButton>
                 </BreadcrumbItem>
-              </>
-            ) : null}
-          </Breadcrumb>
+                {curArticle ? (
+                  <>
+                    <BreadcrumbDivider />
+                    <BreadcrumbItem>
+                      <BreadcrumbButton className={textClasses.textLg}>
+                        {curArticle?.title}
+                      </BreadcrumbButton>
+                    </BreadcrumbItem>
+                  </>
+                ) : null}
+              </Breadcrumb>
+            </div>
+          </div>
+
+          <div className={classes.body}>
+            {/* 文章列表 */}
+            <div
+              className={mergeClasses(
+                classes.streamContentPanel,
+                commonClasses.noScrollbar,
+                isArticlePanelOpen
+                  ? classes.streamContentPanelClosed
+                  : classes.streamContentPanelOpened
+              )}
+            >
+              <StreamContentQueryKeyProvider>
+                <StreamContentPanel
+                  curArticleId={curArticle?.id ?? null}
+                  onStreamContentItemClick={onStreamContentItemClick}
+                />
+              </StreamContentQueryKeyProvider>
+            </div>
+
+            {/* 文章面板 */}
+            <div
+              className={mergeClasses(
+                classes.articelPanel,
+                isArticlePanelOpen
+                  ? classes.articelPanelOpened
+                  : classes.articelPanelClosed
+              )}
+            >
+              <ArticleReadPanel
+                onCloseArticle={handleCloseArticle}
+                curArticle={curArticle}
+              />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className={classes.body}>
-        {/* 文章列表 */}
-        <div
-          className={mergeClasses(
-            classes.streamContentPanel,
-            commonClasses.noScrollbar,
-            isArticlePanelOpen
-              ? classes.streamContentPanelClosed
-              : classes.streamContentPanelOpened
-          )}
-        >
-          <StreamContentQueryKeyProvider>
-            <StreamContentPanel
-              curArticleId={curArticle?.id ?? null}
-              onStreamContentItemClick={onStreamContentItemClick}
-            />
-          </StreamContentQueryKeyProvider>
-        </div>
-
-        {/* 文章面板 */}
-        <div
-          className={mergeClasses(
-            classes.articelPanel,
-            isArticlePanelOpen
-              ? classes.articelPanelOpened
-              : classes.articelPanelClosed
-          )}
-        >
-          <ArticleReadPanel
-            onCloseArticle={handleCloseArticle}
-            curArticle={curArticle}
-          />
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
 
-const useClasses = makeStyles({
+export const useClasses = makeStyles({
+  root: {
+    display: "flex",
+    height: "100%",
+    flex: 1,
+    gap: tokens.spacingHorizontalM,
+  },
+  main: {
+    flex: 1,
+    height: '100%',
+    marginBlockStart: tokens.spacingVerticalM,
+    backgroundColor: tokens.colorNeutralBackground3,
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    ...shorthands.borderRadius(
+      tokens.borderRadiusXLarge,
+      0,
+      0,
+      0
+    ),
+  },
+  content: {
+    marginInline: "auto",
+    maxWidth: "64rem",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    paddingInlineEnd: tokens.spacingHorizontalL,
+  },
   body: {
     position: "relative",
     overflow: "hidden",
@@ -144,7 +170,7 @@ const useClasses = makeStyles({
     display: "flex",
     alignItems: "center",
     background: "inherit",
-    ...shorthands.padding(0, 0, tokens.spacingVerticalL),
+    ...shorthands.padding(tokens.spacingVerticalL, tokens.spacingHorizontalXS, tokens.spacingVerticalM),
   },
   title: {
     flexShrink: 0,
@@ -169,11 +195,13 @@ const useClasses = makeStyles({
     ...shorthands.inset("0"),
     height: "100%",
     zIndex: tokens.zIndexOverlay,
+    marginBlockStart: tokens.spacingHorizontalXS,
+    marginInline: tokens.spacingHorizontalXS,
     backgroundColor: tokens.colorNeutralBackground1,
-    boxShadow: tokens.shadow4,
+    boxShadow: tokens.shadow2,
     ...shorthands.borderRadius(
-      tokens.borderRadiusMedium,
-      tokens.borderRadiusMedium,
+      tokens.borderRadiusLarge,
+      tokens.borderRadiusLarge,
       0,
       0
     ),

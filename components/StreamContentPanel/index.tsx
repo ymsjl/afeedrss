@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useMemo } from "react";
-import { Spinner, List, ListItem, mergeClasses } from "@fluentui/react-components";
+import { Spinner, List, ListItem, mergeClasses, makeStyles } from "@fluentui/react-components";
 import { StreamContentItem } from "@server/inoreader";
 import {
   StreamContentItemWithPageIndex,
@@ -24,6 +24,8 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const {
     globalSettings: { showFeedThumbnail },
   } = useContext(GlobalSettingsCtx);
+
+  const classes = useClasses();
   const commonClasses = useCommonClasses()
   const flexClasses = useFlexClasses()
 
@@ -77,9 +79,15 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
           );
         })}
       </List>
-      <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, commonClasses.p4)}>
+      <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, classes.spinnerContainer)}>
         {streamContentQuery.isFetching && <Spinner />}
       </div>
     </>
   );
 }
+
+const useClasses = makeStyles({
+  spinnerContainer: {
+    height: '400px',
+  }
+});
