@@ -1,6 +1,6 @@
-# syntax=docker.io/docker/dockerfile:1
+# Dockerfile for Next.js application
 
-FROM node:18-alpine AS base
+FROM node:alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -47,20 +47,21 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# 将所有构建文件复制到runner镜像中
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# 设置适当的权限
+RUN chown -R nextjs:nodejs .
 
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+
+# 使用next start启动应用程序
+CMD ["npm", "start"]
