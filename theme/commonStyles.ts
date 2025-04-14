@@ -45,6 +45,9 @@ export const useFlexClasses = makeStyles({
   justifyStart: {
     justifyContent: "flex-start",
   },
+  justifyCenter: {
+    justifyContent: "center",
+  },
   justifyEnd: {
     justifyContent: "flex-end",
   },
