@@ -5,6 +5,10 @@ import qs from "query-string";
 const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
 const TIMEOUT = 60 * 60 * 1000;
 
+export interface RequestWithoutBodyOptions extends Omit<RequestInit, 'body'> {
+  params?: Record<string, any>;
+}
+
 export interface RequestOptions extends RequestInit {
   params?: Record<string, any>;
 }
@@ -94,12 +98,15 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
 };
 
 export default {
-  get: <TResponse = any>(url: string, options?: RequestOptions) =>
+  get: <TResponse = any>(url: string, options?: RequestWithoutBodyOptions) =>
     customFetch<TResponse>(url, { ...options, method: 'GET' }),
-  post: <TRequest = any, TResponse = any>(url: string, data?: TRequest, options?: RequestOptions) =>
-    customFetch<TResponse>(url, { ...options, method: 'POST', body: JSON.stringify(data) }),
-  put: <TRequest = any, TResponse = any>(url: string, data?: TRequest, options?: RequestOptions) =>
-    customFetch<TResponse>(url, { ...options, method: 'PUT', body: JSON.stringify(data) }),
-  delete: <TResponse = any>(url: string, options?: RequestOptions) =>
+
+  post: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
+    customFetch<TResponse>(url, { ...options, method: 'POST', body: data }),
+
+  put: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
+    customFetch<TResponse>(url, { ...options, method: 'PUT', body: data }),
+
+  delete: <TResponse = any>(url: string, options?: RequestWithoutBodyOptions) =>
     customFetch<TResponse>(url, { ...options, method: 'DELETE' }),
 };

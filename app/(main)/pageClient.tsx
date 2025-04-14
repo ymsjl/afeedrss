@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   mergeClasses,
@@ -27,9 +27,9 @@ import { extractFirst } from "@utils/index";
 import { SourceNavPanel } from "@/components/SourceNavPanel";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 
-interface Props { }
+interface Props {}
 
-export default function Home({ }: Props) {
+export default function Home({}: Props) {
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
   const commonClasses = useCommonClasses();
@@ -46,19 +46,26 @@ export default function Home({ }: Props) {
     return !!extractFirst(searchParams.get("unreadOnly"));
   });
 
-  const handleCloseArticle = () => {
+  const handleCloseArticle = useCallback(() => {
+    if (!isArticlePanelOpen) return;
     setIsArticlePanelOpen(false);
     setTimeout(() => setCurArticle(null), 500);
-  };
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("articleId");
+    router.push(`/?${newSearchParams.toString()}`);
+  }, [searchParams, router]);
+
+  useStreamIdUpdateEffect(handleCloseArticle);
 
   const onStreamContentItemClick = useCallback(
     (item: StreamContentItem) => {
       const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set('articleId', item.id);
+      newSearchParams.set("articleId", item.id);
       router.push(`/?${newSearchParams.toString()}`);
       setCurArticle(item);
-      setIsArticlePanelOpen(true);},
-    [router]
+      setIsArticlePanelOpen(true);
+    },
+    [router, searchParams]
   );
 
   return (
@@ -193,3 +200,22 @@ const useClasses = makeStyles({
     },
   },
 });
+
+const useStreamIdUpdateEffect = (cb: () => void) => {
+  const searchParams = useSearchParams();
+  const prevStreamIdRef = React.useRef<string | null>(null);
+  const streamId = searchParams.get("streamId");
+
+  useEffect(() => {
+    () => {
+      prevStreamIdRef.current = streamId;
+    };
+  }, [streamId]);
+
+  useEffect(() => {
+    if (streamId !== prevStreamIdRef.current) {
+      prevStreamIdRef.current = streamId;
+      cb();
+    }
+  }, [cb, streamId]);
+};

@@ -20,10 +20,7 @@ interface StreamContentsParams {
  */
 export function getStreamContents(
   streamId: string,
-
   { number, order, startTime, exclude, include, continuation }: any | undefined
-
-
 ) {
   return fetch.get<StreamContentsResponse>(
     `/reader/api/0/stream/contents/${encodeURIComponent(streamId)}`,

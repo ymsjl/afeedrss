@@ -203,7 +203,7 @@ const useClasses = makeStyles({
     opacity: 0.3,
   },
   selectedArticle: {
-    backgroundColor: "white",
+    backgroundColor: 'inherit',
   },
   withThumbnail: {
     paddingTop: "0.75rem",
