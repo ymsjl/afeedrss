@@ -2,7 +2,7 @@
 
 import React, { useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { makeStyles, mergeClasses, tokens, } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
 import {
   NavCategory,
   NavCategoryItem,
@@ -37,22 +37,22 @@ export function SourceNavPanel({ className }: Props) {
   const searchParams = useSearchParams();
   const { isOpen } = useContext(GlobalNavigationCtx);
   const { data } = useSourcePanelData();
-  const [actviedItem, setActivedItem] = React.useState<string>('');
+  const [actviedItem, setActivedItem] = React.useState<string>("");
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavLink
   ) => {
     e?.preventDefault();
-    const params: { [key: string]: string } = {}
+    const params: { [key: string]: string } = {};
     for (let [key, value] of searchParams.entries()) {
       params[key] = value;
     }
     if (item?.key) {
-      params['streamId'] = item.key;
+      params["streamId"] = item.key;
       setActivedItem(item.key);
     }
-    router.push(`/?${(new URLSearchParams(params)).toString()}`);
+    router.push(`/?${new URLSearchParams(params).toString()}`);
   };
 
   return (
@@ -105,7 +105,6 @@ export function SourceNavPanel({ className }: Props) {
 export default React.memo(SourceNavPanel);
 
 const useClasses = makeStyles({
-
   nav: {
     flexShrink: 0,
     backgroundColor: tokens.colorNeutralBackground4,

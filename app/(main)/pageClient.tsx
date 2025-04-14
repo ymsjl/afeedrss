@@ -11,8 +11,22 @@ import {
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  MenuGroup,
+  MenuDivider,
+  MenuGroupHeader,
+  MenuItemRadio,
+  MenuItemSwitch,
+  Text,
 } from "@fluentui/react-components";
 
+import type { LayoutType } from "@/store/appStore";
 import { StreamContentQueryKeyProvider } from "@components/StreamContentPanel/StreamContentQueryKeyContext";
 import { StreamContentItem } from "@server/inoreader";
 
@@ -26,6 +40,39 @@ import {
 import { extractFirst } from "@utils/index";
 import { SourceNavPanel } from "@/components/SourceNavPanel";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
+import { useAppStore } from "../providers/AppStoreProvider";
+import {
+  bundleIcon,
+  CalendarMonthRegular,
+  FilterRegular,
+  CutRegular,
+  CutFilled,
+  ClipboardPasteRegular,
+  LayoutColumnTwoSplitLeft20Regular,
+  LayoutColumnTwoSplitLeft20Filled,
+  LayoutCellFour20Regular,
+  LayoutColumnTwo20Regular,
+  LayoutColumnTwo20Filled,
+  LayoutColumnOneThirdLeft20Regular,
+  LayoutColumnOneThirdLeft20Filled,
+  ClipboardPasteFilled,
+  EditRegular,
+  EditFilled,
+  ChevronLeft20Regular,
+} from "@fluentui/react-icons";
+
+const LayoutColumnTwoSplitLeftIcon = bundleIcon(
+  LayoutColumnTwoSplitLeft20Filled,
+  LayoutColumnTwoSplitLeft20Regular
+);
+const LayoutColumnTwoIcon = bundleIcon(
+  LayoutColumnTwo20Filled,
+  LayoutColumnTwo20Regular
+);
+const LayoutColumnOneIcon = bundleIcon(
+  LayoutColumnOneThirdLeft20Filled,
+  LayoutColumnOneThirdLeft20Regular
+);
 
 interface Props {}
 
@@ -35,10 +82,10 @@ export default function Home({}: Props) {
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
-
   const [curArticle, setCurArticle] = useState<StreamContentItem | null>(null);
   const [isArticlePanelOpen, setIsArticlePanelOpen] = useState(false);
-
+  const layoutType = useAppStore((state) => state.layoutType);
+  const setLayoutType = useAppStore((state) => state.setLayoutType);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -72,7 +119,12 @@ export default function Home({}: Props) {
     <div className={classes.root}>
       <SourceNavPanel />
       <div className={pageLayoutClasses.main}>
-        <div className={pageLayoutClasses.content}>
+        <div
+          className={mergeClasses(
+            pageLayoutClasses.content,
+            layoutType === "split" && pageLayoutClasses.contentSplitViewMid
+          )}
+        >
           <div className={pageLayoutClasses.header}>
             <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
               <Breadcrumb size="large">
@@ -84,7 +136,7 @@ export default function Home({}: Props) {
                     {unreadOnly ? "未读文章" : "全部文章"}
                   </BreadcrumbButton>
                 </BreadcrumbItem>
-                {curArticle ? (
+                {layoutType !== "split" && curArticle ? (
                   <>
                     <BreadcrumbDivider />
                     <BreadcrumbItem>
@@ -95,6 +147,55 @@ export default function Home({}: Props) {
                   </>
                 ) : null}
               </Breadcrumb>
+
+              <div className={flexClasses.flexGrow}></div>
+              <Menu
+                positioning={{ align: "end" }}
+                checkedValues={{
+                  layoutType: [layoutType],
+                  unreadOnly: [String(unreadOnly)],
+                }}
+                onCheckedValueChange={(_, { name, checkedItems }) => {
+                  if (name === "layoutType") {
+                    setLayoutType(checkedItems[0] as LayoutType);
+                  }
+                }}
+              >
+                <MenuTrigger disableButtonEnhancement>
+                  <MenuButton icon={<LayoutColumnTwoSplitLeftIcon />}>
+                    布局
+                  </MenuButton>
+                </MenuTrigger>
+                <MenuPopover>
+                  <MenuList>
+                    {/* <MenuGroup>
+                      <MenuItemSwitch
+                        icon={<LayoutColumnTwoIcon />}
+                        name="unreadOnly"
+                        value="true"
+                      >
+                        仅看未读
+                      </MenuItemSwitch>
+                    </MenuGroup> */}
+                    <MenuGroup>
+                      <MenuItemRadio
+                        icon={<LayoutColumnOneIcon />}
+                        name="layoutType"
+                        value="default"
+                      >
+                        默认布局
+                      </MenuItemRadio>
+                      <MenuItemRadio
+                        icon={<LayoutColumnTwoIcon />}
+                        name="layoutType"
+                        value="split"
+                      >
+                        分栏布局
+                      </MenuItemRadio>
+                    </MenuGroup>
+                  </MenuList>
+                </MenuPopover>
+              </Menu>
             </div>
           </div>
 
@@ -104,9 +205,10 @@ export default function Home({}: Props) {
               className={mergeClasses(
                 classes.streamContentPanel,
                 commonClasses.noScrollbar,
-                isArticlePanelOpen
-                  ? classes.streamContentPanelClosed
-                  : classes.streamContentPanelOpened
+                layoutType !== "split" &&
+                  (isArticlePanelOpen
+                    ? classes.streamContentPanelClosed
+                    : classes.streamContentPanelOpened)
               )}
             >
               <StreamContentQueryKeyProvider>
@@ -118,21 +220,74 @@ export default function Home({}: Props) {
             </div>
 
             {/* 文章面板 */}
-            <div
-              className={mergeClasses(
-                classes.articelPanel,
-                isArticlePanelOpen
-                  ? classes.articelPanelOpened
-                  : classes.articelPanelClosed
-              )}
-            >
-              <ArticleReadPanel
-                onCloseArticle={handleCloseArticle}
-                curArticle={curArticle}
-              />
-            </div>
+            {layoutType !== "split" && (
+              <div
+                className={mergeClasses(
+                  classes.articelPanel,
+                  isArticlePanelOpen
+                    ? classes.articelPanelOpened
+                    : classes.articelPanelClosed
+                )}
+              >
+                {/* 文章面板 header */}
+                <div className={classes.articelPanelHeader}>
+                  <Button
+                    appearance="transparent"
+                    icon={<ChevronLeft20Regular />}
+                    onClick={handleCloseArticle}
+                  />
+                </div>
+                <ArticleReadPanel
+                  onCloseArticle={handleCloseArticle}
+                  curArticle={curArticle}
+                />
+              </div>
+            )}
           </div>
         </div>
+        {layoutType === "split" && (
+          <div className={pageLayoutClasses.content}>
+            <div className={pageLayoutClasses.header}>
+              <Button 
+                icon={<ChevronLeft20Regular />} 
+                size="large"
+                onClick={handleCloseArticle}
+              ></Button>
+              {curArticle ? (
+                <Text
+                  className={mergeClasses(
+                    classes.title,
+                    textClasses.textLg,
+                    classes.headerTextBlock
+                  )}
+                  wrap={false}
+                  truncate
+                >
+                  {curArticle.title}
+                </Text>
+              ) : (
+                <Text
+                  className={mergeClasses(
+                    classes.title,
+                    textClasses.textLg,
+                    classes.headerTextBlock
+                  )}
+                  wrap={false}
+                >
+                  未选择文章
+                </Text>
+              )}
+            </div>
+            <div className={classes.body}>
+              <div className={mergeClasses(classes.articelPanel)}>
+                <ArticleReadPanel
+                  onCloseArticle={handleCloseArticle}
+                  curArticle={curArticle}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -148,8 +303,10 @@ const useClasses = makeStyles({
   body: {
     position: "relative",
     overflow: "hidden",
+    height: "100%",
   },
   title: {
+    flexGrow: 1,
     flexShrink: 0,
   },
   streamContentPanel: {
@@ -199,6 +356,19 @@ const useClasses = makeStyles({
       display: "none",
     },
   },
+  headerTextBlock: {
+    paddingBlock: tokens.spacingVerticalS,
+    lineHeight: tokens.lineHeightBase300,
+  },
+  articelPanelHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: tokens.spacingHorizontalM,
+    ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalM),
+    "@media (min-width: 640px)": {
+      ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalL),
+    },
+  },
 });
 
 const useStreamIdUpdateEffect = (cb: () => void) => {
@@ -216,6 +386,7 @@ const useStreamIdUpdateEffect = (cb: () => void) => {
     if (streamId !== prevStreamIdRef.current) {
       prevStreamIdRef.current = streamId;
       cb();
+      console.log("cb");
     }
   }, [cb, streamId]);
 };

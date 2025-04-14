@@ -1,12 +1,7 @@
 import { Dayjs } from "dayjs";
-import React from 'react'
-import { NextPage } from 'next'
 
-type GetLayoutFunc = (page: React.ReactElement) => React.ReactElement
-
-export type NextPageWithLayout = NextPage & {
-  getLayout: GetLayoutFunc
-}
+// 主题类型定义
+export type AppTheme = 'light' | 'dark';
 
 export interface FeedItem {
   id: string;
@@ -22,7 +17,6 @@ export interface FeedItem {
   isStar?: boolean;
   isInnerArticleShow?: boolean;
 }
-
 
 export interface Tag extends Sortable {
   id: string;

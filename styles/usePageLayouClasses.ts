@@ -3,8 +3,10 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 export const usePageLayoutClasses = makeStyles({
   main: {
     flex: 1,
+    display: 'flex',
     height: '100%',
     marginBlockStart: tokens.spacingVerticalM,
+    paddingInlineStart: tokens.spacingHorizontalM,
     backgroundColor: tokens.colorNeutralBackground3,
     border: `1px solid ${tokens.colorNeutralStroke2}`,
     ...shorthands.borderRadius(
@@ -23,6 +25,9 @@ export const usePageLayoutClasses = makeStyles({
     height: "100%",
     paddingInlineEnd: tokens.spacingHorizontalL,
   },
+  contentSplitViewMid: {
+    maxWidth: "32rem",
+  },
   header: {
     position: "sticky",
     top: 0,
@@ -30,6 +35,7 @@ export const usePageLayoutClasses = makeStyles({
     display: "flex",
     alignItems: "center",
     background: "inherit",
+    gap: tokens.spacingHorizontalS,
     ...shorthands.padding(tokens.spacingVerticalL, tokens.spacingHorizontalXS, tokens.spacingVerticalM),
   },
 })

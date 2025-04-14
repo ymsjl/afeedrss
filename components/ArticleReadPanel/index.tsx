@@ -18,6 +18,7 @@ import {
   useTextClasses,
 } from "../../theme/commonStyles";
 import dayjs from "../../utils/dayjs";
+import StatusCard, { Status } from "../StatusCard";
 
 interface ArticleReadPanelProps {
   onCloseArticle: () => void;
@@ -40,22 +41,10 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
 
   return (
     <>
-      {/* 文章面板 header */}
-      <div className={classes.header}>
-        <Button
-          appearance="transparent"
-          icon={<ChevronLeft20Regular />}
-          onClick={onCloseArticle}
-        />
-      </div>
-
       {/* 文章面板 body */}
       <div className={classes.body}>
         <div
-          className={mergeClasses(
-            classes.scroll,
-            commonClasses.noScrollbar
-          )}
+          className={mergeClasses(classes.scroll, commonClasses.noScrollbar)}
           ref={articleScrollContainerRef}
         >
           {curArticle ? (
@@ -90,7 +79,9 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
                 }}
               />
             </article>
-          ) : null}
+          ) : (
+            <StatusCard status={Status.EMPTY} content="尚未选择文章" />
+          )}
           <hr className={classes.divider} />
         </div>
       </div>
@@ -99,15 +90,6 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
 }
 
 const useClasses = makeStyles({
-  header: {
-    display: "flex",
-    alignItems: "center",
-    gap: tokens.spacingHorizontalM,
-    ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalM),
-    "@media (min-width: 640px)": {
-      ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalL),
-    },
-  },
   title: {
     display: "block",
     fontSize: tokens.fontSizeBase300,
