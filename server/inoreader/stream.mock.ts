@@ -12,7 +12,7 @@ export const getStreamContentsMock: HttpResponseResolver = ({ request }) => {
   const continuation = url.searchParams.get('c') || ''
   const numberOfItems = parseInt(url.searchParams.get('n') || '20', 10)
 
-  let articles = []
+  let articles: any[] = []
 
   // 获取特定订阅源的文章
   if (streamId.startsWith('feed/')) {
@@ -117,7 +117,7 @@ export const markAllAsReadMock: HttpResponseResolver = ({ request }) => {
   const url = new URL(request.url)
   const streamId = url.searchParams.get('s') || ''
 
-  let articlesToMark = []
+  let articlesToMark:any[] = []
 
   if (streamId && streamId.startsWith('feed/')) {
     // 获取指定订阅源的所有文章
