@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
-import { getUserInfoMock } from './user.mock'
-import { getStreamContentsMock, getStreamPreferenceListMock, markAllAsReadMock, markArticleAsReadMock, markArticleAsStarMock } from './stream.mock'
-import { addSubscriptionMock, getFolderOrTagListMock, getSubscriptionListMock, renameSubscriptionMock, unsubscriptionMock } from './subscription.mock'
+import { getUserInfoMock } from '../inoreader/user.mock'
+import { getStreamContentsMock, getStreamPreferenceListMock, markAllAsReadMock, markArticleAsReadMock, markArticleAsStarMock } from '../inoreader/stream.mock'
+import { addSubscriptionMock, getFolderOrTagListMock, getSubscriptionListMock, renameSubscriptionMock, unsubscriptionMock } from '../inoreader/subscription.mock'
 
 const baseURL = `${process.env.INOREADER_SERVER_URL}/reader/api/0`
 

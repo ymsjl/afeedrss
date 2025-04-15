@@ -1,5 +1,5 @@
-import { db } from './db';
-import { SystemStreamIDs } from './types';
+import { db } from '../mock/db';
+import { SystemStreamIDs } from "./stream.types";
 
 // 检查文章是否具有特定标签
 export const hasTag = (articleId: string, tagId: string) => {

@@ -1,11 +1,6 @@
-import {
-  InfiniteData,
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import service from "@server/index";
-import { StreamContentItem, StreamContentsResponse } from "@server/inoreader";
+import { StreamContentItem, StreamContentsResponse } from "@server/inoreader/stream.types";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
 import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";

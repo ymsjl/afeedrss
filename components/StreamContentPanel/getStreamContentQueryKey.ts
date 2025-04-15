@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "@/constants";
 
-function getRootStreamId(userId: string) {
+export function getRootStreamId(userId: string) {
   return `user/${userId}/state/com.google/root`;
 }
 

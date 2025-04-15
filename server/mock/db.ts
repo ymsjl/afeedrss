@@ -1,5 +1,4 @@
 import { factory, manyOf, primaryKey, oneOf, nullable } from '@mswjs/data'
-import { IdValuePair } from './types'
 
 // 创建数据模型
 export const db = factory({

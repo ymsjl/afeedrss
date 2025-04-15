@@ -28,7 +28,7 @@ import {
 
 import type { LayoutType } from "@/store/appStore";
 import { StreamContentQueryKeyProvider } from "@components/StreamContentPanel/StreamContentQueryKeyContext";
-import { StreamContentItem } from "@server/inoreader";
+import { StreamContentItem } from "@server/inoreader/stream.types";
 
 import { StreamContentPanel } from "@components/StreamContentPanel";
 import { ArticleReadPanel } from "@components/ArticleReadPanel";

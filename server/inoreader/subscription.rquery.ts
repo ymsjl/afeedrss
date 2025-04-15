@@ -2,12 +2,9 @@ import { normalize, schema } from "normalizr";
 import { queryOptions } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../constants";
 import service from "@server/index";
-import {
-  Subscription,
-  SubscriptionEntity,
-  FolderEntity,
-  InoreaderTag,
-} from "../../types";
+import { SubscriptionEntity, FolderEntity } from "../../types";
+import { FolderOrTag } from "./subscription.types";
+import { Subscription } from "./subscription.types";
 
 const subscriptionSchema = new schema.Entity("subscription", undefined);
 const folder = new schema.Entity("folder");
@@ -39,7 +36,7 @@ export const folderQueryOptions = queryOptions({
   queryFn: async () => {
     const res = await service.inoreader.getFolderOrTagList({ types: 1, counts: 1 });
     const tags = res.data.tags;
-    const foldersNormalized = normalize<InoreaderTag, FolderEntity, string[]>(
+    const foldersNormalized = normalize<FolderOrTag, FolderEntity, string[]>(
       tags,
       [folder]
     );

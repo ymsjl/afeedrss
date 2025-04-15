@@ -1,5 +1,5 @@
 import { HttpResponse, HttpResponseResolver } from 'msw'
-import { db } from './db'
+import { db } from '../mock/db'
 
 export const getUserInfoMock: HttpResponseResolver = () => {
   const user = db.user.findFirst({ where: {} })

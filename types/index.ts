@@ -1,3 +1,4 @@
+import { Folder, Sortable, Subscription } from "@/server/inoreader/subscription.types";
 import { Dayjs } from "dayjs";
 
 // 主题类型定义
@@ -40,41 +41,9 @@ export interface FeedProps extends FeedItem {
 export interface KeyValuePair<T> {
   [key: string]: T;
 }
-export interface Sortable {
-  sortid: string;
-}
-
-export interface category {
-  id: string,
-  label: string
-};
-
-export interface Subscription extends Sortable {
-  id: string;
-  title: string;
-  iconUrl?: string;
-  iconName?: string;
-  firstitemmsec: number,
-  url: string;
-  htmlUrl: string;
-  categories: category[];
-}
-
-export type InoreaderTagType = "tag" | "folder" | "active_search" | 'buildIn' 
-
-export interface InoreaderTag extends Sortable {
-  id: string;
-  type?: InoreaderTagType;
-  unread_count?: number;
-  unseen_count?: number;
-}
 
 export interface SubscriptionEntity {
   subscription: { [key: string]: Subscription };
-}
-
-export interface Folder extends InoreaderTag {
-  isCollapsed?: boolean;
 }
 
 export interface FolderEntity {

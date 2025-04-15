@@ -1,5 +1,5 @@
 import { db } from './db';
-import { SystemStreamIDs } from './types';
+import { SystemStreamIDs } from "../inoreader/stream.types";
 
 // 初始化种子数据
 

@@ -1,8 +1,8 @@
 import { HttpResponse, HttpResponseResolver, } from 'msw'
-import { FeedActionType } from './types'
-import { db } from './db'
-import { InoreaderTagListResponse, SubscriptionListResponse } from './subscription'
-import { InoreaderTagType } from '@/types'
+import { FeedActionType } from "./stream.types"
+import { db } from '../mock/db'
+import { InoreaderTagListResponse, SubscriptionListResponse } from "./subscription.types"
+import { InoreaderTagType } from "./subscription.types"
 
 export const getSubscriptionListMock: HttpResponseResolver = () => {
   const subscriptions = db.feed.findMany({}).map(

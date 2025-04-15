@@ -1,27 +1,11 @@
 import { fetch, } from "../index";
-import { Subscription } from "../../types";
-import { FeedActionType } from "./types";
-import { InoreaderTag } from "../../types";
-
-export interface SubscriptionListResponse {
-  subscriptions: Subscription[];
-}
-
-interface SubscriptionEditParams {
-  ac: FeedActionType;
-  s: string;
-  a?: string;
-  t?: string;
-}
-
-interface FolderTagListParams {
-  types?: number;
-  counts?: number;
-}
+import { FeedActionType } from "./stream.types";
+import { SubscriptionEditParams, SubscriptionListResponse, FolderTagListParams, InoreaderTagListResponse } from "./subscription.types";
 
 /**
  * 添加订阅源
- * @params
+ * @params url 订阅源地址
+ * @params folder 订阅源文件夹 ID
  * @returns
  */
 export function addSubscription(url: string, folder?: string) {
@@ -30,12 +14,12 @@ export function addSubscription(url: string, folder?: string) {
     s: url,
     a: folder || "",
   };
-  return fetch.get(`/reader/api/0/subscription/edit`, { params });
+  return fetch.get<string, SubscriptionEditParams>(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
  * 退订订阅源
- * @params
+ * @params streamId 订阅源 ID
  * @returns 
  */
 export function unsubscription(streamId: string) {
@@ -43,13 +27,14 @@ export function unsubscription(streamId: string) {
     ac: FeedActionType.unsubscribe,
     s: streamId,
   };
-  return fetch.get(`/reader/api/0/subscription/edit`, { params });
+  return fetch.get<string, SubscriptionEditParams>(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
  * 重命名订阅源
- * @params
- * @returns 
+ * @params streamId 订阅源 ID
+ * @params title 订阅源名称
+ * @returns
  */
 export function renameSubscription(streamId: string, title: string) {
   const params: SubscriptionEditParams = {
@@ -57,7 +42,7 @@ export function renameSubscription(streamId: string, title: string) {
     s: streamId,
     t: title,
   };
-  return fetch.get(`/reader/api/0/subscription/edit`, { params });
+  return fetch.get<string, SubscriptionEditParams>(`/reader/api/0/subscription/edit`, { params });
 }
 
 /**
@@ -68,15 +53,13 @@ export function getSubscriptionList() {
   return fetch.get<SubscriptionListResponse>(`/reader/api/0/subscription/list`);
 }
 
-export interface InoreaderTagListResponse {
-  tags: InoreaderTag[];
-}
-
 /**
  * 获取文件夹或标签列表
- * @params
+ * @params params 文件夹或标签列表参数
+ * @params params.types 0: 文件夹, 1: 标签, 2: 系统标签
+ * @params params.counts 是否包含未读数量
  * @returns 
  */
 export function getFolderOrTagList(params?: FolderTagListParams) {
-  return fetch.get<InoreaderTagListResponse>(`/reader/api/0/tag/list`, { params });
+  return fetch.get<InoreaderTagListResponse, FolderTagListParams>(`/reader/api/0/tag/list`, { params });
 }

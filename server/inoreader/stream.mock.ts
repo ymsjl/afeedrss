@@ -1,6 +1,6 @@
 import { HttpResponse, HttpResponseResolver } from 'msw'
-import { FeedActionType, IdValuePair, StreamContentsResponse, SystemStreamIDs } from './types'
-import { db } from './db'
+import { FeedActionType, SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
+import { db } from '../mock/db'
 import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from './utils'
 
 export const getStreamContentsMock: HttpResponseResolver = ({ request }) => {

@@ -1,64 +1,38 @@
 import { fetch } from "../index";
-import { StreamContentsResponse, IdValuePair } from "./types";
-import { MarkArticleParmas, SystemStreamIDs } from "./types";
-
-interface StreamContentsParams {
-  n?: number; // Number of items to return (default 20, max 1000)
-  r?: string; // Order. By default, it is newest first. You can pass o here to get oldest first
-  ot?: number; // Start time (unix timestamp)
-  xt?: string; // Exclude Target
-  it?: string; // Include Target
-  c?: string; // Continuation
-  output?: string;
-  includeAllDirectStreamIds?: boolean;
-  annotations?: boolean;
-}
+import { StreamContentsParams, StreamPreferenceListResponse, StreamContentsResponse, MarkArticleParmas, SystemStreamIDs } from "./stream.types";
 
 /**
  * 获取 Feed 流的文章列表
- * @returns
  */
 export function getStreamContents(
   streamId: string,
-  { number, order, startTime, exclude, include, continuation }: any | undefined
+  { exclude, continuation }: any | undefined
 ) {
-  return fetch.get<StreamContentsResponse>(
+  return fetch.get<StreamContentsResponse, StreamContentsParams>(
     `/reader/api/0/stream/contents/${encodeURIComponent(streamId)}`,
     {
       params: {
-        n: 20, // Number of items to return (default 20, max 1000).
-        r: "", // Order. By default, it is newest first. You can pass o here to get oldest first.
-        ot: "", // Start time (unix timestamp) from which to start to get items. If r=o and the time is older than one month ago, one month ago will be used instead.
-        xt: exclude, // Exclude Target - You can query all items from a feed that are not flagged as read by setting this to user/-/state/com.google/read.
-        it: "", // include Target - You can query for a certain label with this. Accepted values: user/-/state/com.google/starred, user/-/state/com.google/like.
-        c: continuation, // Continuation - a string used for continuation process. Each response returns not all, but only a certain number of items. You'll find in the JSON response a string called continuation. Just add that string as argument for this parameter, and you'll retrieve next items. If the continuation string is missing, then you are at the end of the stream.
-        output: "", // if you prefer JSON object pass json here. Note that reader/api/0/stream/contents always returns json object, while reader/atom returns XML by default.
-        includeAllDirectStreamIds: "", // set this to false if you want to receive only manually added tags in the categories list. Otherwise automatically added tags from the folders will be populated there too.
-        annotations: "", // set this to 1 or true if you want to get an array of your annotations for each article.
+        n: 20,
+        r: "",
+        xt: exclude,
+        it: "",
+        c: continuation,
       },
     }
   );
 }
 
-export interface StreamPreferenceListResponse {
-  streamprefs: {
-    [key: string]: IdValuePair[];
-  };
-}
-
 /**
  * 获取文章流偏好列表
- * @returns
+ * @returns 流偏好字典，包含了所有的流 ID 和对应偏好属性
  */
 export function getStreamPreferenceList() {
-  return fetch.get<StreamPreferenceListResponse>(
-    `/reader/api/0/preference/stream/list`
-  );
+  return fetch.get<StreamPreferenceListResponse>('/reader/api/0/preference/stream/list');
 }
 
 /**
  * 添加/移除某个源下的所有文章的已读标记
- * @params
+ * @params streamId 源 ID
  * @returns 
  */
 export function markAllAsRead(streamId: string) {
@@ -72,7 +46,8 @@ export function markAllAsRead(streamId: string) {
 
 /**
  * 添加/移除文章的收藏标记
- * @params
+ * @params id 文章 ID
+ * @params isStar 是否添加收藏标记
  * @returns 
  */
 export function markArticleAsStar(id: string, isStar?: boolean) {
@@ -86,7 +61,7 @@ export function markArticleAsStar(id: string, isStar?: boolean) {
 
 /**
  * 添加/移除文章的已读标记
- * @params
+ * @params id 文章 ID
  * @returns 
  */
 export function markArticleAsRead(id: string | string[], asUnread?: boolean) {

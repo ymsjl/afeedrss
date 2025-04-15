@@ -1,8 +1,9 @@
-import { IdValuePair } from "../../server/inoreader";
-import { KeyValuePair, Subscription, Folder } from "../../types";
-import SubscriptionNavTreeBuilder, {
-  getTagNameFromId,
-} from "./subscriptionNavTreeBuilder";
+import { IdValuePair } from "../../server/inoreader/stream.types";
+import { KeyValuePair } from "../../types";
+import { Folder } from "@/server/inoreader/subscription.types";
+import { Subscription } from "@/server/inoreader/subscription.types";
+import { SubscriptionNavTreeBuilder } from "./subscriptionNavTreeBuilder";
+import { getRootStreamId } from "../StreamContentPanel/getStreamContentQueryKey";
 
 export default class SubscriptionGroupedListBuilder extends SubscriptionNavTreeBuilder {
   constructor({
@@ -17,7 +18,7 @@ export default class SubscriptionGroupedListBuilder extends SubscriptionNavTreeB
     streamPrefById: KeyValuePair<IdValuePair[]>;
   }) {
     super({
-      userId,
+      rootStreamId: getRootStreamId(userId),
       subscriptionById,
       tagsById,
       streamPrefById,
@@ -25,35 +26,9 @@ export default class SubscriptionGroupedListBuilder extends SubscriptionNavTreeB
   }
 
   buildGroupedList() {
-    const rootSortArr = this.getSortArr(this.rootId);
     const items = [];
     const groups = [];
-    for (const sortId of rootSortArr) {
-      const id = this.getIdBySortId(sortId);
-      if (SubscriptionNavTreeBuilder.isSubscriptonId(id)) {
-        const subscrption = this.getSubscription(id);
-        items.push(subscrption);
-      } else {
-        const tag = this.getTag(id);
-        if (tag.type === "tag") {
-          // 如何处理 tag
-        } else if (tag.type === "folder") {
-          const folderSortArr = this.getSortArr(id);
-          const name = getTagNameFromId(tag.id);
-          groups.push({
-            key: tag.id,
-            name: name,
-            startIndex: items.length,
-            count: folderSortArr.length,
-          });
-          for (const sortId of folderSortArr) {
-            const id = this.getIdBySortId(sortId);
-            const subscrption = this.getSubscription(id);
-            items.push(subscrption);
-          }
-        }
-      }
-    }
+
     return {
       items,
       groups,

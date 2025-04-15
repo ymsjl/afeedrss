@@ -11,7 +11,7 @@ import {
   ChevronLeft20Regular,
   WindowNew20Regular,
 } from "@fluentui/react-icons";
-import { StreamContentItem } from "../../server/inoreader/types";
+import { StreamContentItem } from "@/server/inoreader/stream.types";
 import {
   useCommonClasses,
   useFlexClasses,

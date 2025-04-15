@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { Spinner, List, ListItem, mergeClasses, makeStyles } from "@fluentui/react-components";
-import { StreamContentItem } from "@server/inoreader";
+import { StreamContentItem } from "@server/inoreader/stream.types";
 import {
   StreamContentItemWithPageIndex,
   useStreamItemAction,

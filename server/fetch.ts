@@ -5,13 +5,14 @@ import qs from "query-string";
 const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
 const TIMEOUT = 60 * 60 * 1000;
 
-export interface RequestWithoutBodyOptions extends Omit<RequestInit, 'body'> {
-  params?: Record<string, any>;
+type RequestSearchParams = Record<string, any>;
+
+type RequestOptions<P extends RequestSearchParams ={}> = RequestInit & {
+  params?: P;
 }
 
-export interface RequestOptions extends RequestInit {
-  params?: Record<string, any>;
-}
+type RequestWithoutBodyOptions<P extends RequestSearchParams = {}> = Omit<RequestOptions<P>, 'body'>
+
 
 // 创建带超时的 fetch
 const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
@@ -98,7 +99,7 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
 };
 
 export default {
-  get: <TResponse = any>(url: string, options?: RequestWithoutBodyOptions) =>
+  get: <TResponse = any, TParams extends RequestSearchParams = {}>(url: string, options?: RequestWithoutBodyOptions<TParams>) =>
     customFetch<TResponse>(url, { ...options, method: 'GET' }),
 
   post: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
