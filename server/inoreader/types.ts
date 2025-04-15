@@ -1,7 +1,4 @@
-export enum TextDirection {
-  ltr = "ltr",
-  rtl = "rtl",
-}
+export type TextDirection = "auto" | "ltr" | "rtl"
 
 export interface IdValuePair {
   id: string;
@@ -9,16 +6,16 @@ export interface IdValuePair {
 }
 
 export interface StreamContentItem {
-  alternate: { href: string; type: string }[];
+  alternate?: { href: string; type: string }[];
   annotations: any[];
   author: string;
   canonical: { href: string; title: string }[];
   categories: string[];
-  comments: any[];
+  comments?: any[];
   commentsNum: number;
   crawlTimeMsec: string;
   id: string;
-  likingUsers: any[];
+  likingUsers?: any[];
   origin: {
     htmlUrl: string;
     streamId: string;

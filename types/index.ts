@@ -60,9 +60,11 @@ export interface Subscription extends Sortable {
   categories: category[];
 }
 
+export type InoreaderTagType = "tag" | "folder" | "active_search" | 'buildIn' 
+
 export interface InoreaderTag extends Sortable {
   id: string;
-  type?: "tag" | "folder" | "active_search";
+  type?: InoreaderTagType;
   unread_count?: number;
   unseen_count?: number;
 }

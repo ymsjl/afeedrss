@@ -23,7 +23,6 @@ export const useSourcePanelData = () => {
     ) {
       return null;
     }
-
     return new SubscriptionNavTreeBuilder({
       userId,
       subscriptionById: subscriptionsData.entities.subscription,

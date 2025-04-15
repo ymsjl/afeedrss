@@ -1,13 +1,20 @@
 import { HttpResponse, HttpResponseResolver } from 'msw'
+import { db } from './db'
 
 export const getUserInfoMock: HttpResponseResolver = () => {
+  const user = db.user.findFirst({ where: {} })
+  
+  if (!user) {
+    return HttpResponse.json({ error: 'User not found' }, { status: 404 })
+  }
+  
   return HttpResponse.json({
-    userId: 'mock-user-id',
-    userName: 'Mock User',
-    userProfileId: 'mock-profile-id',
-    userEmail: 'mock@example.com',
-    isBloggerUser: false,
-    signupTimeSec: 1617235200, // 2021-04-01
-    isMultiLoginEnabled: true
+    userId: user.id,
+    userName: user.userName,
+    userProfileId: user.userProfileId,
+    userEmail: user.userEmail,
+    isBloggerUser: user.isBloggerUser,
+    signupTimeSec: user.signupTimeSec,
+    isMultiLoginEnabled: user.isMultiLoginEnabled
   })
 }

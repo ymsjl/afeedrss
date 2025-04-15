@@ -20,7 +20,6 @@ import {
 } from "@fluentui/react-icons";
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { useListClasses } from "@components/StreamContentPanel/ArticleListItem";
-import { ZustandDemo } from "@/components/ZustandDemo";
 
 export interface NavListItem {
   key: string;
@@ -95,11 +94,6 @@ export default function Settings() {
           </ListItem>
         ))}
       </List>
-      
-      {/* Zustand 演示组件 */}
-      <div style={{ marginTop: tokens.spacingVerticalXL }}>
-        <ZustandDemo />
-      </div>
     </SettingsPageLayout>
   );
 }

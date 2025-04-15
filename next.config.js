@@ -2,7 +2,7 @@ const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
   skipWaiting: true,
-  // disable: process.env.NODE_ENV === "development",
+  disable: process.env.NODE_ENV === "development",
   runtimeCaching: [
     {
       urlPattern: /^https?.*/,
@@ -24,6 +24,9 @@ const withPWA = require("next-pwa")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     remotePatterns: [{
       protocol: "https",
@@ -39,9 +42,8 @@ const nextConfig = {
     return [
       {
         source: "/api/inoreader/:path*",
-        destination: `${
-          process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
-        }/:path*`,
+        destination: `${process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
+          }/:path*`,
       },
     ];
   },

@@ -386,7 +386,6 @@ const useStreamIdUpdateEffect = (cb: () => void) => {
     if (streamId !== prevStreamIdRef.current) {
       prevStreamIdRef.current = streamId;
       cb();
-      console.log("cb");
     }
   }, [cb, streamId]);
 };
