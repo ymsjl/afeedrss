@@ -16,9 +16,6 @@ export interface INavLink {
   [propertyName: string]: any;
 }
 
-export const getTagNameFromId = (tagId: string): string => SubscriptionNavTreeBuilder.getTagNameFromId(tagId);
-
-
 export class SubscriptionNavTreeBuilder {
   static getTagNameFromId = (tagId: string): string => {
     const slice: string[] = tagId.split("/");

@@ -32,12 +32,12 @@ import {
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
-import { getTagNameFromId } from "@components/SourceNavPanel/subscriptionNavTreeBuilder";
+import { SubscriptionNavTreeBuilder } from "@components/SourceNavPanel/subscriptionNavTreeBuilder";
 import SubscriptionGroupedListBuilder from "@components/SourceNavPanel/subscriptionListTreeBuilder";
 
-interface Props {}
+interface Props { }
 
-export default function SubscriptionSource({}: Props) {
+export default function SubscriptionSource({ }: Props) {
   const classes = useClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>();
@@ -113,7 +113,7 @@ export default function SubscriptionSource({}: Props) {
         .filter((key: string) => folder[key].type === "folder")
         .map((key: string) => ({
           key: folder[key].id,
-          text: getTagNameFromId(folder[key].id),
+          text: SubscriptionNavTreeBuilder.getTagNameFromId(folder[key].id),
         }));
     } else {
       return [];
