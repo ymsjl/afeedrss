@@ -22,35 +22,30 @@ export class SubscriptionNavTreeBuilder {
     return slice[slice.length - 1];
   };
 
-  rootStreamId: string = "";
   subscriptionStreamDictionary: SubscriptionStreamDictionary;
 
   constructor({
-    rootStreamId,
     subscriptionById,
     tagsById,
     streamPrefById,
   }: {
-    rootStreamId: string;
     subscriptionById: Record<string, Subscription>;
     tagsById: Record<string, Folder>;
     streamPrefById: Record<string, IdValuePair[]>;
   }) {
-    this.rootStreamId = rootStreamId;
     this.subscriptionStreamDictionary = new SubscriptionStreamDictionary({ subscriptionById, tagsById, streamPrefById })
   }
 
-  public build() {
-    const links = this.buildCore(this.subscriptionStreamDictionary.getChildrenByStreamId(this.rootStreamId));
+  public build(rootStreamId: string) {
+    const links = this.buildCore(this.subscriptionStreamDictionary.getChildrenByStreamId(rootStreamId));
     links.unshift(
-      this.createBuildInNavLink({ id: this.rootStreamId, name: "all article", }),
+      this.createBuildInNavLink({ id: rootStreamId, name: "all article", }),
       this.createBuildInNavLink({ id: SystemStreamIDs.STARRED, name: "stared article", })
     );
     return [{ links, }];
   }
 
   private buildCore(items: SortableIdentifiableItem[]): INavLink[] {
-    console.log('buildCore', items);
     const result: INavLink[] = [];
     for (const item of items) {
       const link = this.dispatchCreateLink(item);

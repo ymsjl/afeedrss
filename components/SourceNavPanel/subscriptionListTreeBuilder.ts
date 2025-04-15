@@ -18,7 +18,6 @@ export default class SubscriptionGroupedListBuilder extends SubscriptionNavTreeB
     streamPrefById: KeyValuePair<IdValuePair[]>;
   }) {
     super({
-      rootStreamId: getRootStreamId(userId),
       subscriptionById,
       tagsById,
       streamPrefById,

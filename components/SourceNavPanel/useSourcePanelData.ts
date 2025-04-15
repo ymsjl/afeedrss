@@ -25,11 +25,10 @@ export const useSourcePanelData = () => {
       return null;
     }
     return new SubscriptionNavTreeBuilder({
-      rootStreamId: getRootStreamId(userId),
       subscriptionById: subscriptionsData.entities.subscription,
       tagsById: folderData.entities.folder,
       streamPrefById: streamPreferencesData.streamprefs,
-    }).build();
+    }).build(getRootStreamId(userId));
   }, [userId, subscriptionsData, folderData, streamPreferencesData]);
 
   return useMemo(
