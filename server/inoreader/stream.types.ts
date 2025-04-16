@@ -22,10 +22,10 @@ export interface Linkable {
 }
 
 export interface StreamContentItem {
-  alternate?: Linkable & { type: string; }[];
+  alternate?: (Linkable & { type: string; })[];
   annotations: any[];
   author: string;
-  canonical: Linkable & { title: string; }[];
+  canonical: (Linkable & { title: string; })[];
   categories: string[];
   comments?: any[];
   commentsNum: number;
