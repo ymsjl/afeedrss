@@ -4,6 +4,7 @@ import {
   defaultShouldDehydrateQuery,
   isServer,
 } from '@tanstack/react-query'
+import { customDehydrate } from './customDehydrate'
 
 const QUERY_DEFAULT_OPTIONS: DefaultOptions = {
   queries: {
@@ -35,3 +36,6 @@ export function getQueryClient() {
     return browserQueryClient
   }
 }
+
+// 导出我们的自定义 dehydrate 函数，以便在服务器组件中使用
+export { customDehydrate as dehydrate }

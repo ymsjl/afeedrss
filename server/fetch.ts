@@ -7,7 +7,7 @@ const TIMEOUT = 60 * 60 * 1000;
 
 type RequestSearchParams = Record<string, any>;
 
-type RequestOptions<P extends RequestSearchParams ={}> = RequestInit & {
+type RequestOptions<P extends RequestSearchParams = {}> = RequestInit & {
   params?: P;
 }
 
@@ -55,47 +55,29 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
     headers.set('Authorization', `Bearer ${session.accessToken}`);
   }
 
-  try {
-    const response = await fetchWithTimeout(fullUrl, {
-      ...restOptions,
-      headers
-    });
+  const response = await fetchWithTimeout(fullUrl, {
+    ...restOptions,
+    headers
+  });
 
-    // 处理响应
-    if ((response.status >= 200 && response.status < 300) || response.status === 304) {
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/json')) {
-        const data = await response.json();
-        return { data, status: response.status, statusText: response.statusText };
-      }
-      // 对于非 JSON 响应，将文本作为 any 类型处理
-      return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
+  // 处理响应
+  if ((response.status >= 200 && response.status < 300) || response.status === 304) {
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      const data = await response.json();
+      return { data, status: response.status, statusText: response.statusText };
     }
-
-    throw new Error(`${response.status}: ${response.statusText}`);
-  } catch (error: any) {
-    // 处理认证错误
-    if (error instanceof Response) {
-      // 如果错误是 Response 对象
-      if (error.status === 403 || error.status === 401) {
-        if (typeof window !== 'undefined') {
-          window.location.pathname = '/auth/signin';
-        }
-      }
-      const errorText = await error.text();
-      if (errorText === "AppId required! Contact app developer. See https://inoreader.dev") {
-        if (typeof window !== 'undefined') {
-          window.location.pathname = '/auth/signin';
-        }
-      }
-    } else if (error.status === 403 || error.status === 401) {
-      // 处理普通错误对象的认证错误
-      if (typeof window !== 'undefined') {
-        window.location.pathname = '/auth/signin';
-      }
-    }
-    throw error;
+    // 对于非 JSON 响应，将文本作为 any 类型处理
+    return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
   }
+
+  const errorResponse = {
+    status: response.status,
+    statusText: response.statusText,
+    text: await response.text()
+  };
+  throw errorResponse;
+
 };
 
 export default {

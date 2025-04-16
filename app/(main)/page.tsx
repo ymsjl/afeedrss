@@ -3,7 +3,7 @@ import HomePageClient from "./pageClient";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
 import { getQueryClient } from "@/utils/getQueryClient";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getStreamContentQueryKey } from "@/components/StreamContentPanel/getStreamContentQueryKey";
 import { redirect } from "next/navigation";
 import { makeStreamContentQueryOptions } from "@server/inoreader/stream.rquery";
@@ -30,12 +30,14 @@ export default async function Home({
     redirect("/auth/signin");
   }
 
+  const streamContentQueryKey = getStreamContentQueryKey({
+    userId,
+    streamId,
+    unreadOnly,
+  });
   queryClient.prefetchInfiniteQuery(
-    makeStreamContentQueryOptions(
-      getStreamContentQueryKey({ userId, streamId, unreadOnly })
-    )
+    makeStreamContentQueryOptions(streamContentQueryKey)
   );
-
   queryClient.prefetchQuery(subscriptionsQueryOptions);
   queryClient.prefetchQuery(streamPreferencesQueryOptions);
   queryClient.prefetchQuery(folderQueryOptions);

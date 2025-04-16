@@ -1,6 +1,6 @@
 export async function register() {
   // 只在开发环境或者特定环境变量下启用mock
-  if (process.env.NODE_ENV === 'development' || process.env.ENABLE_MSW === 'true') {
+  if (process.env.NODE_ENV === 'development' && process.env.ENABLE_MSW === 'true') {
     // 确保这段代码只在服务器端执行
     if (process.env.NEXT_RUNTIME === 'nodejs') {
       (await import('./server/mock/seedDb')).seedDb()
