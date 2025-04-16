@@ -5,6 +5,55 @@ import qs from "query-string";
 const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
 const TIMEOUT = 60 * 60 * 1000;
 
+// HTTP 错误状态码常量
+export const HTTP_ERROR_CODES = {
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  SERVER_ERROR: 500,
+}
+
+// 自定义 HTTP 错误类型
+export class HttpError extends Error {
+  status: number;
+  statusText: string;
+  responseText: string;
+  isHttpError: boolean;
+  needsAuthentication: boolean;
+
+  constructor(status: number, statusText: string, responseText: string) {
+    // 为不同状态码定制错误信息
+    let message: string;
+    switch (status) {
+      case HTTP_ERROR_CODES.UNAUTHORIZED:
+        message = "未授权，请重新登录";
+        break;
+      case HTTP_ERROR_CODES.FORBIDDEN:
+        message = "无访问权限，请重新登录";
+        break;
+      case HTTP_ERROR_CODES.NOT_FOUND:
+        message = "请求的资源不存在";
+        break;
+      case HTTP_ERROR_CODES.SERVER_ERROR:
+        message = "服务器错误，请稍后再试";
+        break;
+      default:
+        message = `请求失败 (${status}): ${statusText}`;
+    }
+
+    super(message);
+    this.status = status;
+    this.statusText = statusText;
+    this.responseText = responseText;
+    this.isHttpError = true;
+    // 401 和 403 错误需要重新认证
+    this.needsAuthentication = status === HTTP_ERROR_CODES.UNAUTHORIZED || status === HTTP_ERROR_CODES.FORBIDDEN;
+    
+    // 确保 instanceof 能够正常工作
+    Object.setPrototypeOf(this, HttpError.prototype);
+  }
+}
+
 type RequestSearchParams = Record<string, any>;
 
 type RequestOptions<P extends RequestSearchParams = {}> = RequestInit & {
@@ -12,7 +61,6 @@ type RequestOptions<P extends RequestSearchParams = {}> = RequestInit & {
 }
 
 type RequestWithoutBodyOptions<P extends RequestSearchParams = {}> = Omit<RequestOptions<P>, 'body'>
-
 
 // 创建带超时的 fetch
 const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
@@ -69,15 +117,15 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
     }
     // 对于非 JSON 响应，将文本作为 any 类型处理
     return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
+  } else {
+    const responseText = await response.text();
+    // 使用自定义 HttpError 类抛出错误
+    throw new HttpError(
+      response.status,
+      response.statusText,
+      responseText
+    );
   }
-
-  const errorResponse = {
-    status: response.status,
-    statusText: response.statusText,
-    text: await response.text()
-  };
-  throw errorResponse;
-
 };
 
 export default {

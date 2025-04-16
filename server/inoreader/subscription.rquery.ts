@@ -1,13 +1,11 @@
-import { normalize, schema } from "normalizr";
+import { normalize } from "normalizr";
 import { queryOptions } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../constants";
 import service from "@server/index";
 import { SubscriptionEntity, FolderEntity } from "../../types";
 import { FolderOrTag } from "./subscription.types";
 import { Subscription } from "./subscription.types";
-
-const subscriptionSchema = new schema.Entity("subscription", undefined);
-const folder = new schema.Entity("folder");
+import { folderSchema, subscriptionSchema } from "@/types/feed";
 
 export const subscriptionsQueryOptions = queryOptions({
   queryKey: [QUERY_KEYS.SUBSCRIPTIONS_LIST],
@@ -38,7 +36,7 @@ export const folderQueryOptions = queryOptions({
     const tags = res.data.tags;
     const foldersNormalized = normalize<FolderOrTag, FolderEntity, string[]>(
       tags,
-      [folder]
+      [folderSchema]
     );
     return foldersNormalized;
   }

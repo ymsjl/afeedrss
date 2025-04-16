@@ -35,12 +35,16 @@ export default async function Home({
     streamId,
     unreadOnly,
   });
-  queryClient.prefetchInfiniteQuery(
-    makeStreamContentQueryOptions(streamContentQueryKey)
-  );
-  queryClient.prefetchQuery(subscriptionsQueryOptions);
-  queryClient.prefetchQuery(streamPreferencesQueryOptions);
-  queryClient.prefetchQuery(folderQueryOptions);
+
+  await Promise.all([
+    queryClient.prefetchInfiniteQuery(
+      makeStreamContentQueryOptions(streamContentQueryKey)
+    ),
+    queryClient.prefetchQuery(subscriptionsQueryOptions),
+    queryClient.prefetchQuery(streamPreferencesQueryOptions),
+    queryClient.prefetchQuery(folderQueryOptions),
+  ])
+
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

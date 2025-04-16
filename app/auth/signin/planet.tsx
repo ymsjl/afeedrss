@@ -1,10 +1,10 @@
-import { makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles, mergeClasses } from "@fluentui/react-components";
 
 export function Planet() {
   const classes = useClasses();
   return (
     <svg
-      className={classes.planet}
+      className={mergeClasses(classes.planet, classes.rotate)}
       width="150"
       height="150"
       viewBox="0 0 800 800"
@@ -348,26 +348,18 @@ export function Planet() {
 }
 
 const useClasses = makeStyles({
-  planet: {
-    animation: "float 6s ease-in-out infinite, rotate 20s linear infinite",
-  },
-  "@keyframes rotate": {
-    "&from": {
-      transform: "rotate(0deg)",
+  planet: {},
+  rotate: {
+    animationName: {
+      from: {
+        transform: "rotate(0deg)",
+      },
+      to: {
+        transform: "rotate(360deg)",
+      },
     },
-    "&to": {
-      transform: "rotate(360deg)",
-    },
-  },
-  "@keyframes float": {
-    "&0%": {
-      transform: "translateY(0) rotate(0deg)",
-    },
-    "&50%": {
-      transform: "translateY(-20px) rotate(180deg)",
-    },
-    "&100%": {
-      transform: "translateY(0) rotate(360deg)",
-    },
-  },
+    animationDuration: "20s",
+    animationTimingFunction: "linear",
+    animationIterationCount: "infinite",
+  }
 });

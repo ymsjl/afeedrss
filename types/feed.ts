@@ -13,3 +13,8 @@ export interface ArticleEntitySchema {
 }
 
 export const article = new schema.Entity<FeedProps>("article");
+
+
+export const subscriptionSchema = new schema.Entity("subscription", undefined);
+
+export const folderSchema = new schema.Entity("folder");

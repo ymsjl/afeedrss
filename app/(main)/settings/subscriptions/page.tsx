@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Tree,
   Dialog,
   Dropdown,
   Label,
@@ -16,14 +15,20 @@ import {
   SelectionEvents,
   OptionOnSelectData,
   Option,
-  TreeItem,
-  TreeItemLayout,
   makeStyles,
+  TabList,
+  Tab,
+  List,
+  ListItem,
+  Image,
+  tokens,
+  Text,
+  mergeClasses,
 } from "@fluentui/react-components";
 import { Add20Regular } from "@fluentui/react-icons";
 import { useSession } from "next-auth/react";
 import React, { FormEventHandler, useMemo, useState } from "react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   streamPreferencesQueryOptions,
   subscriptionsQueryOptions,
@@ -32,45 +37,54 @@ import {
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
-import { SubscriptionNavTreeBuilder } from "@components/SourceNavPanel/subscriptionNavTreeBuilder";
-import SubscriptionGroupedListBuilder from "@components/SourceNavPanel/subscriptionListTreeBuilder";
+import { FeedNavTreeBuilder } from "@/components/SourceNavPanel/FeedNavTreeBuilder";
+import {
+  Folder20Regular,
+  Folder20Filled,
+  Rss20Regular,
+  Rss20Filled,
+  Tag20Regular,
+  System20Regular,
+  System20Filled,
+  Tag20Filled,
+  bundleIcon,
+} from '@fluentui/react-icons';
+import { denormalize } from "normalizr";
+import { folderSchema, subscriptionSchema } from "@/types/feed";
+import { Folder, Subscription } from "@/server/inoreader/subscription.types";
+import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
+import { useFlexClasses } from "@/theme/commonStyles";
 
 interface Props { }
 
+const TAB_KEYS = {
+  SUBSCRIPTIONS: "1",
+  FOLDER: "2",
+  TAG: "3",
+  SYSTEM_FOLDER: "4",
+}
+
+const FolderIcon = bundleIcon(Folder20Filled, Folder20Regular);
+const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
+const TagIcon = bundleIcon(Tag20Filled, Tag20Regular);
+const SystemIcon = bundleIcon(System20Filled, System20Regular);
+
 export default function SubscriptionSource({ }: Props) {
   const classes = useClasses();
+  const listClasses = useListClasses();
+  const flexClasses = useFlexClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>();
   const { data: session } = useSession();
   const userId = session?.user?.id || "";
   const queryClient = useQueryClient();
-  const subscriptionsQuery = useQuery(subscriptionsQueryOptions);
-  const streamPreferencesQuery = useQuery(streamPreferencesQueryOptions);
+  const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);
+  const streamPreferencesQuery = useSuspenseQuery(streamPreferencesQueryOptions);
   const folderQuery = useQuery(folderQueryOptions);
 
   const subscriptionsData = subscriptionsQuery.data;
   const folderData = folderQuery.data;
   const streamPreferencesData = streamPreferencesQuery.data;
-
-  const { items, groups } = useMemo(() => {
-    if (
-      !userId ||
-      !subscriptionsData ||
-      !folderData ||
-      !streamPreferencesData
-    ) {
-      return {
-        items: [],
-        groups: [],
-      };
-    }
-    return new SubscriptionGroupedListBuilder({
-      userId,
-      subscriptionById: subscriptionsData.entities.subscription,
-      tagsById: folderData.entities.folder,
-      streamPrefById: streamPreferencesData.streamprefs,
-    }).buildGroupedList();
-  }, [userId, subscriptionsData, folderData, streamPreferencesData]);
 
   const addFeedMutation = useMutation({
     mutationFn: ({ feedUrl, folderId }: { feedUrl: string; folderId: string }) =>
@@ -113,12 +127,15 @@ export default function SubscriptionSource({ }: Props) {
         .filter((key: string) => folder[key].type === "folder")
         .map((key: string) => ({
           key: folder[key].id,
-          text: SubscriptionNavTreeBuilder.getTagNameFromId(folder[key].id),
+          text: FeedNavTreeBuilder.getTagNameFromId(folder[key].id),
         }));
     } else {
       return [];
     }
   }, [folderData]);
+
+  const subscriptions: Subscription[] = denormalize(subscriptionsData.result, [subscriptionSchema], subscriptionsData.entities);
+  const folders: Folder[] = denormalize(folderData?.result, [folderSchema], folderData?.entities);
 
   return (
     <SettingsPageLayout
@@ -136,22 +153,38 @@ export default function SubscriptionSource({ }: Props) {
         </Button>
       }
     >
-      <Tree selectionMode="multiselect">
-        {groups.map((group, groupIndex) => (
-          <TreeItem key={groupIndex} itemType="branch">
-            <TreeItemLayout>{group.name}</TreeItemLayout>
-            <Tree>
-              {items
-                .slice(group.startIndex, group.startIndex + group.count)
-                .map((item) => (
-                  <TreeItem itemType="leaf" key={item.id}>
-                    <TreeItemLayout>{item.title}</TreeItemLayout>
-                  </TreeItem>
-                ))}
-            </Tree>
-          </TreeItem>
-        ))}
-      </Tree>
+
+      <TabList>
+        <Tab value={TAB_KEYS.SUBSCRIPTIONS} icon={<RssIcon />} >订阅源</Tab>
+        <Tab value={TAB_KEYS.FOLDER} icon={<FolderIcon />} >文件夹</Tab>
+        <Tab value={TAB_KEYS.TAG} icon={<TagIcon />}>标签</Tab>
+        <Tab value={TAB_KEYS.SYSTEM_FOLDER} icon={<SystemIcon />}>系统文件夹</Tab>
+      </TabList>
+      <div className={classes.tabContent}>
+        <div>
+          <List className={listClasses.list}>
+            {subscriptions.map(subscription => {
+              return (
+                <ListItem key={subscription.id} className={listClasses.listItem} >
+                  <div className={mergeClasses(flexClasses.flexRow, classes.feedItemContainer)}>
+                    <div className={flexClasses.flexDisableShrink}>
+                      <Image className={classes.icon} src={subscription.iconUrl} alt={subscription.title} width={24} height={24} />
+                    </div>
+                    <div className={flexClasses.flexGrow}>
+                      <Text>{subscription.title}</Text>
+                      <div>
+                        <Folder20Regular />
+                        <Text>{subscription.url}</Text>
+                      </div>
+                    </div>
+                  </div>
+                </ListItem>
+              )
+            })}
+          </List>
+        </div>
+      </div>
+
       <Dialog
         open={isDialogOpen}
         onOpenChange={(ev, { open }) => setIsDialogOpen(open)}
@@ -214,7 +247,16 @@ const useClasses = makeStyles({
       marginBottom: "16px",
     },
   },
+  feedItemContainer:{
+    gap: tokens.spacingHorizontalM,
+  },
+  icon: {
+    borderRadius: tokens.borderRadiusCircular
+  },
   fullWidth: {
     width: "100%",
   },
+  tabContent: {
+
+  }
 });
