@@ -8,10 +8,10 @@ import {
   shorthands,
 } from "@fluentui/react-components";
 import { Circle20Regular, Circle20Filled } from "@fluentui/react-icons";
-import { StreamContentItem } from "../../server/inoreader";
+import { StreamContentItem } from "@/server/inoreader/stream.types";
 import Swipeout from "../Swipeout";
-import { filterImgSrcfromHtmlStr } from "../../utils/filterImgSrcfromHtmlStr";
-import dayjs from "../../utils/dayjs";
+import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
+import dayjs from "@/utils/dayjs";
 import { tokens } from "@fluentui/react-components";
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
