@@ -1,4 +1,3 @@
-
 import { IdValuePair, SystemStreamIDs, } from "@server/inoreader/stream.types";
 import { Subscription, Sortable, SortableIdentifiableItem, Tag, Folder, FolderOrTag } from "@/server/inoreader/subscription.types";
 
@@ -16,12 +15,82 @@ export interface INavLink {
   [propertyName: string]: any;
 }
 
-export class FeedNavTreeBuilder {
+// 处理创建NavLink的工厂类
+export class NavLinkFactory {
   static getTagNameFromId = (tagId: string): string => {
     const slice: string[] = tagId.split("/");
     return slice[slice.length - 1];
   };
+  
+  static createTagLink(item: Tag): INavLink {
+    return {
+      name: NavLinkFactory.getTagNameFromId(item.id),
+      key: item.id,
+      url: "",
+      type: "tag",
+      unreadCount: item.unread_count,
+    };
+  }
 
+  static createFolderLink(item: Folder, children: INavLink[]): INavLink {
+    return {
+      name: NavLinkFactory.getTagNameFromId(item.id),
+      key: item.id,
+      url: "",
+      type: "folder",
+      unreadCount: item.unread_count,
+      links: children,
+    };
+  }
+
+  static createBuildInNavLink({ name, id }: Pick<INavLink, 'id' | 'name'>): INavLink {
+    return {
+      name,
+      key: id,
+      url: "",
+      type: "buildIn",
+    };
+  }
+
+  static createFeedLink(feed: Pick<INavLink, 'id' | 'title' | 'iconUrl'>): INavLink {
+    return {
+      name: feed.title ?? '',
+      key: feed.id,
+      url: "",
+      type: "feed",
+      iconUrl: feed.iconUrl,
+    };
+  }
+
+  static createNavLink(item: SortableIdentifiableItem, children?: INavLink[]): INavLink | null {
+    if (isSubscription(item)) {
+      return NavLinkFactory.createFeedLink(item);
+    } else if (isTag(item)) {
+      return NavLinkFactory.createTagLink(item);
+    } else if (isFolder(item)) {
+      return NavLinkFactory.createFolderLink(item, children || []);
+    } else {
+      return null;
+    }
+  }
+}
+type AfFeed = {
+
+}
+
+type AfRootFolder = {
+  children: (AfFeed | AfFeedFolder)[];
+}
+
+type AfFeedFolder = {
+  children: AfFeed[];
+}
+
+type AfTag = {
+  children: AfFeed[];
+}
+
+export class FeedTreeBuilder {
   streamDictionary: StreamDictionary;
 
   constructor({
@@ -39,8 +108,8 @@ export class FeedNavTreeBuilder {
   public build(rootStreamId: string) {
     const links = this.buildCore(this.streamDictionary.getChildrenByStreamId(rootStreamId));
     links.unshift(
-      this.createBuildInNavLink({ id: rootStreamId, name: "all article", }),
-      this.createBuildInNavLink({ id: SystemStreamIDs.STARRED, name: "stared article", })
+      NavLinkFactory.createBuildInNavLink({ id: rootStreamId, name: "all article", }),
+      NavLinkFactory.createBuildInNavLink({ id: SystemStreamIDs.STARRED, name: "stared article", })
     );
     return [{ links, }];
   }
@@ -48,63 +117,22 @@ export class FeedNavTreeBuilder {
   private buildCore(items: SortableIdentifiableItem[]): INavLink[] {
     const result: INavLink[] = [];
     for (const item of items) {
-      const link = this.dispatchCreateLink(item);
-      if (link) result.push(link);
+      if (isFolder(item)) {
+        // 对于文件夹类型，先递归构建子节点
+        const children = this.buildCore(this.streamDictionary.getChildrenByStreamId(item.id));
+        const link = NavLinkFactory.createNavLink(item, children);
+        if (link) result.push(link);
+      } else {
+        // 对于其他类型，直接创建节点
+        const link = NavLinkFactory.createNavLink(item);
+        if (link) result.push(link);
+      }
     }
     return result;
   }
 
-  private createTagLink(item: Tag): INavLink | null {
-    return {
-      name: FeedNavTreeBuilder.getTagNameFromId(item.id),
-      key: item.id,
-      url: "",
-      type: "tag",
-      unreadCount: item.unreadCount,
-    };
-  }
-
-  private createFolderLink(item: Folder): INavLink | null {
-    return {
-      name: FeedNavTreeBuilder.getTagNameFromId(item.id),
-      key: item.id,
-      url: "",
-      type: "folder",
-      unreadCount: item.unreadCount,
-      links: this.buildCore(this.streamDictionary.getChildrenByStreamId(item.id)),
-    };
-  }
-
-  private createBuildInNavLink({ name, id }: Pick<INavLink, 'id' | 'name'>): INavLink {
-    return {
-      name,
-      key: id,
-      url: "",
-      type: "buildIn",
-    };
-  };
-
-  private createFeedLink(feed: Pick<INavLink, 'id' | 'title' | 'iconUrl'>): INavLink {
-    return {
-      name: feed.title ?? '',
-      key: feed.id,
-      url: "",
-      type: "feed",
-      iconUrl: feed.iconUrl,
-    };
-  };
-
-
-  private dispatchCreateLink(item: (Subscription | FolderOrTag | Folder)): INavLink | null {
-    if (isSubscription(item)) {
-      return this.createFeedLink(item);
-    } else if (isTag(item)) {
-      return this.createTagLink(item);
-    } else if (isFolder(item)) {
-      return this.createFolderLink(item);
-    } else {
-      return null
-    }
+  public travarse(){
+    
   }
 }
 
@@ -125,7 +153,7 @@ const isSubscription = (item: any): item is Subscription => {
 };
 
 const isInoreaderTag = (item: any): item is FolderOrTag => {
-  return isSortableIdentifiable(item) && ('unreadCount' in item) && ('type' in item) && (typeof item.type === 'string');
+  return isSortableIdentifiable(item) && ('unread_count' in item) && ('type' in item) && (typeof item.type === 'string');
 }
 
 const isFolder = (item: any): item is Folder => {

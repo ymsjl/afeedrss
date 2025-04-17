@@ -20,7 +20,7 @@ import {
   Rss20Filled,
   bundleIcon,
 } from "@fluentui/react-icons";
-import { INavLink } from "./FeedNavTreeBuilder";
+import { INavLink } from "./FeedTreeBuilder";
 import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
 import { useSourcePanelData } from "./useSourcePanelData";
 

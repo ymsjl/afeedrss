@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { FeedNavTreeBuilder } from "./FeedNavTreeBuilder";
+import { FeedTreeBuilder } from "./FeedTreeBuilder";
 import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
 import { useSession } from "next-auth/react";
 import { getRootStreamId } from './../StreamContentPanel/getStreamContentQueryKey';
@@ -24,7 +24,7 @@ export const useSourcePanelData = () => {
     ) {
       return null;
     }
-    return new FeedNavTreeBuilder({
+    return new FeedTreeBuilder({
       feedsById: subscriptionsData.entities.subscription,
       tagsById: folderData.entities.folder,
       streamPrefById: streamPreferencesData.streamprefs,

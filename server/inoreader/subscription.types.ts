@@ -38,7 +38,6 @@ export interface SortableIdentifiableItem extends Sortable, Identifiable{}
 export interface Subscription extends SortableIdentifiableItem {
   title: string;
   iconUrl?: string;
-  iconName?: string;
   firstitemmsec: number;
   url: string;
   htmlUrl: string;
@@ -47,7 +46,7 @@ export interface Subscription extends SortableIdentifiableItem {
 
 export interface FolderOrTag extends SortableIdentifiableItem {
   type?: InoreaderTagType;
-  unreadCount?: number;
+  unread_count?: number;
   unseen_count?: number;
 }
 

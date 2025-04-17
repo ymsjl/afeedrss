@@ -148,6 +148,23 @@ export const useCommonClasses = makeStyles({
   py2: { ...shorthands.padding(tokens.spacingVerticalS, 0) },
   py4: { ...shorthands.padding(tokens.spacingVerticalM, 0) },
 
+  spaceX1: { "> * + *": { marginLeft: tokens.spacingHorizontalXS } },
+  spaceX2: { "> * + *": { marginLeft: tokens.spacingHorizontalS } },
+  spaceX4: { "> * + *": { marginLeft: tokens.spacingHorizontalM } },
+  spaceX6: { "> * + *": { marginLeft: tokens.spacingHorizontalL } },
+  spaceX8: { "> * + *": { marginLeft: tokens.spacingHorizontalXL } },
+  spaceX10: { "> * + *": { marginLeft: tokens.spacingHorizontalXXL } },
+  spaceX12: { "> * + *": { marginLeft: tokens.spacingHorizontalXXXL } },
+
+  spaceY1: { "> * + *": { marginTop: tokens.spacingVerticalXS } },
+  spaceY2: { "> * + *": { marginTop: tokens.spacingVerticalS } },
+  spaceY4: { "> * + *": { marginTop: tokens.spacingVerticalM } },
+  spaceY6: { "> * + *": { marginTop: tokens.spacingVerticalL } },
+  spaceY8: { "> * + *": { marginTop: tokens.spacingVerticalXL } },
+  spaceY10: { "> * + *": { marginTop: tokens.spacingVerticalXXL } },
+  spaceY12: { "> * + *": { marginTop: tokens.spacingVerticalXXXL } },
+
+
   // 宽度和高度
   w25: { width: "25%" },
   w50: { width: "50%" },

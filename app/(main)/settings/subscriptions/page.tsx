@@ -37,7 +37,7 @@ import {
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
-import { FeedNavTreeBuilder } from "@/components/SourceNavPanel/FeedNavTreeBuilder";
+import { FeedTreeBuilder, NavLinkFactory } from "@/components/SourceNavPanel/FeedTreeBuilder";
 import {
   Folder20Regular,
   Folder20Filled,
@@ -53,7 +53,7 @@ import { denormalize } from "normalizr";
 import { folderSchema, subscriptionSchema } from "@/types/feed";
 import { Folder, Subscription } from "@/server/inoreader/subscription.types";
 import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
-import { useFlexClasses } from "@/theme/commonStyles";
+import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 
 interface Props { }
 
@@ -71,6 +71,7 @@ const SystemIcon = bundleIcon(System20Filled, System20Regular);
 
 export default function SubscriptionSource({ }: Props) {
   const classes = useClasses();
+  const commonClasses = useCommonClasses();
   const listClasses = useListClasses();
   const flexClasses = useFlexClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -127,7 +128,7 @@ export default function SubscriptionSource({ }: Props) {
         .filter((key: string) => folder[key].type === "folder")
         .map((key: string) => ({
           key: folder[key].id,
-          text: FeedNavTreeBuilder.getTagNameFromId(folder[key].id),
+          text: NavLinkFactory.getTagNameFromId(folder[key].id),
         }));
     } else {
       return [];
@@ -166,18 +167,35 @@ export default function SubscriptionSource({ }: Props) {
             {subscriptions.map(subscription => {
               return (
                 <ListItem key={subscription.id} className={listClasses.listItem} >
-                  <div className={mergeClasses(flexClasses.flexRow, classes.feedItemContainer)}>
-                    <div className={flexClasses.flexDisableShrink}>
-                      <Image className={classes.icon} src={subscription.iconUrl} alt={subscription.title} width={24} height={24} />
-                    </div>
-                    <div className={flexClasses.flexGrow}>
-                      <Text>{subscription.title}</Text>
-                      <div>
-                        <Folder20Regular />
-                        <Text>{subscription.url}</Text>
+                  <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, classes.feedItemContainer)}>
+                    <div className={mergeClasses(flexClasses.flexGrow, commonClasses.spaceY2)}>
+                      <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, commonClasses.spaceX2)}>
+                        <Image className={classes.icon} src={subscription.iconUrl} alt={subscription.title} width={16} height={16} className={flexClasses.flexDisableShrink} />
+                        <Text size={300}>{subscription.title}</Text>
                       </div>
+                      {(subscription.categories.length > 0) && <div className={commonClasses.spaceX8}>
+                        {
+                          subscription.categories.map(category => (
+                            <div key={category.id} className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, commonClasses.spaceX1)}>
+                              <Folder20Regular />
+                              <Text size={200}>{category?.label}</Text>
+                            </div>
+                          ))
+                        }
+                      </div>}
                     </div>
                   </div>
+                </ListItem>
+              )
+            })}
+          </List>
+        </div>
+        <div>
+          <List className={listClasses.list}>
+            {folders.map(folder => {
+              return (
+                <ListItem key={folder.id} className={listClasses.listItem} >
+                  <Text>{NavLinkFactory.getTagNameFromId(folder.id)}</Text>
                 </ListItem>
               )
             })}
@@ -247,7 +265,7 @@ const useClasses = makeStyles({
       marginBottom: "16px",
     },
   },
-  feedItemContainer:{
+  feedItemContainer: {
     gap: tokens.spacingHorizontalM,
   },
   icon: {
