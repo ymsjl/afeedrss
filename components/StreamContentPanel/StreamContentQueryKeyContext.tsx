@@ -7,8 +7,10 @@ import { getStreamContentQueryKey } from "./getStreamContentQueryKey";
 export const StreamContentQueryKeyContext = React.createContext<string[]>([]);
 
 export function StreamContentQueryKeyProvider({
+  initValue = [],
   children,
 }: {
+  initValue?: string[],
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
@@ -23,8 +25,10 @@ export function StreamContentQueryKeyProvider({
     streamId,
   });
 
+  const isServer = typeof window === 'undefined';
+
   return (
-    <StreamContentQueryKeyContext.Provider value={streamContentQueryKey}>
+    <StreamContentQueryKeyContext.Provider value={isServer ? initValue : streamContentQueryKey}>
       {children}
     </StreamContentQueryKeyContext.Provider>
   );

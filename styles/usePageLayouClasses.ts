@@ -26,7 +26,13 @@ export const usePageLayoutClasses = makeStyles({
     paddingInlineEnd: tokens.spacingHorizontalL,
   },
   contentSplitViewMid: {
+    flexShrink: 0,
     maxWidth: "32rem",
+    marginInline: 0,
+  },
+  contentSplitViewEnd: {
+    marginInline: 0,
+    maxWidth: "unset",
   },
   header: {
     position: "sticky",

@@ -111,7 +111,7 @@ export class FeedTreeBuilder {
       NavLinkFactory.createBuildInNavLink({ id: rootStreamId, name: "all article", }),
       NavLinkFactory.createBuildInNavLink({ id: SystemStreamIDs.STARRED, name: "stared article", })
     );
-    return [{ links, }];
+    return links;
   }
 
   private buildCore(items: SortableIdentifiableItem[]): INavLink[] {

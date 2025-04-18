@@ -1,3 +1,4 @@
+
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -28,11 +29,13 @@ const nextConfig = {
     instrumentationHook: true,
   },
   images: {
-    remotePatterns: [{
-      protocol: "https",
-      hostname: "www.inoreader.com",
-      port: "",
-    }],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.inoreader.com",
+        port: "",
+      },
+    ],
   },
   swcMinify: true,
   compiler: {
@@ -42,11 +45,12 @@ const nextConfig = {
     return [
       {
         source: "/api/inoreader/:path*",
-        destination: `${process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
-          }/:path*`,
+        destination: `${
+          process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
+        }/:path*`,
       },
     ];
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;

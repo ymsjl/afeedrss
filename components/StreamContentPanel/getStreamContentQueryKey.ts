@@ -1,4 +1,5 @@
 import { QUERY_KEYS } from "@/constants";
+import { SystemStreamIDs } from "@/server/inoreader/stream.types";
 
 export function getRootStreamId(userId: string) {
   return `user/${userId}/state/com.google/root`;
@@ -14,10 +15,10 @@ export function getStreamContentQueryKey({
   unreadOnly,
   userId,
   streamId,
-}: StreamContentQueryKeyParmas): any[] {
+}: StreamContentQueryKeyParmas) {
   return [
     QUERY_KEYS.STREAM_CONTENT,
     streamId || getRootStreamId(userId),
-    unreadOnly,
+    unreadOnly ? SystemStreamIDs.READ : '',
   ];
 }

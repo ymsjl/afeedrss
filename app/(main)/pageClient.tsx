@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   mergeClasses,
@@ -30,7 +30,7 @@ import type { LayoutType } from "@/store/appStore";
 import { StreamContentQueryKeyProvider } from "@components/StreamContentPanel/StreamContentQueryKeyContext";
 import { StreamContentItem } from "@server/inoreader/stream.types";
 
-import { StreamContentPanel } from "@components/StreamContentPanel";
+import { StreamContentPanel, StreamContentPanelSkeleton } from "@components/StreamContentPanel";
 import { ArticleReadPanel } from "@components/ArticleReadPanel";
 import {
   useCommonClasses,
@@ -43,21 +43,12 @@ import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 import { useAppStore } from "../providers/AppStoreProvider";
 import {
   bundleIcon,
-  CalendarMonthRegular,
-  FilterRegular,
-  CutRegular,
-  CutFilled,
-  ClipboardPasteRegular,
   LayoutColumnTwoSplitLeft20Regular,
   LayoutColumnTwoSplitLeft20Filled,
-  LayoutCellFour20Regular,
   LayoutColumnTwo20Regular,
   LayoutColumnTwo20Filled,
   LayoutColumnOneThirdLeft20Regular,
   LayoutColumnOneThirdLeft20Filled,
-  ClipboardPasteFilled,
-  EditRegular,
-  EditFilled,
   ChevronLeft20Regular,
 } from "@fluentui/react-icons";
 
@@ -74,9 +65,11 @@ const LayoutColumnOneIcon = bundleIcon(
   LayoutColumnOneThirdLeft20Regular
 );
 
-interface Props {}
+interface Props {
+  streamContentQueryKey?: string[]
+}
 
-export default function Home({}: Props) {
+export default function Home({ streamContentQueryKey }: Props) {
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
   const commonClasses = useCommonClasses();
@@ -206,16 +199,18 @@ export default function Home({}: Props) {
                 classes.streamContentPanel,
                 commonClasses.noScrollbar,
                 layoutType !== "split" &&
-                  (isArticlePanelOpen
-                    ? classes.streamContentPanelClosed
-                    : classes.streamContentPanelOpened)
+                (isArticlePanelOpen
+                  ? classes.streamContentPanelClosed
+                  : classes.streamContentPanelOpened)
               )}
             >
-              <StreamContentQueryKeyProvider>
-                <StreamContentPanel
-                  curArticleId={curArticle?.id ?? null}
-                  onStreamContentItemClick={onStreamContentItemClick}
-                />
+              <StreamContentQueryKeyProvider initValue={streamContentQueryKey}>
+                <Suspense fallback={<StreamContentPanelSkeleton />}>
+                  <StreamContentPanel
+                    curArticleId={curArticle?.id ?? null}
+                    onStreamContentItemClick={onStreamContentItemClick}
+                  />
+                </Suspense>
               </StreamContentQueryKeyProvider>
             </div>
 
@@ -246,10 +241,10 @@ export default function Home({}: Props) {
           </div>
         </div>
         {layoutType === "split" && (
-          <div className={pageLayoutClasses.content}>
+          <div className={mergeClasses(pageLayoutClasses.content, pageLayoutClasses.contentSplitViewEnd)}>
             <div className={pageLayoutClasses.header}>
-              <Button 
-                icon={<ChevronLeft20Regular />} 
+              <Button
+                icon={<ChevronLeft20Regular />}
                 size="large"
                 onClick={handleCloseArticle}
               ></Button>

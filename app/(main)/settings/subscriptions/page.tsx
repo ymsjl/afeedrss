@@ -135,8 +135,8 @@ export default function SubscriptionSource({ }: Props) {
     }
   }, [folderData]);
 
-  const subscriptions: Subscription[] = denormalize(subscriptionsData.result, [subscriptionSchema], subscriptionsData.entities);
-  const folders: Folder[] = denormalize(folderData?.result, [folderSchema], folderData?.entities);
+  const subscriptions: Subscription[] = denormalize(subscriptionsData.result, [subscriptionSchema], subscriptionsData.entities) ?? [];
+  const folders: Folder[] = denormalize(folderData?.result, [folderSchema], folderData?.entities) ?? [];
 
   return (
     <SettingsPageLayout
@@ -170,7 +170,7 @@ export default function SubscriptionSource({ }: Props) {
                   <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, classes.feedItemContainer)}>
                     <div className={mergeClasses(flexClasses.flexGrow, commonClasses.spaceY2)}>
                       <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, commonClasses.spaceX2)}>
-                        <Image className={classes.icon} src={subscription.iconUrl} alt={subscription.title} width={16} height={16} className={flexClasses.flexDisableShrink} />
+                        <Image className={mergeClasses(flexClasses.flexDisableShrink, classes.icon)} src={subscription.iconUrl} alt={subscription.title} width={16} height={16} />
                         <Text size={300}>{subscription.title}</Text>
                       </div>
                       {(subscription.categories.length > 0) && <div className={commonClasses.spaceX8}>

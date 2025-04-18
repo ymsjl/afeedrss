@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, tokens, Skeleton, SkeletonItem } from "@fluentui/react-components";
 import {
   NavCategory,
   NavCategoryItem,
@@ -31,12 +31,63 @@ export interface Props {
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
 const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
 
+function FeedNavItem({ link, onClick }: { link: INavLink, onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavLink) => void }) {
+  if (link.type === "folder") {
+    return (
+      <NavCategory value={link.key!}>
+        <NavCategoryItem icon={<Folder />}>
+          {link.name}
+        </NavCategoryItem>
+        <NavSubItemGroup>
+          {link.links?.map((subLink, subLinkIndex) => (
+            <NavSubItem
+              key={subLinkIndex}
+              value={subLink.key!}
+              onClick={(e) => onClick(e, subLink)}
+            >
+              {subLink.name}
+            </NavSubItem>
+          ))}
+        </NavSubItemGroup>
+      </NavCategory>
+    )
+  }
+
+  return (
+    <NavItem
+      key={link.key}
+      icon={<RssIcon />}
+      value={link.key!}
+      onClick={(e) => onClick(e, link)}
+    >
+      {link.name}
+    </NavItem>
+  )
+}
+
+function FeedNavList({ onClick }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavLink) => void }) {
+  const { data } = useSourcePanelData();
+  return <>{data?.map((link) => <FeedNavItem key={link.key} link={link} onClick={onClick} />)}</>
+}
+
+function FeedNavListSkeleton() {
+  const classes = useClasses()
+  return (
+    <>
+      {Array(5).fill(null).map((_, index) =>
+        <Skeleton aria-label="Loading Content" key={index} className={classes.skeleton}>
+          <SkeletonItem className={classes.skeletonItem} />
+        </Skeleton>
+      )}
+    </>
+  )
+}
+
 export function SourceNavPanel({ className }: Props) {
   const classes = useClasses();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isOpen } = useContext(GlobalNavigationCtx);
-  const { data } = useSourcePanelData();
   const [actviedItem, setActivedItem] = React.useState<string>("");
 
   const handleLinkClick = (
@@ -63,40 +114,10 @@ export function SourceNavPanel({ className }: Props) {
       className={mergeClasses(classes.nav, className)}
     >
       <NavDrawerBody>
-        {data?.map((group, groupIndex) => (
-          <React.Fragment key={groupIndex}>
-            <NavSectionHeader>订阅源</NavSectionHeader>
-            {group.links.map((link, linkIndex) =>
-              link.type !== "folder" ? (
-                <NavItem
-                  key={linkIndex}
-                  icon={<RssIcon />}
-                  value={link.key!}
-                  onClick={(e) => handleLinkClick(e, link)}
-                >
-                  {link.name}
-                </NavItem>
-              ) : link.type === "folder" ? (
-                <NavCategory key={linkIndex} value={link.key!}>
-                  <NavCategoryItem icon={<Folder />}>
-                    {link.name}
-                  </NavCategoryItem>
-                  <NavSubItemGroup>
-                    {link.links?.map((subLink, subLinkIndex) => (
-                      <NavSubItem
-                        key={subLinkIndex}
-                        value={subLink.key!}
-                        onClick={(e) => handleLinkClick(e, subLink)}
-                      >
-                        {subLink.name}
-                      </NavSubItem>
-                    ))}
-                  </NavSubItemGroup>
-                </NavCategory>
-              ) : null
-            )}
-          </React.Fragment>
-        ))}
+        <NavSectionHeader>订阅源</NavSectionHeader>
+        <Suspense fallback={<FeedNavListSkeleton />}>
+          <FeedNavList onClick={handleLinkClick} />
+        </Suspense>
       </NavDrawerBody>
     </NavDrawer>
   );
@@ -115,4 +136,10 @@ const useClasses = makeStyles({
     width: "100%",
     alignItems: "center",
   },
+  skeleton: {
+    marginBlockEnd: tokens.spacingVerticalXXS
+  },
+  skeletonItem: {
+    height: '40px',
+  }
 });

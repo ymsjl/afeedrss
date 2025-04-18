@@ -15,6 +15,7 @@
     "@tailwindcss/typography": "^0.5.2",
     "@tanstack/react-query": "^5.73.3",
     "@tanstack/react-query-devtools": "^5.73.3",
+    "@tanstack/react-query-next-experimental": "^5.74.4",
     "@types/lodash.keyby": "^4.6.7",
     "@types/oauth": "^0.9.1",
     "@types/react-helmet": "^6.1.5",

@@ -7,7 +7,7 @@ import {
 } from "./useStreamContent";
 import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 import StatusCard, { Status } from "../StatusCard";
-import ArticleListItem, { useListClasses } from "./ArticleListItem";
+import ArticleListItem, { ArticleListItemSkeleton, useListClasses } from "./ArticleListItem";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 import { makeStreamContentQueryOptions } from "@/server/inoreader/stream.rquery";
 import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
@@ -81,12 +81,25 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
             </ListItem>
           );
         })}
-      </List>
+      </List >
       <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, classes.spinnerContainer)}>
         {streamContentQuery.isFetching && <Spinner />}
       </div>
     </>
   );
+}
+
+export function StreamContentPanelSkeleton() {
+  const listClasses = useListClasses();
+  return (
+    <List className={listClasses.list}>
+      {Array(5).fill(null).map((_, index) => (
+        <ListItem className={listClasses.listItem} key={index}>
+          <ArticleListItemSkeleton />
+        </ListItem>
+      ))}
+    </List>
+  )
 }
 
 const useClasses = makeStyles({
