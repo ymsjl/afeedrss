@@ -5,10 +5,8 @@ import {
   mergeClasses,
   makeStyles,
   tokens,
-  shorthands,
 } from "@fluentui/react-components";
 import {
-  ChevronLeft20Regular,
   WindowNew20Regular,
 } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
@@ -18,7 +16,7 @@ import {
   useTextClasses,
 } from "../../theme/commonStyles";
 import dayjs from "../../utils/dayjs";
-import StatusCard, { Status } from "../StatusCard";
+import StatusCard, { Status } from "@components/StatusCard";
 
 interface ArticleReadPanelProps {
   onCloseArticle: () => void;

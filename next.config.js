@@ -25,9 +25,14 @@ const withPWA = require("next-pwa")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental:{
+  experimental: {
     instrumentationHook: true,
+    serverSourceMaps: false,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  productionBrowserSourceMaps: false,
   images: {
     remotePatterns: [
       {
@@ -45,9 +50,8 @@ const nextConfig = {
     return [
       {
         source: "/api/inoreader/:path*",
-        destination: `${
-          process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
-        }/:path*`,
+        destination: `${process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
+          }/:path*`,
       },
     ];
   },
