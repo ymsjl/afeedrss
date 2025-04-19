@@ -14,15 +14,11 @@ import {
   Button,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
   MenuPopover,
   MenuTrigger,
   MenuGroup,
-  MenuDivider,
-  MenuGroupHeader,
   MenuItemRadio,
-  MenuItemSwitch,
   Text,
 } from "@fluentui/react-components";
 
@@ -30,7 +26,10 @@ import type { LayoutType } from "@/store/appStore";
 import { StreamContentQueryKeyProvider } from "@components/StreamContentPanel/StreamContentQueryKeyContext";
 import { StreamContentItem } from "@server/inoreader/stream.types";
 
-import { StreamContentPanel, StreamContentPanelSkeleton } from "@components/StreamContentPanel";
+import {
+  StreamContentPanel,
+  StreamContentPanelSkeleton,
+} from "@components/StreamContentPanel";
 import { ArticleReadPanel } from "@components/ArticleReadPanel";
 import {
   useCommonClasses,
@@ -66,7 +65,7 @@ const LayoutColumnOneIcon = bundleIcon(
 );
 
 interface Props {
-  streamContentQueryKey?: string[]
+  streamContentQueryKey?: string[];
 }
 
 export default function Home({ streamContentQueryKey }: Props) {
@@ -161,15 +160,6 @@ export default function Home({ streamContentQueryKey }: Props) {
                 </MenuTrigger>
                 <MenuPopover>
                   <MenuList>
-                    {/* <MenuGroup>
-                      <MenuItemSwitch
-                        icon={<LayoutColumnTwoIcon />}
-                        name="unreadOnly"
-                        value="true"
-                      >
-                        仅看未读
-                      </MenuItemSwitch>
-                    </MenuGroup> */}
                     <MenuGroup>
                       <MenuItemRadio
                         icon={<LayoutColumnOneIcon />}
@@ -199,9 +189,9 @@ export default function Home({ streamContentQueryKey }: Props) {
                 classes.streamContentPanel,
                 commonClasses.noScrollbar,
                 layoutType !== "split" &&
-                (isArticlePanelOpen
-                  ? classes.streamContentPanelClosed
-                  : classes.streamContentPanelOpened)
+                  (isArticlePanelOpen
+                    ? classes.streamContentPanelClosed
+                    : classes.streamContentPanelOpened)
               )}
             >
               <StreamContentQueryKeyProvider initValue={streamContentQueryKey}>
@@ -241,7 +231,12 @@ export default function Home({ streamContentQueryKey }: Props) {
           </div>
         </div>
         {layoutType === "split" && (
-          <div className={mergeClasses(pageLayoutClasses.content, pageLayoutClasses.contentSplitViewEnd)}>
+          <div
+            className={mergeClasses(
+              pageLayoutClasses.content,
+              pageLayoutClasses.contentSplitViewEnd
+            )}
+          >
             <div className={pageLayoutClasses.header}>
               <Button
                 icon={<ChevronLeft20Regular />}

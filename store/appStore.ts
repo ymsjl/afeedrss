@@ -1,11 +1,16 @@
 import { createStore as createZustandStore } from 'zustand/vanilla';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { AppTheme } from '../types';
+import { Session } from 'next-auth';
 
 export type LayoutType = 'default' | 'split' | 'compact'
 // 定义应用状态类型
 
 export interface AppState {
+  // 用户会话状态
+  session: Session | null;
+  setSession: (session: Session | null) => void;
+
   // 布局相关状态
   layoutType: LayoutType;
   setLayoutType: (type: LayoutType) => void;
@@ -32,6 +37,7 @@ export interface AppState {
 
 // 默认初始状态
 export const defaultInitState: Partial<AppState> = {
+  session: null,
   layoutType: 'default',
   isArticlePanelOpen: false,
   theme: 'light' as AppTheme,
@@ -48,6 +54,10 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
   createZustandStore<AppState>()(
     persist(
       (set) => ({
+        // 用户会话状态
+        session: null,
+        setSession: (session) => set({ session }),
+
         // 默认状态
         layoutType: 'default',
         setLayoutType: (type) => set({ layoutType: type }),
@@ -85,7 +95,7 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
           layoutType: state.layoutType,
           theme: state.theme,
           preferences: state.preferences
-          // 这里没有包含 isArticlePanelOpen，因为这可能是临时性的 UI 状态
+          // 不持久化 session，因为它应该从服务端获取
         }),
       }
     )
@@ -95,7 +105,7 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
 const isServer = typeof window === 'undefined';
 
 // 客户端全局实例
-let clientStore: ReturnType<typeof createAppStore> | null = null;
+export let clientStore: ReturnType<typeof createAppStore> | null = null;
 
 // 初始化 store 的函数
 export const initializeAppStore = (preloadedState?: Partial<AppState>) => {

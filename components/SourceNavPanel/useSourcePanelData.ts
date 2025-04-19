@@ -2,12 +2,11 @@ import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { FeedTreeBuilder } from "./FeedTreeBuilder";
 import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
-import { useSession } from "next-auth/react";
 import { getRootStreamId } from './../StreamContentPanel/getStreamContentQueryKey';
+import { useAppStore } from "@/app/providers/AppStoreProvider";
 
 export const useSourcePanelData = () => {
-  const { data: session } = useSession();
-  const userId = session?.user?.id || "";
+  const userId = useAppStore(store => store.session?.user?.id || "");
   const streamPreferencesQuery = useSuspenseQuery(streamPreferencesQueryOptions);
   const folderQuery = useSuspenseQuery(folderQueryOptions);
   const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);

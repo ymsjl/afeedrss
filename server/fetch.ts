@@ -1,6 +1,6 @@
-import { getSession } from "next-auth/react";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import qs from "query-string";
+import { clientStore } from "@/store/appStore";
 
 const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
 const TIMEOUT = 60 * 60 * 1000;
@@ -96,7 +96,7 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
     const { getServerSession } = await import("next-auth");
     session = await getServerSession(authOptions);
   } else {
-    session = await getSession();
+    session = clientStore?.getState()?.session;
   }
   const headers = new Headers(restOptions.headers);
   if (session?.accessToken) {

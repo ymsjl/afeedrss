@@ -40,7 +40,7 @@ export default function StatusCard({ content, status }: Props) {
         width={120}
         height={120}
         alt=""
-        objectFit="contain"
+        style={{ objectFit: 'contain'}}
       />
       <div className={classes.content}>{content}</div>
     </div>

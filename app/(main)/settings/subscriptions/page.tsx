@@ -26,7 +26,6 @@ import {
   mergeClasses,
 } from "@fluentui/react-components";
 import { Add20Regular } from "@fluentui/react-icons";
-import { useSession } from "next-auth/react";
 import React, { FormEventHandler, useMemo, useState } from "react";
 import { useMutation, useQueryClient, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
@@ -37,7 +36,7 @@ import {
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
-import { FeedTreeBuilder, NavLinkFactory } from "@/components/SourceNavPanel/FeedTreeBuilder";
+import { NavLinkFactory } from "@/components/SourceNavPanel/FeedTreeBuilder";
 import {
   Folder20Regular,
   Folder20Filled,
@@ -54,6 +53,7 @@ import { folderSchema, subscriptionSchema } from "@/types/feed";
 import { Folder, Subscription } from "@/server/inoreader/subscription.types";
 import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
+import { useAppStore } from "@/app/providers/AppStoreProvider";
 
 interface Props { }
 
@@ -76,8 +76,7 @@ export default function SubscriptionSource({ }: Props) {
   const flexClasses = useFlexClasses();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>();
-  const { data: session } = useSession();
-  const userId = session?.user?.id || "";
+  const userId = useAppStore(store => store.session?.user?.id || "");
   const queryClient = useQueryClient();
   const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);
   const streamPreferencesQuery = useSuspenseQuery(streamPreferencesQueryOptions);
