@@ -19,7 +19,7 @@ const StatusImageMap = {
 
 const useStyles = makeStyles({
   container: {
-    paddingTop: "5rem",
+    paddingTop: "240px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

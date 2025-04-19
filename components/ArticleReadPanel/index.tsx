@@ -5,6 +5,7 @@ import {
   mergeClasses,
   makeStyles,
   tokens,
+  Divider,
 } from "@fluentui/react-components";
 import {
   WindowNew20Regular,
@@ -46,41 +47,44 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
           ref={articleScrollContainerRef}
         >
           {curArticle ? (
-            <article
-              className={mergeClasses(
-                commonClasses.mxAuto,
-                commonClasses.mt8,
-                "prose"
-              )}
-            >
-              <h1>{curArticle?.title}</h1>
-              <div className={flexClasses.flexCenter}>
-                <Text
-                  className={mergeClasses(
-                    textClasses.textQuaternary,
-                    textClasses.textSm,
-                    flexClasses.flexGrow
-                  )}
-                >{`${curArticle?.origin.title}/${dayjs(
-                  curArticle?.published * 1000
-                ).fromNow()}`}</Text>
-                <Button
-                  appearance="transparent"
-                  icon={<WindowNew20Regular />}
-                  onClick={() => window.open(curArticle?.canonical[0].href)}
-                  title="在新标签页打开"
+            <>
+              <article
+                className={mergeClasses(
+                  commonClasses.mxAuto,
+                  commonClasses.mt8,
+                  "prose"
+                )}
+              >
+                <h1>{curArticle?.title}</h1>
+                <div className={flexClasses.flexCenter}>
+                  <Text
+                    className={mergeClasses(
+                      textClasses.textQuaternary,
+                      textClasses.textSm,
+                      flexClasses.flexGrow
+                    )}
+                  >{`${curArticle?.origin.title}/${dayjs(
+                    curArticle?.published * 1000
+                  ).fromNow()}`}</Text>
+                  <Button
+                    appearance="transparent"
+                    icon={<WindowNew20Regular />}
+                    onClick={() => window.open(curArticle?.canonical[0].href)}
+                    title="在新标签页打开"
+                  />
+                </div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: curArticle?.summary.content ?? "",
+                  }}
                 />
-              </div>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: curArticle?.summary.content ?? "",
-                }}
-              />
-            </article>
+              </article>
+              <Divider className={classes.divider}>完</Divider>
+            </>
           ) : (
             <StatusCard status={Status.EMPTY} content="尚未选择文章" />
           )}
-          <hr className={classes.divider} />
+
         </div>
       </div>
     </>
@@ -112,7 +116,9 @@ const useClasses = makeStyles({
     },
   },
   divider: {
-    marginTop: tokens.spacingVerticalL,
-    marginBottom: tokens.spacingVerticalXL,
+    paddingBlockStart: tokens.spacingVerticalXXXL,
+    paddingBlockEnd: tokens.spacingVerticalXXXL,
+    marginInline: tokens.spacingHorizontalL,
+    width: 'auto'
   },
 });
