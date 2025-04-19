@@ -13,7 +13,7 @@ export enum Status {
 }
 
 const StatusImageMap = {
-  [Status.EMPTY]: "/images/3d-fluency-spiderweb.png",
+  [Status.EMPTY]: "/images/hole_3d.png",
   [Status.ERROR]: "/images/3d-fluency-bandage.png",
 };
 

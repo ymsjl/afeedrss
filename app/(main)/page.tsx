@@ -2,9 +2,10 @@ import { extractFirst } from "@/utils";
 import HomePageClient from "./pageClient";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
-import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
+import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { getStreamContentQueryKey } from "@/components/StreamContentPanel/getStreamContentQueryKey";
 import { redirect } from "next/navigation";
+
 export default async function Home({
   params,
   searchParams,
@@ -27,10 +28,8 @@ export default async function Home({
     unreadOnly,
   });
 
-
-
   return (
-    <ReactQueryStreamedHydration >
+    <ReactQueryStreamedHydration>
       <HomePageClient streamContentQueryKey={streamContentQueryKey} />
     </ReactQueryStreamedHydration>
   );
