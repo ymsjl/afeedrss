@@ -2,7 +2,7 @@ import { QUERY_KEYS } from "@/constants";
 import { SystemStreamIDs } from "@/server/inoreader/stream.types";
 
 export function getRootStreamId(userId: string) {
-  return `user/${userId}/state/com.google/root`;
+  return userId ? `user/${userId}/state/com.google/root` : '';
 }
 
 export interface StreamContentQueryKeyParmas {

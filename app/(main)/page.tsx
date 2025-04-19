@@ -27,9 +27,11 @@ export default async function Home({
     unreadOnly,
   });
 
+
+
   return (
     <ReactQueryStreamedHydration >
-      <HomePageClient streamContentQueryKey={streamContentQueryKey}/>
+      <HomePageClient streamContentQueryKey={streamContentQueryKey} />
     </ReactQueryStreamedHydration>
   );
 }

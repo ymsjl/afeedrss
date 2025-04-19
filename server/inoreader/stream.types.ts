@@ -51,11 +51,11 @@ export interface StreamContentItem {
 export interface StreamContentsResponse {
   items: StreamContentItem[];
   continuation: string;
-  description: string;
+  description?: string;
   direction: TextDirection;
   id: string;
-  self: Linkable;
-  title: string;
+  self?: Linkable;
+  title?: string;
   updated: number;
 }
 

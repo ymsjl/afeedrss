@@ -1,17 +1,31 @@
-import { infiniteQueryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, QueryFunction } from "@tanstack/react-query";
 import service from "@server/index";
+import { StreamContentsResponse } from "./stream.types";
 
-export const makeStreamContentQueryOptions = (queryKey: unknown[]) =>
+const queryStreamContentsFn: QueryFunction<StreamContentsResponse, string[], string> = async ({ queryKey, pageParam }) => {
+  const [, streamId, exclude] = queryKey;
+  if (!streamId) {
+    return {
+      items: [],
+      continuation: '',
+      description: '',
+      direction: 'ltr',
+      title: '',
+      updated: 0,
+      id: '',
+    } as StreamContentsResponse
+  }
+  const res = await service.inoreader.getStreamContents(streamId, {
+    exclude,
+    continuation: pageParam,
+  });
+  return res.data;
+}
+
+export const makeStreamContentQueryOptions = (queryKey: string[]) =>
   infiniteQueryOptions({
     queryKey,
-    queryFn: async ({ queryKey, pageParam }) => {
-      const [, streamId, exclude] = queryKey;
-      const res = await service.inoreader.getStreamContents(String(streamId), {
-        xt: exclude,
-        c: pageParam,
-      });
-      return res.data;
-    },
+    queryFn: queryStreamContentsFn,
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.continuation,
   });
