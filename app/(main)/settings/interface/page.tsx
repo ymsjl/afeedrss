@@ -12,11 +12,11 @@ import {
   Text,
   tokens,
 } from "@fluentui/react-components";
-import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { SettingsPageLayout } from "@/components/SettingsPageLayout";
+import { useFlexClasses } from "@/theme/commonStyles";
+import { SettingsPageLayout } from "@/components/settings-page-layout";
 
-import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
-import { useAppStore } from "@/app/providers/AppStoreProvider";
+import { useListClasses } from "@/components/stream-content-panel/article-list-item";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface Props { }
 

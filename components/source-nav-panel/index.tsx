@@ -21,7 +21,7 @@ import {
   bundleIcon,
 } from "@fluentui/react-icons";
 import { INavItem } from "./createNav";
-import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
+import { GlobalNavigationCtx } from "../home-page-layout/global-navigation-ctx";
 import { useSourcePanelData } from "./useSourcePanelData";
 import { useMediaQuery } from "@reactuses/core";
 

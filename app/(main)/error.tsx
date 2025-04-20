@@ -14,7 +14,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { HttpError } from "@/server/fetch";
-import { useAppStore } from "../providers/AppStoreProvider";
+import { useAppStore } from "../providers/app-store-provider";
 
 // 错误图片映射
 const ERROR_IMAGES = {

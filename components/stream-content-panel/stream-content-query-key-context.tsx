@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { extractFirst } from "../../utils";
+import { extractFirst } from "@/utils";
 import { useSearchParams } from "next/navigation";
-import { getStreamContentQueryKey } from "./getStreamContentQueryKey";
-import { useAppStore } from "@/app/providers/AppStoreProvider";
+import { getStreamContentQueryKey } from "./get-stream-content-query-key";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
 export const StreamContentQueryKeyContext = React.createContext<string[]>([]);
 

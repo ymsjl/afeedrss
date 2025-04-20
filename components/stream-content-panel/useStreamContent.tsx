@@ -3,7 +3,7 @@ import service from "@server/index";
 import { StreamContentItem, StreamContentsResponse } from "@server/inoreader/stream.types";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
-import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
+import { useStreamContentQueryKey } from "./stream-content-query-key-context";
 
 export interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;

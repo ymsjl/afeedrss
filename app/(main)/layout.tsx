@@ -1,8 +1,8 @@
-import HomePageLayout from "@components/HomePageLayout";
+import HomePageLayout from "@/components/home-page-layout";
 import { getServerSession } from "next-auth";
 import { PropsWithChildren } from "react";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
-import { AppStoreProvider } from "../providers/AppStoreProvider";
+import { AppStoreProvider } from "../providers/app-store-provider";
 
 export default async function Layout({ children }: PropsWithChildren<{}>) {
   const session = await getServerSession(authOptions);

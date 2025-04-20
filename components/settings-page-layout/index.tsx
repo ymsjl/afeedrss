@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import StatusCard, { Status } from "@components/StatusCard";
+import StatusCard, { Status } from "@/components/status-card";
 import {
   Breadcrumb,
   BreadcrumbButton,

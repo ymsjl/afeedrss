@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
-import { getRootStreamId } from './../StreamContentPanel/getStreamContentQueryKey';
-import { useAppStore } from "@/app/providers/AppStoreProvider";
+import { getRootStreamId } from '@components/stream-content-panel/get-stream-content-query-key';
+import { useAppStore } from "@/app/providers/app-store-provider";
 import { createFeedTree } from './createFeedTree';
 import { createBuildInNavItem, createNavList } from "./createNav";
 import { SystemStreamIDs } from '@server/inoreader/stream.types';

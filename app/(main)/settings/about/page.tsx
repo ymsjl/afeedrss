@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Image, Text, makeStyles } from "@fluentui/react-components";
-import { SettingsPageLayout } from "@components/SettingsPageLayout";
+import { SettingsPageLayout } from "@/components/settings-page-layout";
 import { useTextClasses } from "@/theme/commonStyles";
 
 interface Props {}

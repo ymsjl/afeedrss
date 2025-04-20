@@ -18,7 +18,7 @@ import {
   News24Regular,
   News24Filled,
 } from "@fluentui/react-icons";
-import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
+import { GlobalNavigationCtx } from "../home-page-layout/global-navigation-ctx";
 import { usePathname } from "next/navigation";
 
 export interface Props {
@@ -29,58 +29,59 @@ const NewsIcon = bundleIcon(News24Filled, News24Regular);
 const SettingsIcon = bundleIcon(Settings24Filled, Settings24Regular);
 const DiscoverIcon = bundleIcon(SearchSparkle24Filled, SearchSparkle24Regular);
 
-export function AppNav({ className }: Props) {
+export function TabBar({ className }: Props) {
   const classes = useClasses();
   const { setIsOpen, isOpen } = useContext(GlobalNavigationCtx);
   const pathname = usePathname()
   return (
-    <NavDrawer
-      open
-      type="inline"
-      selectedValue={pathname}
-      className={mergeClasses(classes.nav, className)}
-
-    >
-      <NavDrawerHeader className={classes.header}>
-        <Tooltip content="Close Navigation" relationship="label">
-          <Hamburger className={mergeClasses(classes.hamburger, pathname !== '/' && classes.invisible)} onClick={() => setIsOpen(!isOpen)} />
-        </Tooltip>
-      </NavDrawerHeader>
-      <NavDrawerBody>
+    <div className={mergeClasses(classes.stickyBar, className)}>
+      <div className={classes.nav}>
         <NavItem icon={<NewsIcon className={classes.navItemIcon} />} as="a" href="/" value='/' className={classes.navItem}>
           文章
         </NavItem>
         <NavItem icon={<DiscoverIcon className={classes.navItemIcon} />} as="a" href="/discover" value='/discover' className={classes.navItem}>
           发现
         </NavItem>
-      </NavDrawerBody>
-      <NavItem icon={<SettingsIcon className={classes.navItemIcon} />} as="a" href="/settings" value='/settings' className={classes.navItem}>
-        设置
-      </NavItem>
-    </NavDrawer>
+        <NavItem icon={<SettingsIcon className={classes.navItemIcon} />} as="a" href="/settings" value='/settings' className={classes.navItem}>
+          设置
+        </NavItem>
+      </div>
+    </div>
   );
 }
 
-export default React.memo(AppNav);
+export default React.memo(TabBar);
 
 const useClasses = makeStyles({
   root: {
   },
-  header: {
-    paddingLeft: tokens.spacingHorizontalXL,
-    paddingRight: tokens.spacingVerticalMNudge,
-    paddingBlock: tokens.spacingVerticalM,
-  },
+ 
   hamburger: {
     maxWidth: '100%',
   },
   invisible: {
     visibility: "hidden",
   },
-  nav: {
-    flexShrink: 0,
-    maxWidth: '80px',
+  stickyBar: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    backgroundColor: tokens.colorNeutralBackground1,
     zIndex: tokens.zIndexFloating,
+    boxShadow: tokens.shadow4,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  nav: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexShrink: 0,
+    maxWidth: '100%',
+    zIndex: tokens.zIndexFloating,
+    height: "56px",
   },
   navItem: {
     display: "flex",

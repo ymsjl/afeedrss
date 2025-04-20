@@ -16,7 +16,7 @@ import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
 import dayjs from "@/utils/dayjs";
 import { tokens } from "@fluentui/react-components";
 import { useFlexClasses } from "@/theme/commonStyles";
-import { useCommonClasses } from './../../theme/commonStyles';
+import { useCommonClasses } from '../../theme/commonStyles';
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;

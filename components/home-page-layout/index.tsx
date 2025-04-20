@@ -4,10 +4,10 @@ import React, { Suspense } from "react";
 import { shorthands, tokens } from "@fluentui/react-components";
 import { makeStyles } from "@fluentui/react-components";
 
-import AppNav from "../AppNav";
-import { GlobalNavigationCtxProvider } from "./GlobalNavigationCtx";
+import AppNav from "../app-nav";
+import { GlobalNavigationCtxProvider } from "./global-navigation-ctx";
 import { useMediaQuery } from "@reactuses/core";
-import { TabBar } from "../AppNav/TabBar";
+import { TabBar } from "../app-nav/TabBar";
 
 interface Props {
   children?: React.ReactNode;

@@ -15,7 +15,7 @@ import {
   useTextClasses,
 } from "@/theme/commonStyles";
 import dayjs from "@/utils/dayjs";
-import StatusCard, { Status } from "@components/StatusCard";
+import StatusCard, { Status } from "@/components/status-card";
 import { useProseClasses } from "./proseClasses";
 
 interface ArticleReadPanelProps {
