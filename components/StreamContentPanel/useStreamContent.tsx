@@ -15,17 +15,25 @@ export const useStreamItemAction = () => {
 
   const markItemAsRead = useCallback(
     async (target: StreamContentItemWithPageIndex) => {
-      await service.inoreader.markArticleAsRead(target.id, target.isRead);
+      // 乐观更新：先本地更新
+      const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
       queryClient.setQueryData<InfiniteData<StreamContentsResponse>>(
         queryKey,
         produce<InfiniteData<StreamContentsResponse>>((draft) => {
           const { items } = draft.pages[target.pageIndex];
           const draftTarget = items.find(({ id }) => id === target.id);
           if (draftTarget) {
-            draftTarget!.isRead = !target.isRead;
+            draftTarget.isRead = !target.isRead;
           }
         })
       );
+      try {
+        await service.inoreader.markArticleAsRead(target.id, target.isRead);
+      } catch (e) {
+        // 回滚
+        queryClient.setQueryData(queryKey, previousData);
+        throw e;
+      }
     },
     [queryClient, queryKey]
   );
@@ -33,6 +41,8 @@ export const useStreamItemAction = () => {
   const markAboveAsRead = useCallback(
     async (target: StreamContentItemWithPageIndex, isRead: boolean) => {
       const pendingIds: string[] = [];
+      // 乐观更新：先保存旧数据
+      const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
       queryClient.setQueryData(
         queryKey,
         produce<InfiniteData<StreamContentsResponse>>((draft) => {
@@ -56,7 +66,13 @@ export const useStreamItemAction = () => {
             });
         })
       );
-      await service.inoreader.markArticleAsRead(pendingIds, !isRead);
+      try {
+        await service.inoreader.markArticleAsRead(pendingIds, !isRead);
+      } catch (e) {
+        // 回滚
+        queryClient.setQueryData(queryKey, previousData);
+        throw e;
+      }
     },
     [queryClient, queryKey]
   );

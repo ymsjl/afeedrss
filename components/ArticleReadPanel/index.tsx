@@ -7,16 +7,14 @@ import {
   tokens,
   Divider,
 } from "@fluentui/react-components";
-import {
-  WindowNew20Regular,
-} from "@fluentui/react-icons";
+import { WindowNew20Regular } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
 import {
   useCommonClasses,
   useFlexClasses,
   useTextClasses,
-} from "../../theme/commonStyles";
-import dayjs from "../../utils/dayjs";
+} from "@/theme/commonStyles";
+import dayjs from "@/utils/dayjs";
 import StatusCard, { Status } from "@components/StatusCard";
 import { useProseClasses } from "./proseClasses";
 
@@ -86,7 +84,6 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
           ) : (
             <StatusCard status={Status.EMPTY} content="尚未选择文章" />
           )}
-
         </div>
       </div>
     </>

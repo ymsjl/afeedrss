@@ -59,14 +59,6 @@ export const useProseClasses = makeStyles({
       marginBlockEnd: tokens.spacingVerticalL,
       paddingInlineStart: tokens.spacingHorizontalXXL, // Adjust as needed (~26px)
     },
-    '& ol[type="A"]': { listStyleType: "upper-alpha" },
-    '& ol[type="a"]': { listStyleType: "lower-alpha" },
-    '& ol[type="A" s]': { listStyleType: "upper-alpha" }, // Note: 's' modifier might not be standard CSS
-    '& ol[type="a" s]': { listStyleType: "lower-alpha" },
-    '& ol[type="I"]': { listStyleType: "upper-roman" },
-    '& ol[type="i"]': { listStyleType: "lower-roman" },
-    '& ol[type="I" s]': { listStyleType: "upper-roman" },
-    '& ol[type="i" s]': { listStyleType: "lower-roman" },
     '& ol[type="1"]': { listStyleType: "decimal" }, // Default
 
     "& ul": {

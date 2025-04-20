@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { getStreamContentQueryKey } from "@/components/StreamContentPanel/getStreamContentQueryKey";
-import { ServerSessionProvider } from '@/app/providers/ServerSessionProvider';
 import { redirect } from "next/navigation";
 
 export default async function Home({
@@ -29,10 +28,8 @@ export default async function Home({
   });
 
   return (
-    <ServerSessionProvider session={session}>
-      <ReactQueryStreamedHydration>
-        <HomePageClient streamContentQueryKey={streamContentQueryKey} />
-      </ReactQueryStreamedHydration>
-    </ServerSessionProvider>
+    <ReactQueryStreamedHydration>
+      <HomePageClient streamContentQueryKey={streamContentQueryKey} />
+    </ReactQueryStreamedHydration>
   );
 }

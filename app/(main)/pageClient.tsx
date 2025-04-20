@@ -189,9 +189,9 @@ export default function Home({ streamContentQueryKey }: Props) {
                 classes.streamContentPanel,
                 commonClasses.noScrollbar,
                 layoutType !== "split" &&
-                  (isArticlePanelOpen
-                    ? classes.streamContentPanelClosed
-                    : classes.streamContentPanelOpened)
+                (isArticlePanelOpen
+                  ? classes.streamContentPanelClosed
+                  : classes.streamContentPanelOpened)
               )}
             >
               <StreamContentQueryKeyProvider initValue={streamContentQueryKey}>

@@ -23,6 +23,7 @@ import {
 import { INavItem } from "./createNav";
 import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
 import { useSourcePanelData } from "./useSourcePanelData";
+import { useMediaQuery } from "@reactuses/core";
 
 export interface Props {
   className?: string;
@@ -88,6 +89,7 @@ export function SourceNavPanel({ className }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isOpen } = useContext(GlobalNavigationCtx);
+  const isWide = useMediaQuery("(min-width: 480px)", true);
   const [actviedItem, setActivedItem] = React.useState<string>("");
 
   const handleLinkClick = (
@@ -109,7 +111,7 @@ export function SourceNavPanel({ className }: Props) {
   return (
     <NavDrawer
       open={isOpen}
-      type="inline"
+      type={isWide ? "inline" : 'overlay'}
       selectedValue={actviedItem}
       className={mergeClasses(classes.nav, className)}
     >

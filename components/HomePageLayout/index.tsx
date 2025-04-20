@@ -6,6 +6,8 @@ import { makeStyles } from "@fluentui/react-components";
 
 import AppNav from "../AppNav";
 import { GlobalNavigationCtxProvider } from "./GlobalNavigationCtx";
+import { useMediaQuery } from "@reactuses/core";
+import { TabBar } from "../AppNav/TabBar";
 
 interface Props {
   children?: React.ReactNode;
@@ -13,11 +15,12 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const classes = useClasses();
+  const isWide = useMediaQuery("(min-width: 480px)", true);
   return (
     <GlobalNavigationCtxProvider>
       <Suspense fallback={<div>Loading...</div>}>
         <div className={classes.root}>
-          <AppNav />
+          {isWide ? <AppNav /> : <TabBar />}
           {children}
         </div>
       </Suspense>

@@ -5,13 +5,13 @@ import {
   StreamContentItemWithPageIndex,
   useStreamItemAction,
 } from "./useStreamContent";
-import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 import StatusCard, { Status } from "../StatusCard";
 import ArticleListItem, { ArticleListItemSkeleton, useListClasses } from "./ArticleListItem";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 import { makeStreamContentQueryOptions } from "@/server/inoreader/stream.rquery";
 import { useStreamContentQueryKey } from "./StreamContentQueryKeyContext";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import { useAppStore } from "@/app/providers/AppStoreProvider";
 
 interface StreamContentPanelProps {
   curArticleId: string | null;
@@ -24,9 +24,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const queryKey = useStreamContentQueryKey();
   const streamContentQuery = useSuspenseInfiniteQuery(makeStreamContentQueryOptions(queryKey));
   const { markAboveAsRead, markItemAsRead } = useStreamItemAction();
-  const {
-    globalSettings: { showFeedThumbnail },
-  } = useContext(GlobalSettingsCtx);
+  const showFeedThumbnail = useAppStore(store => store.preferences.showFeedThumbnail);
 
   const classes = useClasses();
   const commonClasses = useCommonClasses()

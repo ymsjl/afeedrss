@@ -15,27 +15,24 @@ import {
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
 
-import { GlobalSettingsCtx } from "@/app/providers/GlobalSettingProvider";
 import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
+import { useAppStore } from "@/app/providers/AppStoreProvider";
 
-interface Props {}
+interface Props { }
 
-function Interface({}: Props) {
+function Interface({ }: Props) {
   const classes = useClasses();
   const flexClasses = useFlexClasses();
   const listClasses = useListClasses();
-  
-  const { globalSettings, setGlobalSettings } =
-    React.useContext(GlobalSettingsCtx);
+
+  const showFeedThumbnail = useAppStore(store => store.preferences.showFeedThumbnail)
+  const setPreference = useAppStore(store => store.setPreference)
 
   const handleOnShowFeedThumbnailToggleChange = (
     ev: React.ChangeEvent<HTMLInputElement>,
     { checked }: SwitchOnChangeData
   ) => {
-    setGlobalSettings((prevState) => ({
-      ...prevState,
-      showFeedThumbnail: Boolean(checked),
-    }));
+    setPreference('showFeedThumbnail', Boolean(checked));
   };
 
   return (
@@ -60,7 +57,7 @@ function Interface({}: Props) {
           >
             <Text className={flexClasses.flexGrow}>显示缩略图</Text>
             <Switch
-              checked={globalSettings.showFeedThumbnail}
+              checked={showFeedThumbnail}
               onChange={handleOnShowFeedThumbnailToggleChange}
             />
           </ListItem>

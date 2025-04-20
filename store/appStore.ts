@@ -28,6 +28,7 @@ export interface AppState {
     fontSize: number;
     fontFamily: string;
     showUnreadOnly: boolean;
+    showFeedThumbnail: boolean;
   };
   setPreference: <K extends keyof AppState['preferences']>(
     key: K,
@@ -45,6 +46,7 @@ export const defaultInitState: Partial<AppState> = {
     fontSize: 16,
     fontFamily: 'system-ui',
     showUnreadOnly: false,
+    showFeedThumbnail: true,
   }
 };
 
@@ -72,6 +74,7 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
           fontSize: 16,
           fontFamily: 'system-ui',
           showUnreadOnly: false,
+          showFeedThumbnail: true
         },
         setPreference: (key, value) => set((state) => ({
           preferences: {
@@ -95,7 +98,6 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
           layoutType: state.layoutType,
           theme: state.theme,
           preferences: state.preferences
-          // 不持久化 session，因为它应该从服务端获取
         }),
       }
     )

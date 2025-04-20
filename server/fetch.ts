@@ -48,7 +48,7 @@ export class HttpError extends Error {
     this.isHttpError = true;
     // 401 和 403 错误需要重新认证
     this.needsAuthentication = status === HTTP_ERROR_CODES.UNAUTHORIZED || status === HTTP_ERROR_CODES.FORBIDDEN;
-    
+
     // 确保 instanceof 能够正常工作
     Object.setPrototypeOf(this, HttpError.prototype);
   }
@@ -71,6 +71,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
     const response = await fetch(url, {
       ...options,
       signal: controller.signal,
+      cache: 'no-cache'
     });
     clearTimeout(timeoutId);
     return response;

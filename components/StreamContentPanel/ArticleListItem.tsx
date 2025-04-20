@@ -9,7 +9,7 @@ import {
   Skeleton,
   SkeletonItem,
 } from "@fluentui/react-components";
-import { Circle20Regular, Circle20Filled } from "@fluentui/react-icons";
+import { Circle20Regular, CheckmarkCircle20Filled, Circle20Filled } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
 import Swipeout from "../Swipeout";
 import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
@@ -61,7 +61,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
 
   return (
     <Swipeout
-      className={mergeClasses(listItemClasses.listItem, classes.swipeoutContainer)}
+      className={mergeClasses(listItemClasses.listItem, classes.swipeoutContainer, isSelected && classes.selectedItem,)}
       rightBtnsProps={[
         {
           className: classes.leftButton,
@@ -82,7 +82,6 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
         className={mergeClasses(
           classes.articleContainer,
           !isSelected && item?.isRead && classes.readArticle,
-          isSelected && classes.selectedArticle,
           showFeedThumbnail ? classes.withThumbnail : classes.withoutThumbnail
         )}
         onClick={() => onSelectArticle(item)}
@@ -114,7 +113,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
                 <div className={classes.readButton}>
                   <Button
                     icon={
-                      item.isRead ? <Circle20Filled /> : <Circle20Regular />
+                      item.isRead ? <CheckmarkCircle20Filled /> : <Circle20Regular />
                     }
                     appearance="transparent"
                     onClick={onRead}
@@ -139,7 +138,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
             </Text>
             <div className={classes.readButton}>
               <Button
-                icon={item.isRead ? <Circle20Filled /> : <Circle20Regular />}
+                icon={item.isRead ? <CheckmarkCircle20Filled /> : <Circle20Regular />}
                 appearance="transparent"
                 onClick={onRead}
               />
@@ -231,8 +230,8 @@ const useClasses = makeStyles({
   readArticle: {
     opacity: 0.3,
   },
-  selectedArticle: {
-    backgroundColor: 'inherit',
+  selectedItem: {
+    outline: `1px solid ${tokens.colorBrandForeground1}`,
   },
   withThumbnail: {
   },
