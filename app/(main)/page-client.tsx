@@ -26,16 +26,10 @@ import type { LayoutType } from "@/store/app-store";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 import { StreamContentItem } from "@server/inoreader/stream.types";
 
-import {
-  StreamContentPanel,
-  StreamContentPanelSkeleton,
-} from "@/app/(main)/_components/stream-content-panel";
+import { StreamContentPanel } from "@/app/(main)/_components/stream-content-panel";
+import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/skeleton";
 import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
-import {
-  useCommonClasses,
-  useFlexClasses,
-  useTextClasses,
-} from "@/theme/commonStyles";
+import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { extractFirst } from "@utils/index";
 import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
