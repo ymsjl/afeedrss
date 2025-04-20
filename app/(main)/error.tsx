@@ -57,7 +57,7 @@ export default function Error({
   // 处理认证错误，自动跳转到登录页
   useEffect(() => {
     if (isAuthError) {
-      // setSession(null)
+      setSession(null)
     }
   }, [isAuthError, router, setSession]);
 
