@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useContext } from "react";
+import React, { Suspense} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { makeStyles, mergeClasses, tokens, Skeleton, SkeletonItem } from "@fluentui/react-components";
 import {
@@ -20,10 +20,10 @@ import {
   Rss20Filled,
   bundleIcon,
 } from "@fluentui/react-icons";
-import { INavItem } from "./createNav";
-import { GlobalNavigationCtx } from "../home-page-layout/global-navigation-ctx";
-import { useSourcePanelData } from "./useSourcePanelData";
+import { INavItem } from "./create-nav";
+import { useFeedSideNavData } from "@features/subscription-source/use-feed-side-nav-data";
 import { useMediaQuery } from "@reactuses/core";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
 export interface Props {
   className?: string;
@@ -67,7 +67,7 @@ function FeedNavItem({ link, onClick }: { link: INavItem, onClick: (e: React.Mou
 }
 
 function FeedNavList({ onClick }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void }) {
-  const { data } = useSourcePanelData();
+  const { data } = useFeedSideNavData();
   return <>{data?.map((link) => <FeedNavItem key={link.key} link={link} onClick={onClick} />)}</>
 }
 
@@ -84,11 +84,11 @@ function FeedNavListSkeleton() {
   )
 }
 
-export function SourceNavPanel({ className }: Props) {
+export function FeedSideNav({ className }: Props) {
   const classes = useClasses();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isOpen } = useContext(GlobalNavigationCtx);
+  const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);
   const isWide = useMediaQuery("(min-width: 480px)", true);
   const [actviedItem, setActivedItem] = React.useState<string>("");
 
@@ -110,7 +110,7 @@ export function SourceNavPanel({ className }: Props) {
 
   return (
     <NavDrawer
-      open={isOpen}
+      open={isFeedSideNavOpen}
       type={isWide ? "inline" : 'overlay'}
       selectedValue={actviedItem}
       className={mergeClasses(classes.nav, className)}
@@ -125,7 +125,7 @@ export function SourceNavPanel({ className }: Props) {
   );
 }
 
-export default React.memo(SourceNavPanel);
+export default React.memo(FeedSideNav);
 
 const useClasses = makeStyles({
   nav: {

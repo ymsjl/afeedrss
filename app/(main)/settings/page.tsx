@@ -10,7 +10,7 @@ import {
   mergeClasses,
   tokens,
 } from "@fluentui/react-components";
-import { SettingsPageLayout } from "@/components/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
 import {
   PersonAccounts20Regular,
   EyeLines20Regular,
@@ -19,7 +19,7 @@ import {
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { useListClasses } from "@components/stream-content-panel/article-list-item";
+import { useListClasses } from "@/app/(main)/_components/stream-content-panel/steam-content-list-item";
 
 export interface NavListItem {
   key: string;

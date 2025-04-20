@@ -3,9 +3,9 @@
 import React, { Suspense, useState } from "react";
 import { Button } from "@fluentui/react-components";
 import { Add20Regular } from "@fluentui/react-icons";
-import { SettingsPageLayout } from "@/components/settings-page-layout";
-import { SubscriptionSkeleton } from "./_components/SubscriptionSkeleton";
-import { TabsWithData } from "./_components/TabWithData";
+import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
+import { SubscriptionPageContentSkeleton } from "./_components/page-content/skeleton";
+import { SubscriptionPageContent } from "./_components/page-content";
 
 interface Props { }
 
@@ -28,8 +28,8 @@ export default function SubscriptionSource({ }: Props) {
         </Button>
       }
     >
-      <Suspense fallback={<SubscriptionSkeleton />}>
-        <TabsWithData isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+      <Suspense fallback={<SubscriptionPageContentSkeleton />}>
+        <SubscriptionPageContent isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
       </Suspense>
     </SettingsPageLayout >
   );

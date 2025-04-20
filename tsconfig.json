@@ -25,6 +25,9 @@
       "@components/*": [
         "./components/*"
       ],
+      "@features/*": [
+        "./features/*"
+      ],
       "@server/*": [
         "./server/*"
       ],

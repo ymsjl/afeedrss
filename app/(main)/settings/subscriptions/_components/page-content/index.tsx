@@ -7,15 +7,15 @@ import { denormalize } from "normalizr";
 import { subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
 import { folderSchema, subscriptionSchema } from "@/types/feed";
 import { Folder, Subscription } from "@/server/inoreader/subscription.types";
-import { TabContextProvider, TabPanel, TabPanels } from '@components/Tabs'
-import { useClasses } from "../useClasses";
-import { SubscriptionTabList } from "./SubscriptionTabList";
-import { SubscriptionsPanel } from "./SubscriptionsPanel";
-import { FoldersPanel } from "./FoldersPanel";
-import { AddSubscriptionDialog } from "./AddSubscriptionDialog";
-import { TAB_KEYS } from "../constants";
+import { TabContextProvider, TabPanel, TabPanels } from '@/components/tab-panes'
+import { useClasses } from "../../useClasses";
+import { SubscriptionTabList } from "../subscription-tab-list";
+import { SubscriptionsTabContent } from "../subscriptions-tab-content";
+import { FoldersTabContent } from "../folders-tab-content";
+import { AddSubscriptionDialog } from "../add-subscription-dialog";
+import { TAB_KEYS } from "../../constants";
 
-export function TabsWithData({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: boolean, setIsDialogOpen: (open: boolean) => void }) {
+export function SubscriptionPageContent({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: boolean, setIsDialogOpen: (open: boolean) => void }) {
   const classes = useClasses();
 
   const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);
@@ -39,10 +39,10 @@ export function TabsWithData({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: 
       <TabContextProvider activedValue={selectedTab}>
         <TabPanels className={classes.tabContent}>
           <TabPanel value={TAB_KEYS.SUBSCRIPTIONS}>
-            <SubscriptionsPanel subscriptions={subscriptions} />
+            <SubscriptionsTabContent subscriptions={subscriptions} />
           </TabPanel>
           <TabPanel value={TAB_KEYS.FOLDER}>
-            <FoldersPanel folders={folders} />
+            <FoldersTabContent folders={folders} />
           </TabPanel>
         </TabPanels>
       </TabContextProvider>

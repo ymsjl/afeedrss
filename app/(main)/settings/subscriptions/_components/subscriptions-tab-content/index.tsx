@@ -2,12 +2,12 @@ import React from "react";
 import { Image, List, ListItem, mergeClasses, Text } from "@fluentui/react-components";
 import { Folder20Regular } from "@fluentui/react-icons";
 
-import { useListClasses } from "@/components/stream-content-panel/article-list-item";
+import { useListClasses } from "@/app/(main)/_components/stream-content-panel/steam-content-list-item";
 import { Subscription } from "@/server/inoreader/subscription.types";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
-import { useClasses } from "../useClasses";
+import { useClasses } from "../../useClasses";
 
-export const SubscriptionsPanel = React.memo(({ subscriptions }: { subscriptions: Subscription[] }) => {
+export const SubscriptionsTabContent = React.memo(({ subscriptions }: { subscriptions: Subscription[] }) => {
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();

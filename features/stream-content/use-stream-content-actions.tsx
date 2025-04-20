@@ -9,7 +9,7 @@ export interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
 }
 
-export const useStreamItemAction = () => {
+export const useStreamContentActions = () => {
   const queryClient = useQueryClient();
   const queryKey = useStreamContentQueryKey();
 

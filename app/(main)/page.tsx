@@ -3,7 +3,7 @@ import HomePageClient from "./page-client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
-import { getStreamContentQueryKey } from "@/components/stream-content-panel/get-stream-content-query-key";
+import { getStreamContentQueryKey } from "@/features/stream-content/get-stream-content-query-key";
 import { redirect } from "next/navigation";
 
 export default async function Home({
@@ -17,6 +17,7 @@ export default async function Home({
   const userId = session?.user.id || "";
   const streamId = extractFirst(searchParams.streamId);
   const unreadOnly = !!extractFirst(searchParams.unreadOnly);
+
   if (!session?.user.id) {
     redirect("/auth/signin");
   }

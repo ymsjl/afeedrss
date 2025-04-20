@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@fluentui/react-components";
 import { signOut } from "next-auth/react";
 import { ArrowImportRegular } from "@fluentui/react-icons";
-import { SettingsPageLayout } from "@/components/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
 
 interface Props {}
 

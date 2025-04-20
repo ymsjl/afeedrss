@@ -19,6 +19,10 @@ export interface AppState {
   isArticlePanelOpen: boolean;
   setArticlePanelOpen: (open: boolean) => void;
 
+  isFeedSideNavOpen: boolean;
+  setIsFeedSideNavOpen: (open: boolean) => void;
+  toggleFeedSideNav: () => void;
+
   // 主题状态
   theme: AppTheme;
   setTheme: (theme: AppTheme) => void;
@@ -67,6 +71,10 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
         isArticlePanelOpen: false,
         setArticlePanelOpen: (open) => set({ isArticlePanelOpen: open }),
 
+        isFeedSideNavOpen: false,
+        setIsFeedSideNavOpen: (open) => set({ isFeedSideNavOpen: open }),
+        toggleFeedSideNav: () => set(({ isFeedSideNavOpen }) => ({ isFeedSideNavOpen: !isFeedSideNavOpen })),
+
         theme: 'light' as AppTheme,
         setTheme: (theme) => set({ theme }),
 
@@ -90,8 +98,8 @@ export const createAppStore = (initState: Partial<AppState> = defaultInitState) 
         name: 'app-storage', // localStorage 中的键名
         storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
           getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {},
+          setItem: () => { },
+          removeItem: () => { },
         })),
         // 你可以选择只持久化某些状态
         partialize: (state) => ({

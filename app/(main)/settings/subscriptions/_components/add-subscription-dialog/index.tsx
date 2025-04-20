@@ -1,11 +1,11 @@
 import React, { ComponentProps, useState, FormEventHandler, useMemo } from "react";
 import { Dialog, SelectionEvents, OptionOnSelectData, DialogSurface, DialogBody, DialogTitle, DialogContent, Label, Input, Dropdown, DialogActions, Button, DialogTrigger, Option } from "@fluentui/react-components";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { getTagNameFromId } from "@/components/source-nav-panel/createNav";
+import { getTagNameFromId } from "@/app/(main)/_components/feed-side-nav/create-nav";
 import { QUERY_KEYS } from "@/constants";
 import server from "@/server";
 import { Folder } from "@/server/inoreader/subscription.types";
-import { useClasses } from "../useClasses";
+import { useClasses } from "../../useClasses";
 
 interface Props extends Pick<ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'> {
   folders: Folder[];

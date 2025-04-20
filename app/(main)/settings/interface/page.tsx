@@ -13,9 +13,9 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { useFlexClasses } from "@/theme/commonStyles";
-import { SettingsPageLayout } from "@/components/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
 
-import { useListClasses } from "@/components/stream-content-panel/article-list-item";
+import { useListClasses } from "@/app/(main)/_components/stream-content-panel/steam-content-list-item";
 import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface Props { }

@@ -22,22 +22,22 @@ import {
   Text,
 } from "@fluentui/react-components";
 
-import type { LayoutType } from "@/store/appStore";
-import { StreamContentQueryKeyProvider } from "@components/stream-content-panel/stream-content-query-key-context";
+import type { LayoutType } from "@/store/app-store";
+import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 import { StreamContentItem } from "@server/inoreader/stream.types";
 
 import {
   StreamContentPanel,
   StreamContentPanelSkeleton,
-} from "@components/stream-content-panel";
-import { ArticleReadPanel } from "@/components/article-read-panel";
+} from "@/app/(main)/_components/stream-content-panel";
+import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import {
   useCommonClasses,
   useFlexClasses,
   useTextClasses,
 } from "@/theme/commonStyles";
 import { extractFirst } from "@utils/index";
-import { SourceNavPanel } from "@/components/source-nav-panel";
+import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 import { useAppStore } from "../providers/app-store-provider";
 import {
@@ -109,7 +109,7 @@ export default function Home({ streamContentQueryKey }: Props) {
 
   return (
     <div className={classes.root}>
-      <SourceNavPanel />
+      <FeedSideNav />
       <div className={pageLayoutClasses.main}>
         <div
           className={mergeClasses(

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useRef } from "react";
-import { AppState, createAppStore, initializeAppStore } from "@/store/appStore";
+import { AppState, createAppStore, initializeAppStore } from "@/store/app-store";
 import { useStore } from "zustand";
 
 // 明确定义 store API 类型

@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
-import { getRootStreamId } from '@components/stream-content-panel/get-stream-content-query-key';
+import { getRootStreamId } from "../stream-content/get-root-stream-id";
 import { useAppStore } from "@/app/providers/app-store-provider";
-import { createFeedTree } from './createFeedTree';
-import { createBuildInNavItem, createNavList } from "./createNav";
+import { createFeedTree } from './create-feed-tree';
+import { createBuildInNavItem, createNavList } from "../../app/(main)/_components/feed-side-nav/create-nav";
 import { SystemStreamIDs } from '@server/inoreader/stream.types';
 
-export const useSourcePanelData = () => {
+export const useFeedSideNavData = () => {
   const userId = useAppStore(store => store.session?.user?.id || "");
   const streamPreferencesQuery = useSuspenseQuery(streamPreferencesQueryOptions);
   const folderQuery = useSuspenseQuery(folderQueryOptions);

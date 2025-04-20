@@ -1,4 +1,4 @@
-import HomePageLayout from "@/components/home-page-layout";
+import HomePageLayout from "@/app/(main)/_components/home-page-layout";
 import { getServerSession } from "next-auth";
 import { PropsWithChildren } from "react";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";

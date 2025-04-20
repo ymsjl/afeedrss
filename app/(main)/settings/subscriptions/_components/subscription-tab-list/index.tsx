@@ -13,7 +13,7 @@ import {
   Tag20Filled,
   bundleIcon,
 } from '@fluentui/react-icons';
-import { TAB_KEYS } from "../constants";
+import { TAB_KEYS } from "../../constants";
 
 const FolderIcon = bundleIcon(Folder20Filled, Folder20Regular);
 const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);

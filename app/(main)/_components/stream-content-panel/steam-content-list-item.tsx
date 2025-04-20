@@ -6,17 +6,13 @@ import {
   makeStyles,
   mergeClasses,
   shorthands,
-  Skeleton,
-  SkeletonItem,
 } from "@fluentui/react-components";
-import { Circle20Regular, CheckmarkCircle20Filled, Circle20Filled } from "@fluentui/react-icons";
+import { Circle20Regular, CheckmarkCircle20Filled } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
-import Swipeout from "../Swipeout";
+import Swipeout from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
 import dayjs from "@/utils/dayjs";
 import { tokens } from "@fluentui/react-components";
-import { useFlexClasses } from "@/theme/commonStyles";
-import { useCommonClasses } from '../../theme/commonStyles';
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
@@ -178,37 +174,12 @@ export const useListClasses = makeStyles({
   },
 });
 
-export function ArticleListItemSkeleton() {
-  const classes = useClasses()
-  const flexClasses = useFlexClasses()
-  const commonClasses = useCommonClasses();
-  return (
-    <Skeleton>
-      <div className={mergeClasses(flexClasses.flexRow, commonClasses.spaceX4)}>
-        <SkeletonItem className={mergeClasses(classes.thumbnailSkeleton, flexClasses.flexDisableShrink)} />
-        <div className={mergeClasses(flexClasses.flexGrow, commonClasses.spaceY2)}>
-          <SkeletonItem className={classes.titleSkeleton} />
-          <SkeletonItem className={classes.titleSkeleton} />
-        </div>
-      </div>
-    </Skeleton>
-  )
-}
-
-const useClasses = makeStyles({
+export const useClasses = makeStyles({
   thumbnail: {
     width: "80px",
     height: "80px",
     borderRadius: tokens.borderRadiusLarge,
     backgroundColor: tokens.colorNeutralBackground1,
-  },
-  thumbnailSkeleton: {
-    width: "80px",
-    height: "80px",
-    borderRadius: tokens.borderRadiusLarge,
-  },
-  titleSkeleton: {
-
   },
   swipeoutContainer: {},
   leftButton: {

@@ -1,5 +1,5 @@
 import { FolderWithChildren, Tag, Subscription } from "@/server/inoreader/subscription.types";
-import { isSubscription, isTag, isFolderWithChildren } from "./utils";
+import { isSubscription, isTag, isFolderWithChildren } from "@features/subscription-source/utils";
 
 export function getTagNameFromId(tagId: string) {
   const slice: string[] = tagId.split("/");
