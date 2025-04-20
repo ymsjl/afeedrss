@@ -18,6 +18,7 @@ import {
 } from "../../theme/commonStyles";
 import dayjs from "../../utils/dayjs";
 import StatusCard, { Status } from "@components/StatusCard";
+import { useProseClasses } from "./proseClasses";
 
 interface ArticleReadPanelProps {
   onCloseArticle: () => void;
@@ -31,6 +32,7 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
+  const proseClasses = useProseClasses();
 
   useEffect(() => {
     if (articleScrollContainerRef.current) {
@@ -52,7 +54,7 @@ export function ArticleReadPanel(props: ArticleReadPanelProps) {
                 className={mergeClasses(
                   commonClasses.mxAuto,
                   commonClasses.mt8,
-                  "prose"
+                  proseClasses.root
                 )}
               >
                 <h1>{curArticle?.title}</h1>

@@ -98,6 +98,7 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
   } else {
     session = clientStore?.getState()?.session;
   }
+
   const headers = new Headers(restOptions.headers);
   if (session?.accessToken) {
     headers.set('Authorization', `Bearer ${session.accessToken}`);

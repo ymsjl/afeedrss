@@ -40,7 +40,6 @@ import {
 import { QUERY_KEYS } from "@/constants";
 import server from "@server/index";
 import { SettingsPageLayout } from "@/components/SettingsPageLayout";
-import { NavLinkFactory } from "@/components/SourceNavPanel/FeedTreeBuilder";
 import {
   Folder20Regular,
   Folder20Filled,
@@ -58,6 +57,7 @@ import { Folder, Subscription } from "@/server/inoreader/subscription.types";
 import { useListClasses } from "@/components/StreamContentPanel/ArticleListItem";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { TabContextProvider, TabPanel, TabPanels } from '@components/Tabs'
+import { getTagNameFromId } from "@/components/SourceNavPanel/createNav";
 
 interface Props { }
 
@@ -157,7 +157,7 @@ function TabsWithData({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: boolean
         .filter((key: string) => folder[key].type === "folder")
         .map((key: string) => ({
           key: folder[key].id,
-          text: NavLinkFactory.getTagNameFromId(folder[key].id),
+          text: getTagNameFromId(folder[key].id),
         }));
     } else {
       return [];
@@ -205,7 +205,7 @@ function TabsWithData({ isDialogOpen, setIsDialogOpen }: { isDialogOpen: boolean
       {folders.map(folder => {
         return (
           <ListItem key={folder.id} className={listClasses.listItem} >
-            <Text>{NavLinkFactory.getTagNameFromId(folder.id)}</Text>
+            <Text>{getTagNameFromId(folder.id)}</Text>
           </ListItem>
         )
       })}

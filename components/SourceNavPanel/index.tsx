@@ -20,7 +20,7 @@ import {
   Rss20Filled,
   bundleIcon,
 } from "@fluentui/react-icons";
-import { INavLink } from "./FeedTreeBuilder";
+import { INavItem } from "./createNav";
 import { GlobalNavigationCtx } from "../HomePageLayout/GlobalNavigationCtx";
 import { useSourcePanelData } from "./useSourcePanelData";
 
@@ -31,7 +31,7 @@ export interface Props {
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
 const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
 
-function FeedNavItem({ link, onClick }: { link: INavLink, onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavLink) => void }) {
+function FeedNavItem({ link, onClick }: { link: INavItem, onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void }) {
   if (link.type === "folder") {
     return (
       <NavCategory value={link.key!}>
@@ -65,7 +65,7 @@ function FeedNavItem({ link, onClick }: { link: INavLink, onClick: (e: React.Mou
   )
 }
 
-function FeedNavList({ onClick }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavLink) => void }) {
+function FeedNavList({ onClick }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void }) {
   const { data } = useSourcePanelData();
   return <>{data?.map((link) => <FeedNavItem key={link.key} link={link} onClick={onClick} />)}</>
 }
@@ -92,7 +92,7 @@ export function SourceNavPanel({ className }: Props) {
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
-    item?: INavLink
+    item?: INavItem
   ) => {
     e?.preventDefault();
     const params: { [key: string]: string } = {};

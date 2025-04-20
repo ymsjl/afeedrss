@@ -14,6 +14,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { HttpError } from "@/server/fetch";
+import { useAppStore } from "../providers/AppStoreProvider";
 
 // 错误图片映射
 const ERROR_IMAGES = {
@@ -34,8 +35,9 @@ export default function Error({
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
   const flexClasses = useFlexClasses();
+  const setSession = useAppStore(store => store.setSession)
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
+
   // 检查是否为 HTTP 错误，特别是认证错误
   const isHttpError = error.isHttpError;
   const isAuthError = error.needsAuthentication;
@@ -44,30 +46,26 @@ export default function Error({
   // 根据错误类型选择图片
   const getErrorImage = () => {
     if (!isHttpError) return ERROR_IMAGES.default;
-    
+
     if (isAuthError) return ERROR_IMAGES.auth;
     if (statusCode === 404) return ERROR_IMAGES.notFound;
     if (statusCode && statusCode >= 500) return ERROR_IMAGES.serverError;
-    
+
     return ERROR_IMAGES.default;
   };
 
   // 处理认证错误，自动跳转到登录页
   useEffect(() => {
     if (isAuthError) {
-      const redirectTimer = setTimeout(() => {
-        router.push("/auth/signin");
-      }, 3000); // 3秒后自动跳转
-      
-      return () => clearTimeout(redirectTimer);
+      setSession(null)
     }
-  }, [isAuthError, router]);
-  
+  }, [isAuthError, router, setSession]);
+
   const handleRefresh = () => {
     setIsRefreshing(true);
     reset();
   };
-  
+
   const handleLogin = () => {
     router.push("/auth/signin");
   };

@@ -28,6 +28,11 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
     serverSourceMaps: false,
+    optimizePackageImports: [
+      "@fluentui/react-components",
+      "@fluentui/react-icons",
+      "@reactuses/core",
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,

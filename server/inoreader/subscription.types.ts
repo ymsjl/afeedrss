@@ -61,4 +61,6 @@ export interface Tag extends FolderOrTag {
 
 export type InoreaderTagType = "tag" | "folder" | "active_search" | 'buildIn';
 
-
+export interface FolderWithChildren extends Folder {
+  children: (Subscription | Tag | FolderWithChildren)[];
+}
