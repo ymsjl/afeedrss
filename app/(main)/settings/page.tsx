@@ -19,7 +19,7 @@ import {
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { useListClasses } from "@/app/(main)/_components/stream-content-panel/steam-content-list-item";
+import { useListClasses } from "../_components/stream-content-panel/stream-content-list-item.style";
 
 export interface NavListItem {
   key: string;

@@ -1,24 +1,24 @@
+'use client'
+
 import React from "react";
 import {
   Button,
   Text,
   Image,
-  makeStyles,
   mergeClasses,
-  shorthands,
 } from "@fluentui/react-components";
 import { Circle20Regular, CheckmarkCircle20Filled } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
 import Swipeout from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
 import dayjs from "@/utils/dayjs";
-import { tokens } from "@fluentui/react-components";
+import { useClasses, useListClasses } from "./stream-content-list-item.style";
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
 }
 
-interface ArticleListItemProps {
+interface StreamContentListItemProps {
   item: StreamContentItemWithPageIndex;
   isSelected: boolean;
   showFeedThumbnail: boolean;
@@ -30,7 +30,7 @@ interface ArticleListItemProps {
   onSelectArticle: (item: StreamContentItemWithPageIndex) => void;
 }
 
-const ArticleListItem: React.FC<ArticleListItemProps> = ({
+const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   item,
   isSelected,
   showFeedThumbnail,
@@ -88,8 +88,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
               {src && (
                 <Image
                   src={src}
-                  fit="cover"
-                  className={classes.thumbnail}
+                  className={mergeClasses(classes.thumbnail, classes.thumbnailBackground)}
                   alt=""
                 />
               )}
@@ -146,97 +145,6 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
   );
 };
 
-export default ArticleListItem;
+export default StreamContentListItem;
 
-export const useListClasses = makeStyles({
-  list: {
-    marginBlockStart: tokens.spacingVerticalXS,
 
-    "> li": {
-      marginInline: tokens.spacingVerticalXS,
-    },
-
-    "> li:not(:last-child)": {
-      marginBlockEnd: tokens.spacingVerticalS,
-    },
-  },
-  listItem: {
-    transition: "all",
-    boxShadow: tokens.shadow2,
-    ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
-    ...shorthands.borderRadius(tokens.borderRadiusMedium),
-    backgroundColor: tokens.colorNeutralBackground1,
-    "&:hover": {
-      boxShadow: tokens.shadow4,
-
-      backgroundColor: tokens.colorBrandBackgroundInvertedHover,
-    },
-  },
-});
-
-export const useClasses = makeStyles({
-  thumbnail: {
-    width: "80px",
-    height: "80px",
-    borderRadius: tokens.borderRadiusLarge,
-    backgroundColor: tokens.colorNeutralBackground1,
-  },
-  swipeoutContainer: {},
-  leftButton: {
-    backgroundColor: tokens.colorBrandBackground,
-    color: "white",
-    fontWeight: "500",
-  },
-  leftButtonAbove: {
-    backgroundColor: tokens.colorBrandBackground3Static,
-    color: "white",
-    fontWeight: "500",
-  },
-  articleContainer: {
-    display: "flex",
-    gap: "1rem",
-    cursor: "pointer",
-    wordBreak: "break-all",
-  },
-  readArticle: {
-    opacity: 0.3,
-  },
-  selectedItem: {
-    outline: `1px solid ${tokens.colorBrandForeground1}`,
-  },
-  withThumbnail: {
-  },
-  withoutThumbnail: {
-    alignItems: "center",
-  },
-  thumbnailWrapper: {
-    flexShrink: 0,
-  },
-  contentWrapper: {
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-  },
-  titleWrapper: {
-    flexGrow: 1,
-  },
-  title: {
-    cursor: "pointer",
-  },
-  metaInfo: {
-    display: "flex",
-    alignItems: "center",
-  },
-  sourceInfo: {
-    fontSize: "0.75rem",
-    color: tokens.colorNeutralForeground3,
-    flexGrow: 1,
-  },
-  readButton: {
-    display: "none",
-    flexShrink: 0,
-    "@media(min-width: 640px)": {
-      display: "block",
-    },
-  },
-});

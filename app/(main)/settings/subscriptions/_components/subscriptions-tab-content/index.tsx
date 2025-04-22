@@ -1,8 +1,8 @@
 import React from "react";
-import { Image, List, ListItem, mergeClasses, Text } from "@fluentui/react-components";
+import { Image, mergeClasses, Text } from "@fluentui/react-components";
 import { Folder20Regular } from "@fluentui/react-icons";
 
-import { useListClasses } from "@/app/(main)/_components/stream-content-panel/steam-content-list-item";
+import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
 import { Subscription } from "@/server/inoreader/subscription.types";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useClasses } from "../../useClasses";
@@ -14,10 +14,10 @@ export const SubscriptionsTabContent = React.memo(({ subscriptions }: { subscrip
   const listClasses = useListClasses()
 
   return (
-    <List className={listClasses.list}>
+    <ul className={listClasses.list}>
       {subscriptions.map(subscription => {
         return (
-          <ListItem key={subscription.id} className={listClasses.listItem} >
+          <li key={subscription.id} className={listClasses.listItem} >
             <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, classes.feedItemContainer)}>
               <div className={mergeClasses(flexClasses.flexGrow, commonClasses.spaceY2)}>
                 <div className={mergeClasses(flexClasses.flexRow, flexClasses.itemsCenter, commonClasses.spaceX2)}>
@@ -36,9 +36,9 @@ export const SubscriptionsTabContent = React.memo(({ subscriptions }: { subscrip
                 </div>}
               </div>
             </div>
-          </ListItem>
+          </li>
         )
       })}
-    </List>
+    </ul>
   )
 })

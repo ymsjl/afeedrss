@@ -3,7 +3,7 @@ export async function register() {
   if (process.env.NODE_ENV === 'development' && process.env.ENABLE_MSW === 'true') {
     // 确保这段代码只在服务器端执行
     if (process.env.NEXT_RUNTIME === 'nodejs') {
-      (await import('./server/mock/seedDb')).seedDb()
+      (await import('./server/mock/seed-db')).seedDb()
       const { server } = await import('./server/mock/msw-node-server')
       server.listen({ onUnhandledRequest: 'bypass' })
       console.log('[MSW] 服务器端 Mock 已启用')

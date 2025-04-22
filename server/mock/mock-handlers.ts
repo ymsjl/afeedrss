@@ -11,8 +11,11 @@ export const handlers = [
 
   // Stream APIs
   http.get(`${baseURL}/stream/contents/*`, getStreamContentsMock),
+
   http.get(`${baseURL}/preference/stream/list`, getStreamPreferenceListMock),
+
   http.post(`${baseURL}/mark-all-as-read`, markAllAsReadMock),
+
   http.post(`${baseURL}/edit-tag`, (...args) => {
     const { request } = args[0]
     const url = new URL(request.url)
@@ -40,6 +43,8 @@ export const handlers = [
         return new HttpResponse(null, { status: 400 })
     }
   }),
+
   http.get(`${baseURL}/subscription/list`, getSubscriptionListMock),
+
   http.get(`${baseURL}/tag/list`, getFolderOrTagListMock),
 ]

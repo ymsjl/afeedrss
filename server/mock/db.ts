@@ -48,7 +48,7 @@ export const db = factory({
     id: primaryKey(String),
     type: String, // "tag", "folder", "active_search" 或系统标签
     label: String,
-    unreadCount: Number,
+    unread_count: Number,
     sortid: String,
     articles: manyOf('article'), // 多对多关系：一个标签可以应用于多篇文章
     feeds: manyOf('feed'), // 多对多关系：一个标签(文件夹)可以包含多个订阅源

@@ -8,6 +8,7 @@ import {
   NavCategoryItem,
   NavDrawer,
   NavDrawerBody,
+  NavDrawerHeader,
   NavItem,
   NavSectionHeader,
   NavSubItem,
@@ -24,6 +25,7 @@ import { INavItem } from "./create-nav";
 import { useFeedSideNavData } from "@features/subscription-source/use-feed-side-nav-data";
 import { useMediaQuery } from "@reactuses/core";
 import { useAppStore } from "@/app/providers/app-store-provider";
+import { breakpointQuerys } from '@/theme/tokens';
 
 export interface Props {
   className?: string;
@@ -89,7 +91,9 @@ export function FeedSideNav({ className }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);
-  const isWide = useMediaQuery("(min-width: 480px)", true);
+  const setIsFeedSideNavOpen = useAppStore(store => store.setIsFeedSideNavOpen);
+  const isMobileSSR = useAppStore(store => store.isMobileSSR);
+  const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
   const [actviedItem, setActivedItem] = React.useState<string>("");
 
   const handleLinkClick = (
@@ -111,10 +115,12 @@ export function FeedSideNav({ className }: Props) {
   return (
     <NavDrawer
       open={isFeedSideNavOpen}
+      onOpenChange={(_, { open }) => setIsFeedSideNavOpen(open)}
       type={isWide ? "inline" : 'overlay'}
       selectedValue={actviedItem}
       className={mergeClasses(classes.nav, className)}
     >
+      <NavDrawerHeader></NavDrawerHeader>
       <NavDrawerBody>
         <NavSectionHeader>订阅源</NavSectionHeader>
         <Suspense fallback={<FeedNavListSkeleton />}>
@@ -131,7 +137,6 @@ const useClasses = makeStyles({
   nav: {
     flexShrink: 0,
     backgroundColor: tokens.colorNeutralBackground4,
-    paddingBlockStart: tokens.spacingVerticalS,
   },
   navItem: {
     display: "flex",

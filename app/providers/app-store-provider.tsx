@@ -1,26 +1,14 @@
 'use client';
 
-import { createContext, useContext, useRef } from "react";
-import { AppState, createAppStore, initializeAppStore } from "@/store/app-store";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { AppState, AppStore, createAppStore } from "@/store/app-store";
+import { initializeAppStore } from '@/store/initialize-app-store';
 import { useStore } from "zustand";
 
-// 明确定义 store API 类型
-export type AppStoreApi = ReturnType<typeof createAppStore>;
+type AppStoreApi = ReturnType<typeof createAppStore>;
 
-// 创建上下文，初始值为 undefined
-export const AppStoreContext = createContext<AppStoreApi | undefined>(undefined);
+const AppStoreContext = createContext<AppStoreApi | undefined>(undefined);
 
-// 使用 store 的 hook
-export function useAppStore<T>(selector: (state: AppState) => T): T {
-  const store = useContext(AppStoreContext);
-  if (!store) {
-    throw new Error("useAppStore 必须在 AppStoreProvider 内部使用");
-  }
-
-  return useStore(store, selector);
-}
-
-// Provider 组件
 export function AppStoreProvider({
   children,
   initialState,
@@ -28,7 +16,6 @@ export function AppStoreProvider({
   children: React.ReactNode;
   initialState?: Partial<AppState>;
 }) {
-  // 使用 useRef 确保只创建一次 store
   const storeRef = useRef<AppStoreApi | null>(null);
 
   if (storeRef.current === null) {
@@ -40,4 +27,25 @@ export function AppStoreProvider({
       {children}
     </AppStoreContext.Provider>
   );
+}
+
+export function useAppStore<T>(selector: (state: AppStore) => T): T {
+  const store = useContext(AppStoreContext);
+  if (!store) {
+    throw new Error("useAppStore 必须在 AppStoreProvider 内部使用");
+  }
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
+
+  const selectedState =  useStore(store, selector);
+
+  if(!isHydrated) {
+    const initialState = store.getInitialState();
+    return selector(initialState)
+  }
+
+  return selectedState;
 }

@@ -17,6 +17,7 @@ import {
 import dayjs from "@/utils/dayjs";
 import StatusCard, { Status } from "@/components/status-card";
 import { useProseClasses } from "./proseClasses";
+import { appTokens } from '@/theme/tokens';
 
 interface ArticleReadPanelProps {
   onCloseArticle: () => void;
@@ -110,7 +111,7 @@ const useClasses = makeStyles({
     width: "100%",
     height: "100%",
     paddingInline: tokens.spacingHorizontalM,
-    "@media (min-width: 640px)": {
+    [appTokens.breakpoints.medium]: {
       paddingInline: tokens.spacingHorizontalL,
     },
   },

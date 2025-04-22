@@ -71,7 +71,7 @@ export default function Error({
   };
 
   return (
-    <div className={pageLayoutClasses.main}>
+    <div className={mergeClasses(pageLayoutClasses.main, classes.errorRoot)}>
       <div className={mergeClasses(pageLayoutClasses.content, flexClasses.flexCol, flexClasses.flexCenter, classes.errorContainer)}>
         <Image
           src={getErrorImage()}
@@ -133,6 +133,9 @@ export default function Error({
 }
 
 const useClasses = makeStyles({
+  errorRoot:{
+    width: '100%'
+  },
   errorContainer: {
     flexGrow: 1,
     gap: tokens.spacingVerticalM,

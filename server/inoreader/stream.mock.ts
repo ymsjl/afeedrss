@@ -1,9 +1,9 @@
-import { HttpResponse, HttpResponseResolver } from 'msw'
+import { delay, HttpResponse, HttpResponseResolver } from 'msw'
 import { FeedActionType, SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
 import { db } from '../mock/db'
 import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from './utils'
 
-export const getStreamContentsMock: HttpResponseResolver = ({ request }) => {
+export const getStreamContentsMock: HttpResponseResolver = async ({ request }) => {
   const url = new URL(request.url)
   const streamId = url.pathname.split('/').pop() || ''
 
@@ -90,6 +90,7 @@ export const getStreamContentsMock: HttpResponseResolver = ({ request }) => {
     feedTitle = 'Starred Items'
   }
 
+  await delay(1000)
   return HttpResponse.json<StreamContentsResponse>({
     direction: 'ltr',
     id: streamId || 'user/-/state/com.google/reading-list',
@@ -117,7 +118,7 @@ export const markAllAsReadMock: HttpResponseResolver = ({ request }) => {
   const url = new URL(request.url)
   const streamId = url.searchParams.get('s') || ''
 
-  let articlesToMark:any[] = []
+  let articlesToMark: any[] = []
 
   if (streamId && streamId.startsWith('feed/')) {
     // 获取指定订阅源的所有文章

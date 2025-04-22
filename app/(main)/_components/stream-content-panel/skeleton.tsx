@@ -1,6 +1,6 @@
 import { List, ListItem, makeStyles, mergeClasses, Skeleton, SkeletonItem } from "@fluentui/react-components";
-import { useListClasses } from "./steam-content-list-item";
-import { useClasses } from "./steam-content-list-item";
+import { useListClasses } from "./stream-content-list-item.style";
+import { useClasses } from "./stream-content-list-item.style";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import React from "react";
 
@@ -37,7 +37,5 @@ export const ArticleListItemSkeleton = React.memo(() => {
 })
 
 const useSkeletonClasses = makeStyles({
-  thumbnail: {
-    backgroundColor: 'unset'
-  }
+  thumbnail: {}
 })

@@ -33,6 +33,7 @@ const nextConfig = {
       "@fluentui/react-icons",
       "@reactuses/core",
     ],
+    swcPlugins: [['fluentui-next-appdir-directive', { paths: ['@griffel', '@fluentui'] }]],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -47,6 +48,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: false,
   swcMinify: true,
   compiler: {
     styledComponents: true,

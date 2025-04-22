@@ -3,9 +3,11 @@
 import React, { Suspense } from "react";
 import { makeStyles, tokens } from "@fluentui/react-components";
 import { useMediaQuery } from "@reactuses/core";
+import { breakpointQuerys } from '@/theme/tokens';
 
 import { AppSideNav } from "../app-side-nav";
 import { AppTabBar } from "../app-tab-bar";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface Props {
   children?: React.ReactNode;
@@ -13,7 +15,8 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const classes = useClasses();
-  const isWide = useMediaQuery("(min-width: 480px)", true);
+  const isMobileSSR = useAppStore(store => store.isMobileSSR);
+  const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className={classes.root}>

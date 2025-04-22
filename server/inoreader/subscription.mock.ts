@@ -1,10 +1,10 @@
-import { HttpResponse, HttpResponseResolver, } from 'msw'
+import { delay, HttpResponse, HttpResponseResolver, } from 'msw'
 import { FeedActionType } from "./stream.types"
 import { db } from '../mock/db'
 import { InoreaderTagListResponse, SubscriptionListResponse } from "./subscription.types"
 import { InoreaderTagType } from "./subscription.types"
 
-export const getSubscriptionListMock: HttpResponseResolver = () => {
+export const getSubscriptionListMock: HttpResponseResolver = async () => {
   const subscriptions = db.feed.findMany({}).map(
     feed => ({
       id: feed.id,
@@ -16,27 +16,28 @@ export const getSubscriptionListMock: HttpResponseResolver = () => {
         id: tag.id,
         label: tag.label,
         type: tag.type,
-        unreadCount: tag.unreadCount,
         sortid: tag.sortid
       })),
       iconUrl: feed.iconUrl,
-      unreadCount: 0, // TODO: 实际未读数
+      unread_count: 0, // TODO: 实际未读数
       sortid: feed.sortid
     })
   )
+  await delay(1000) // 模拟延迟
   return HttpResponse.json<SubscriptionListResponse>({ subscriptions })
 }
 
-export const getFolderOrTagListMock: HttpResponseResolver = () => {
-  const tags = db.tag.findMany({}).map((tag)=>{
+export const getFolderOrTagListMock: HttpResponseResolver = async () => {
+  const tags = db.tag.findMany({}).map((tag) => {
     return {
       id: tag.id,
       label: tag.label,
       type: tag.type as InoreaderTagType,
-      unreadCount: tag.unreadCount,
+      unread_count: tag.unread_count,
       sortid: tag.sortid
     }
   })
+  await delay(1000) // 模拟延迟
   return HttpResponse.json<InoreaderTagListResponse>({ tags })
 }
 

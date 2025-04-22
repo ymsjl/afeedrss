@@ -44,6 +44,7 @@ import {
   LayoutColumnOneThirdLeft20Filled,
   ChevronLeft20Regular,
 } from "@fluentui/react-icons";
+import { appTokens } from "@/theme/tokens";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -224,6 +225,7 @@ export default function Home({ streamContentQueryKey }: Props) {
             )}
           </div>
         </div>
+
         {layoutType === "split" && (
           <div
             className={mergeClasses(
@@ -282,7 +284,10 @@ const useClasses = makeStyles({
     display: "flex",
     height: "100%",
     flex: 1,
-    gap: tokens.spacingHorizontalM,
+    overflowX: 'hidden',
+    [appTokens.breakpoints.medium]: {
+      gap: tokens.spacingHorizontalM,
+    }
   },
   body: {
     position: "relative",
@@ -307,22 +312,26 @@ const useClasses = makeStyles({
     opacity: 0,
   },
   articelPanel: {
-    display: "flex",
-    flexDirection: "column",
     position: "absolute",
     ...shorthands.inset("0"),
-    height: "100%",
     zIndex: tokens.zIndexOverlay,
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    maxWidth: '100%',
     marginBlockStart: tokens.spacingHorizontalXS,
-    marginInline: tokens.spacingHorizontalXS,
     backgroundColor: tokens.colorNeutralBackground1,
-    boxShadow: tokens.shadow2,
-    ...shorthands.borderRadius(
-      tokens.borderRadiusLarge,
-      tokens.borderRadiusLarge,
-      0,
-      0
-    ),
+    [appTokens.breakpoints.medium]: {
+      marginInline: tokens.spacingHorizontalXS,
+      boxShadow: tokens.shadow2,
+      ...shorthands.borderRadius(
+        tokens.borderRadiusLarge,
+        tokens.borderRadiusLarge,
+        0,
+        0
+      ),
+      
+    },
     transition: "all 0.3s ease-in-out",
   },
   articelPanelOpened: {
@@ -336,7 +345,7 @@ const useClasses = makeStyles({
     paddingBlock: tokens.spacingVerticalS,
   },
   hamburgerHiden: {
-    "@media (min-width: 640px)": {
+    [appTokens.breakpoints.medium]: {
       display: "none",
     },
   },
@@ -349,7 +358,7 @@ const useClasses = makeStyles({
     alignItems: "center",
     gap: tokens.spacingHorizontalM,
     ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalM),
-    "@media (min-width: 640px)": {
+    [appTokens.breakpoints.medium]: {
       ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalL),
     },
   },

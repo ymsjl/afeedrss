@@ -64,7 +64,14 @@ function createNavItem(data: (Subscription | Tag | FolderWithChildren | null)) {
 }
 
 export function createNavList(list: (Subscription | Tag | FolderWithChildren | null)[]) {
-  return list.map(createNavItem) as INavItem[]
+  const result: INavItem[] = [];
+  list.forEach((item) => {
+    const navItem = createNavItem(item);
+    if (navItem) {
+      result.push(navItem);
+    }
+  })
+  return result;
 }
 
 export type NavItemType = 'feed' | 'tag' | 'folder' | 'buildIn'

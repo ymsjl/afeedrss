@@ -6,7 +6,8 @@ import { useStreamContentsQuery } from '@features/stream-content/use-stream-cont
 import StatusCard, { Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 import { useAppStore } from "@/app/providers/app-store-provider";
-import ArticleListItem, { useListClasses } from "./steam-content-list-item";
+import StreamContentListItem from "./stream-content-list-item";
+import { useListClasses } from "./stream-content-list-item.style";
 
 interface StreamContentPanelProps {
   curArticleId: string | null;
@@ -19,7 +20,6 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const { markAboveAsRead, markItemAsRead } = useStreamContentActions();
   const { data: items, isFetching, isFetched, error } = useStreamContentsQuery();
   const showFeedThumbnail = useAppStore(store => store.preferences.showFeedThumbnail);
-
   const classes = useClasses();
   const commonClasses = useCommonClasses()
   const flexClasses = useFlexClasses()
@@ -44,12 +44,12 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
 
   return (
     <>
-      <List className={listClasses.list}>
+      <ul className={listClasses.list}>
         {items.map((item) => {
           if (!item) return null;
           return (
-            <ListItem key={item.id}>
-              <ArticleListItem
+            <li key={item.id}>
+              <StreamContentListItem
                 item={item}
                 isSelected={curArticleId === item.id}
                 showFeedThumbnail={showFeedThumbnail}
@@ -57,10 +57,10 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
                 onMarkAboveAsRead={markAboveAsRead}
                 onSelectArticle={onSelectArticle}
               />
-            </ListItem>
+            </li>
           );
         })}
-      </List >
+      </ul>
       <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, classes.spinnerContainer)}>
         {isFetching && <Spinner />}
       </div>
