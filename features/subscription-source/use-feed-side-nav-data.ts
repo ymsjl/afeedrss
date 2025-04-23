@@ -16,7 +16,6 @@ export const useFeedSideNavData = () => {
   const subscriptionsData = subscriptionsQuery.data;
   const folderData = folderQuery.data;
   const streamPreferencesData = streamPreferencesQuery.data;
-  console.log('mayday',subscriptionsData, streamPreferencesData)
   const data = useMemo(() => {
     if (
       !userId ||

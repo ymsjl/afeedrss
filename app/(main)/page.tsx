@@ -1,5 +1,5 @@
 import { extractFirst } from "@/utils";
-import HomePageClient from "./page-client";
+import HomePageClient from "./_components/home-page-client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";

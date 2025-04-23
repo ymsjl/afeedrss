@@ -4,9 +4,6 @@ import React, { useState, useCallback, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   mergeClasses,
-  makeStyles,
-  tokens,
-  shorthands,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
@@ -33,7 +30,7 @@ import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/common
 import { extractFirst } from "@utils/index";
 import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
-import { useAppStore } from "../providers/app-store-provider";
+import { useAppStore } from "../../../providers/app-store-provider";
 import {
   bundleIcon,
   LayoutColumnTwoSplitLeft20Regular,
@@ -44,9 +41,8 @@ import {
   LayoutColumnOneThirdLeft20Filled,
   ChevronLeft20Regular,
 } from "@fluentui/react-icons";
-import { appTokens } from "@/theme/tokens";
-import { useMediaQuery } from "@reactuses/core";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
+import { useClasses } from "./useClasses";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -95,7 +91,6 @@ export default function Home({ streamContentQueryKey }: Props) {
   useStreamIdUpdateEffect(handleCloseArticle);
 
   const handleArticleIdUpdate: Parameters<typeof useArticleIdUpdateEffect>[0] = useCallback((prev, current) => {
-    console.log('prev', prev, current)
     if (prev && !current) {
       setIsArticlePanelOpen(false);
     }
@@ -297,91 +292,6 @@ export default function Home({ streamContentQueryKey }: Props) {
     </div>
   );
 }
-
-const useClasses = makeStyles({
-  root: {
-    display: "flex",
-    height: "100%",
-    flex: 1,
-    overflowX: 'hidden',
-    [appTokens.breakpoints.medium]: {
-      gap: tokens.spacingHorizontalM,
-    }
-  },
-  body: {
-    position: "relative",
-    overflow: "hidden",
-    height: "100%",
-  },
-  title: {
-    flexGrow: 1,
-    flexShrink: 0,
-  },
-  streamContentPanel: {
-    overflowY: "scroll",
-    height: "100%",
-    transition: "all 0.3s ease-in-out",
-  },
-  streamContentPanelOpened: {
-    transform: "translateX(0)",
-    opacity: 1,
-  },
-  streamContentPanelClosed: {
-    transform: "translateX(-100%)",
-    opacity: 0,
-  },
-  articelPanel: {
-    position: "absolute",
-    ...shorthands.inset("0"),
-    zIndex: tokens.zIndexOverlay,
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    maxWidth: '100%',
-    marginBlockStart: tokens.spacingHorizontalXS,
-    backgroundColor: tokens.colorNeutralBackground1,
-    [appTokens.breakpoints.medium]: {
-      marginInline: tokens.spacingHorizontalXS,
-      boxShadow: tokens.shadow2,
-      ...shorthands.borderRadius(
-        tokens.borderRadiusLarge,
-        tokens.borderRadiusLarge,
-        0,
-        0
-      ),
-
-    },
-    transition: "all 0.3s ease-in-out",
-  },
-  articelPanelOpened: {
-    transform: "translateX(0px)",
-  },
-  articelPanelClosed: {
-    transform: "translateX(calc(100% + 16px))",
-  },
-  hamburger: {
-    display: "block",
-    paddingBlock: tokens.spacingVerticalS,
-  },
-  hamburgerHiden: {
-    [appTokens.breakpoints.medium]: {
-      display: "none",
-    },
-  },
-  headerTextBlock: {
-    paddingBlock: tokens.spacingVerticalS,
-    lineHeight: tokens.lineHeightBase300,
-  },
-  articelPanelHeader: {
-    display: "flex",
-    alignItems: "center",
-    gap: tokens.spacingHorizontalM,
-    ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalM),
-    [appTokens.breakpoints.medium]: {
-      ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalL),
-    },
-  },
-});
 
 const useStreamIdUpdateEffect = (cb: () => void) => {
   const searchParams = useSearchParams();
