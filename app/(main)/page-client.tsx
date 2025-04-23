@@ -27,7 +27,7 @@ import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-
 import { StreamContentItem } from "@server/inoreader/stream.types";
 
 import { StreamContentPanel } from "@/app/(main)/_components/stream-content-panel";
-import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/skeleton";
+import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/stream-content-panel-skeleton";
 import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { extractFirst } from "@utils/index";
@@ -45,6 +45,8 @@ import {
   ChevronLeft20Regular,
 } from "@fluentui/react-icons";
 import { appTokens } from "@/theme/tokens";
+import { useMediaQuery } from "@reactuses/core";
+import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -72,6 +74,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const [curArticle, setCurArticle] = useState<StreamContentItem | null>(null);
   const [isArticlePanelOpen, setIsArticlePanelOpen] = useState(false);
   const layoutType = useAppStore((state) => state.layoutType);
+  const isLargeThenMobile = useLargeThenMobile()
   const setLayoutType = useAppStore((state) => state.setLayoutType);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -91,6 +94,15 @@ export default function Home({ streamContentQueryKey }: Props) {
 
   useStreamIdUpdateEffect(handleCloseArticle);
 
+  const handleArticleIdUpdate: Parameters<typeof useArticleIdUpdateEffect>[0] = useCallback((prev, current) => {
+    console.log('prev', prev, current)
+    if (prev && !current) {
+      setIsArticlePanelOpen(false);
+    }
+  }, [handleCloseArticle])
+
+  useArticleIdUpdateEffect(handleArticleIdUpdate)
+
   const onStreamContentItemClick = useCallback(
     (item: StreamContentItem) => {
       const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -102,6 +114,75 @@ export default function Home({ streamContentQueryKey }: Props) {
     [router, searchParams]
   );
 
+  const header = () => {
+    return (
+      <div className={pageLayoutClasses.header}>
+        <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
+          <Breadcrumb size="large">
+            <BreadcrumbItem>
+              <BreadcrumbButton
+                onClick={handleCloseArticle}
+                className={textClasses.textLg}
+              >
+                {unreadOnly ? "未读文章" : "全部文章"}
+              </BreadcrumbButton>
+            </BreadcrumbItem>
+            {layoutType !== "split" && curArticle ? (
+              <>
+                <BreadcrumbDivider />
+                <BreadcrumbItem>
+                  <BreadcrumbButton className={textClasses.textLg}>
+                    {curArticle?.title}
+                  </BreadcrumbButton>
+                </BreadcrumbItem>
+              </>
+            ) : null}
+          </Breadcrumb>
+
+          <div className={flexClasses.flexGrow}></div>
+          <Menu
+            positioning={{ align: "end" }}
+            checkedValues={{
+              layoutType: [layoutType],
+              unreadOnly: [String(unreadOnly)],
+            }}
+            onCheckedValueChange={(_, { name, checkedItems }) => {
+              if (name === "layoutType") {
+                setLayoutType(checkedItems[0] as LayoutType);
+              }
+            }}
+          >
+            <MenuTrigger disableButtonEnhancement>
+              <MenuButton icon={<LayoutColumnTwoSplitLeftIcon />}>
+                布局
+              </MenuButton>
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                <MenuGroup>
+                  <MenuItemRadio
+                    icon={<LayoutColumnOneIcon />}
+                    name="layoutType"
+                    value="default"
+                  >
+                    默认布局
+                  </MenuItemRadio>
+                  <MenuItemRadio
+                    icon={<LayoutColumnTwoIcon />}
+                    name="layoutType"
+                    value="split"
+                  >
+                    分栏布局
+                  </MenuItemRadio>
+                </MenuGroup>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.root}>
       <FeedSideNav />
@@ -112,74 +193,12 @@ export default function Home({ streamContentQueryKey }: Props) {
             layoutType === "split" && pageLayoutClasses.contentSplitViewMid
           )}
         >
-          <div className={pageLayoutClasses.header}>
-            <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
-              <Breadcrumb size="large">
-                <BreadcrumbItem>
-                  <BreadcrumbButton
-                    onClick={handleCloseArticle}
-                    className={textClasses.textLg}
-                  >
-                    {unreadOnly ? "未读文章" : "全部文章"}
-                  </BreadcrumbButton>
-                </BreadcrumbItem>
-                {layoutType !== "split" && curArticle ? (
-                  <>
-                    <BreadcrumbDivider />
-                    <BreadcrumbItem>
-                      <BreadcrumbButton className={textClasses.textLg}>
-                        {curArticle?.title}
-                      </BreadcrumbButton>
-                    </BreadcrumbItem>
-                  </>
-                ) : null}
-              </Breadcrumb>
-
-              <div className={flexClasses.flexGrow}></div>
-              <Menu
-                positioning={{ align: "end" }}
-                checkedValues={{
-                  layoutType: [layoutType],
-                  unreadOnly: [String(unreadOnly)],
-                }}
-                onCheckedValueChange={(_, { name, checkedItems }) => {
-                  if (name === "layoutType") {
-                    setLayoutType(checkedItems[0] as LayoutType);
-                  }
-                }}
-              >
-                <MenuTrigger disableButtonEnhancement>
-                  <MenuButton icon={<LayoutColumnTwoSplitLeftIcon />}>
-                    布局
-                  </MenuButton>
-                </MenuTrigger>
-                <MenuPopover>
-                  <MenuList>
-                    <MenuGroup>
-                      <MenuItemRadio
-                        icon={<LayoutColumnOneIcon />}
-                        name="layoutType"
-                        value="default"
-                      >
-                        默认布局
-                      </MenuItemRadio>
-                      <MenuItemRadio
-                        icon={<LayoutColumnTwoIcon />}
-                        name="layoutType"
-                        value="split"
-                      >
-                        分栏布局
-                      </MenuItemRadio>
-                    </MenuGroup>
-                  </MenuList>
-                </MenuPopover>
-              </Menu>
-            </div>
-          </div>
+          {isLargeThenMobile && (header())}
 
           <div className={classes.body}>
             {/* 文章列表 */}
             <div
+              tabIndex={-1}
               className={mergeClasses(
                 classes.streamContentPanel,
                 commonClasses.noScrollbar,
@@ -330,7 +349,7 @@ const useClasses = makeStyles({
         0,
         0
       ),
-      
+
     },
     transition: "all 0.3s ease-in-out",
   },
@@ -381,4 +400,23 @@ const useStreamIdUpdateEffect = (cb: () => void) => {
       cb();
     }
   }, [cb, streamId]);
+};
+
+const useArticleIdUpdateEffect = (cb: (prev: string | null, current: string | null) => void) => {
+  const searchParams = useSearchParams();
+  const prevStreamIdRef = React.useRef<string | null>(null);
+  const articleId = searchParams.get("articleId");
+
+  useEffect(() => {
+    () => {
+      prevStreamIdRef.current = articleId;
+    };
+  }, [articleId]);
+
+  useEffect(() => {
+    if (articleId !== prevStreamIdRef.current) {
+      cb(prevStreamIdRef.current, articleId);
+      prevStreamIdRef.current = articleId;
+    }
+  }, [cb, articleId]);
 };

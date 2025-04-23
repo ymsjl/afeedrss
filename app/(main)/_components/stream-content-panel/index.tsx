@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Spinner, List, ListItem, mergeClasses, makeStyles } from "@fluentui/react-components";
+import { Spinner, mergeClasses, makeStyles } from "@fluentui/react-components";
 import { StreamContentItem } from "@server/inoreader/stream.types";
 import { StreamContentItemWithPageIndex, useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';

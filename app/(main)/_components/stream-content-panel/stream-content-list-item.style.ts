@@ -36,9 +36,9 @@ export const useListClasses = makeStyles({
 export const useClasses = makeStyles({
   thumbnail: {
     width: "80px",
-    height: "80px",
+    height: "60px",
     objectFit: "cover",
-    borderRadius: tokens.borderRadiusLarge,
+    borderRadius: tokens.borderRadiusMedium,
   },
   thumbnailBackground: {
     backgroundColor: tokens.colorNeutralBackground1,
@@ -91,9 +91,8 @@ export const useClasses = makeStyles({
     alignItems: "center",
   },
   sourceInfo: {
-    fontSize: "0.75rem",
-    color: tokens.colorNeutralForeground3,
     flexGrow: 1,
+    color: tokens.colorNeutralForeground4,
   },
   readButton: {
     display: "none",

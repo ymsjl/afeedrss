@@ -3,9 +3,10 @@
 import React from "react";
 import {
   Button,
-  Text,
   Image,
   mergeClasses,
+  Caption1,
+  Body1Strong
 } from "@fluentui/react-components";
 import { Circle20Regular, CheckmarkCircle20Filled } from "@fluentui/react-icons";
 import { StreamContentItem } from "@/server/inoreader/stream.types";
@@ -13,6 +14,9 @@ import Swipeout from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
 import dayjs from "@/utils/dayjs";
 import { useClasses, useListClasses } from "./stream-content-list-item.style";
+import { useMediaQuery } from '@reactuses/core';
+import { breakpointQuerys } from "@/theme/tokens";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;
@@ -41,6 +45,8 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   const { title } = item;
   const classes = useClasses();
   const listItemClasses = useListClasses();
+  const isMobileSSR = useAppStore(store=> store.isMobileSSR);
+  const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
 
   const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -74,7 +80,6 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
       btnWidth={96}
     >
       <div
-        data-is-focusable={true}
         className={mergeClasses(
           classes.articleContainer,
           !isSelected && item?.isRead && classes.readArticle,
@@ -95,16 +100,16 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
             </div>
             <div className={classes.contentWrapper}>
               <div className={classes.titleWrapper}>
-                <Text className={classes.title} block>
+                <Body1Strong className={classes.title} block>
                   {title}
-                </Text>
+                </Body1Strong>
               </div>
               <div className={classes.metaInfo}>
-                <Text className={classes.sourceInfo}>
+                <Caption1 className={classes.sourceInfo}>
                   {`${item.origin.title}/ ${dayjs(
                     item?.published * 1000
                   ).fromNow()}`}
-                </Text>
+                </Caption1>
                 <div className={classes.readButton}>
                   <Button
                     icon={
@@ -119,18 +124,18 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
           </>
         ) : (
           <>
-            <Text
-              className={mergeClasses(classes.title, "flex-1")}
+            <Body1Strong
+              className={mergeClasses(classes.title)}
               block
               wrap={false}
             >
               {title}
-            </Text>
-            <Text className={classes.sourceInfo} block wrap={false}>
+            </Body1Strong>
+            <Caption1 className={classes.sourceInfo} block wrap={false}>
               {`${item.origin.title}/ ${dayjs(
                 item?.published * 1000
               ).fromNow()}`}
-            </Text>
+            </Caption1>
             <div className={classes.readButton}>
               <Button
                 icon={item.isRead ? <CheckmarkCircle20Filled /> : <Circle20Regular />}

@@ -7,6 +7,7 @@ export const usePageLayoutClasses = makeStyles({
     display: 'flex',
     height: '100%',
     backgroundColor: tokens.colorNeutralBackground1,
+    overflow: 'hidden',
     [appTokens.breakpoints.medium]: {
       backgroundColor: tokens.colorNeutralBackground3,
       marginBlockStart: tokens.spacingVerticalM,

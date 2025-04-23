@@ -3,25 +3,33 @@ import { FeedActionType } from "./stream.types"
 import { db } from '../mock/db'
 import { InoreaderTagListResponse, SubscriptionListResponse } from "./subscription.types"
 import { InoreaderTagType } from "./subscription.types"
+import { getTagNameFromId } from '@/app/(main)/_components/feed-side-nav/create-nav';
 
 export const getSubscriptionListMock: HttpResponseResolver = async () => {
   const subscriptions = db.feed.findMany({}).map(
-    feed => ({
-      id: feed.id,
-      title: feed.title,
-      htmlUrl: feed.htmlUrl,
-      firstitemmsec: feed.firstitemmsec,
-      url: feed.url,
-      categories: feed.tags.map(tag => ({
-        id: tag.id,
-        label: tag.label,
-        type: tag.type,
-        sortid: tag.sortid
-      })),
-      iconUrl: feed.iconUrl,
-      unread_count: 0, // TODO: 实际未读数
-      sortid: feed.sortid
-    })
+    feed => {
+      let folders = [];
+      for (let feedTag of feed.tags) {
+        const result = db.tag.findFirst({ where: { id: { equals: feedTag.id }, type: { equals: "folder" } } })
+        if (result) {
+          folders.push(result);
+        }
+      }
+      return ({
+        id: feed.id,
+        title: feed.title,
+        htmlUrl: feed.htmlUrl,
+        firstitemmsec: feed.firstitemmsec,
+        url: feed.url,
+        categories: folders.map(folder => ({
+          id: folder.id,
+          label: getTagNameFromId(folder.id)
+        })),
+        iconUrl: feed.iconUrl,
+        unread_count: 0, // TODO: 实际未读数
+        sortid: feed.sortid
+      })
+    }
   )
   await delay(1000) // 模拟延迟
   return HttpResponse.json<SubscriptionListResponse>({ subscriptions })
@@ -31,7 +39,6 @@ export const getFolderOrTagListMock: HttpResponseResolver = async () => {
   const tags = db.tag.findMany({}).map((tag) => {
     return {
       id: tag.id,
-      label: tag.label,
       type: tag.type as InoreaderTagType,
       unread_count: tag.unread_count,
       sortid: tag.sortid
@@ -54,13 +61,6 @@ export const addSubscriptionMock: HttpResponseResolver = ({ request }) => {
     // 检查订阅是否已存在
     const existingFeed = db.feed.findFirst({ where: { url: { equals: feedUrl } } })
 
-    const folderTag = db.tag.findFirst({
-      where: {
-        id: { equals: folderId },
-        type: { equals: 'folder' }
-      }
-    });
-
     if (!existingFeed) {
       // 创建新的订阅
       const newFeed = db.feed.create({
@@ -68,10 +68,35 @@ export const addSubscriptionMock: HttpResponseResolver = ({ request }) => {
         title: `Feed from ${feedUrl}`,
         url: feedUrl,
         htmlUrl: feedUrl,
-        tags: folderTag ? [folderTag] : [],
+        tags: [],
         iconUrl: `${new URL(feedUrl).origin}/favicon.ico`,
       })
+      const folder = db.tag.findFirst({
+        where: {
+          id: { equals: folderId },
+          type: { equals: 'folder' }
+        }
+      });
 
+      if (folder) {
+        const feedTag = db.feedTag.create({ id: `${feedId}:${folder.id}`, tagId: folder.id, feedId: feedId })
+        db.feed.update({
+          where: {
+            id: { equals: feedId }
+          },
+          data: {
+            tags: [feedTag]
+          }
+        })
+        db.tag.update({
+          where: {
+            id: { equals: folderId }
+          },
+          data: {
+            feeds: [...folder.feeds, feedTag]
+          }
+        })
+      }
       return HttpResponse.json({ success: true, feed: newFeed })
     }
 

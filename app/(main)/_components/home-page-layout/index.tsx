@@ -20,7 +20,7 @@ export default function Layout({ children }: Props) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className={classes.root}>
-        {isWide ? <AppSideNav /> : <AppTabBar />}
+        {isWide ? <AppSideNav /> : null}
         {children}
       </div>
     </Suspense>

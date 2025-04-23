@@ -4,17 +4,6 @@ import { StreamContentsResponse } from "./stream.types";
 
 const queryStreamContentsFn: QueryFunction<StreamContentsResponse, string[], string> = async ({ queryKey, pageParam }) => {
   const [, streamId, exclude] = queryKey;
-  // if (!streamId) {
-  //   return {
-  //     items: [],
-  //     continuation: '',
-  //     description: '',
-  //     direction: 'ltr',
-  //     title: '',
-  //     updated: 0,
-  //     id: '',
-  //   } as StreamContentsResponse
-  // }
   const res = await service.inoreader.getStreamContents(streamId, {
     exclude,
     continuation: pageParam,

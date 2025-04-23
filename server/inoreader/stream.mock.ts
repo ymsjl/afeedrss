@@ -24,7 +24,7 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
 
     if (feed) {
       articles = db.article.findMany({
-        where: { feed: { id: { equals: streamId } } },
+        where: { origin: { id: { equals: streamId } } },
         take: numberOfItems
       })
     }
@@ -50,16 +50,17 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
 
   // 将文章转换为响应格式
   const items: StreamContentsResponse['items'] = articles.map(article => {
-    const feed = article.feed || { id: '', title: '' }
+    const origin = article.origin || { id: '', title: '' }
 
     return {
       id: article.id,
       title: article.title,
       published: article.published,
-      summary: article.summary || { content: article.content },
-      origin: article.origin || {
-        streamId: feed.id,
-        title: feed.title || article.feedTitle
+      summary: article.summary,
+      origin: {
+        streamId: origin.id,
+        title: origin.title,
+        htmlUrl: origin.htmlUrl || '',
       },
       author: article.author || '',
       timestampUsec: article.timestampUsec || '',
@@ -128,7 +129,7 @@ export const markAllAsReadMock: HttpResponseResolver = ({ request }) => {
 
     if (feed) {
       articlesToMark = db.article.findMany({
-        where: { feed: { id: { equals: streamId } } }
+        where: { origin: { id: { equals: streamId } } }
       })
     }
   } else {

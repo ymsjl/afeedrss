@@ -10,14 +10,14 @@ export const StreamContentPanelSkeleton = React.memo(() => {
     <List className={listClasses.list}>
       {Array(5).fill(null).map((_, index) => (
         <ListItem className={listClasses.listItem} key={index}>
-          <ArticleListItemSkeleton />
+          <StreamContentListItemSkeleton />
         </ListItem>
       ))}
     </List>
   )
 })
 
-export const ArticleListItemSkeleton = React.memo(() => {
+export const StreamContentListItemSkeleton = React.memo(() => {
   const classes = useClasses()
   const flexClasses = useFlexClasses()
   const commonClasses = useCommonClasses();

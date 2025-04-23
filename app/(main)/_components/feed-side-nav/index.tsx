@@ -2,91 +2,26 @@
 
 import React, { Suspense} from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { makeStyles, mergeClasses, tokens, Skeleton, SkeletonItem } from "@fluentui/react-components";
+import { mergeClasses } from "@fluentui/react-components";
 import {
-  NavCategory,
-  NavCategoryItem,
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
-  NavItem,
   NavSectionHeader,
-  NavSubItem,
-  NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
-import {
-  Folder20Filled,
-  Folder20Regular,
-  Rss20Regular,
-  Rss20Filled,
-  bundleIcon,
-} from "@fluentui/react-icons";
 import { INavItem } from "./create-nav";
-import { useFeedSideNavData } from "@features/subscription-source/use-feed-side-nav-data";
 import { useMediaQuery } from "@reactuses/core";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { breakpointQuerys } from '@/theme/tokens';
+import { useClasses } from "./feed-side-nav.style";
+import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
+import { FeedNavList } from "./feed-nav-list";
 
 export interface Props {
   className?: string;
 }
 
-const Folder = bundleIcon(Folder20Filled, Folder20Regular);
-const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
-
-function FeedNavItem({ link, onClick }: { link: INavItem, onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void }) {
-  if (link.type === "folder") {
-    return (
-      <NavCategory value={link.key!}>
-        <NavCategoryItem icon={<Folder />}>
-          {link.name}
-        </NavCategoryItem>
-        <NavSubItemGroup>
-          {link.links?.map((subLink, subLinkIndex) => (
-            <NavSubItem
-              key={subLinkIndex}
-              value={subLink.key!}
-              onClick={(e) => onClick(e, subLink)}
-            >
-              {subLink.name}
-            </NavSubItem>
-          ))}
-        </NavSubItemGroup>
-      </NavCategory>
-    )
-  }
-
-  return (
-    <NavItem
-      key={link.key}
-      icon={<RssIcon />}
-      value={link.key!}
-      onClick={(e) => onClick(e, link)}
-    >
-      {link.name}
-    </NavItem>
-  )
-}
-
-function FeedNavList({ onClick }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void }) {
-  const { data } = useFeedSideNavData();
-  return <>{data?.map((link) => <FeedNavItem key={link.key} link={link} onClick={onClick} />)}</>
-}
-
-function FeedNavListSkeleton() {
-  const classes = useClasses()
-  return (
-    <>
-      {Array(5).fill(null).map((_, index) =>
-        <Skeleton aria-label="Loading Content" key={index} className={classes.skeleton}>
-          <SkeletonItem className={classes.skeletonItem} />
-        </Skeleton>
-      )}
-    </>
-  )
-}
-
-export function FeedSideNav({ className }: Props) {
+export const FeedSideNav = React.memo(({ className }: Props) =>{
   const classes = useClasses();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -116,7 +51,7 @@ export function FeedSideNav({ className }: Props) {
     <NavDrawer
       open={isFeedSideNavOpen}
       onOpenChange={(_, { open }) => setIsFeedSideNavOpen(open)}
-      type={isWide ? "inline" : 'overlay'}
+      type={isWide ? 'inline' : 'overlay'}
       selectedValue={actviedItem}
       className={mergeClasses(classes.nav, className)}
     >
@@ -129,24 +64,8 @@ export function FeedSideNav({ className }: Props) {
       </NavDrawerBody>
     </NavDrawer>
   );
-}
+})
 
-export default React.memo(FeedSideNav);
+FeedSideNav.displayName = "FeedSideNav";
 
-const useClasses = makeStyles({
-  nav: {
-    flexShrink: 0,
-    backgroundColor: tokens.colorNeutralBackground4,
-  },
-  navItem: {
-    display: "flex",
-    width: "100%",
-    alignItems: "center",
-  },
-  skeleton: {
-    marginBlockEnd: tokens.spacingVerticalXXS
-  },
-  skeletonItem: {
-    height: '40px',
-  }
-});
+

@@ -121,6 +121,7 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
     return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
   } else {
     const responseText = await response.text();
+    console.log('Error response:', responseText);
     // 使用自定义 HttpError 类抛出错误
     throw new HttpError(
       response.status,
