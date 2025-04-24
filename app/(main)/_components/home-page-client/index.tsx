@@ -44,7 +44,7 @@ import {
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { useClasses } from "./useClasses";
 import { MobileBottomBar } from "../mobile-bottom-bar";
-import { useArticleIdSearchParam, useSearchParamsNavigation, useStreamIdSearchParam } from "./use-search-params-navigation";
+import { useSearchParamsNavigation } from "./use-search-param-navigation";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -82,10 +82,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
   const navigateWithSearch = useSearchParamsNavigation()
   const searchParams = useSearchParams();
-
-  const [unreadOnly, setUnreadOnly] = useState(() => {
-    return !!extractFirst(searchParams.get("unreadOnly"));
-  });
+  const unreadOnly = !!searchParams.get("unreadOnly")
 
   const handleCloseArticle = useCallback(() => {
     if (!isArticlePanelOpen) return;

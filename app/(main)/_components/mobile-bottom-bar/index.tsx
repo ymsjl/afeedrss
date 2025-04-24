@@ -8,7 +8,7 @@ import { Button, ToggleButton } from '@fluentui/react-components';
 import { bundleIcon, ChevronLeft20Regular, Filter20Filled, Filter20Regular, Star20Filled, Star20Regular } from '@fluentui/react-icons'
 import Swipeout from '@/components/swipe-out';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
-import { useSearchParamsNavigation } from '../home-page-client/use-search-params-navigation';
+import { useSearchParamsNavigation } from '../home-page-client/use-search-param-navigation';
 
 const FilterIcon = bundleIcon(Filter20Filled, Filter20Regular);
 const StarIcon = bundleIcon(Star20Filled, Star20Regular);
