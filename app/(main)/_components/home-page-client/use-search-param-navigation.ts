@@ -2,7 +2,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import qs from 'query-string';
 
-export const useSearchParamsNavigation = () => {
+export const useSearchParamNavigation = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const navigation = useCallback((pathname: string, newParams: { [key: string]: string | string[] | null }) => {

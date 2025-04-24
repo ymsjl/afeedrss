@@ -44,7 +44,7 @@ import {
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { useClasses } from "./useClasses";
 import { MobileBottomBar } from "../mobile-bottom-bar";
-import { useSearchParamsNavigation } from "./use-search-param-navigation";
+import { useSearchParamNavigation } from "./use-search-param-navigation";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -80,7 +80,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const setLayoutType = useAppStore((state) => state.setLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
-  const navigateWithSearch = useSearchParamsNavigation()
+  const navigateWithSearch = useSearchParamNavigation()
   const searchParams = useSearchParams();
   const unreadOnly = !!searchParams.get("unreadOnly")
 

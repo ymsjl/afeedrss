@@ -13,7 +13,7 @@ const withPWA = require("next-pwa")({
         networkTimeoutSeconds: 15,
         expiration: {
           maxEntries: 150,
-          maxAgeSeconds: 60 * 20, // 20分钟
+          maxAgeSeconds: 60 * 8, // 8分钟
         },
         cacheableResponse: {
           statuses: [0, 200],
@@ -64,4 +64,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);

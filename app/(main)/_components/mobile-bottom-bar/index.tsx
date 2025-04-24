@@ -8,7 +8,7 @@ import { Button, ToggleButton } from '@fluentui/react-components';
 import { bundleIcon, ChevronLeft20Regular, Filter20Filled, Filter20Regular, Star20Filled, Star20Regular } from '@fluentui/react-icons'
 import Swipeout from '@/components/swipe-out';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
-import { useSearchParamsNavigation } from '../home-page-client/use-search-param-navigation';
+import { useSearchParamNavigation } from '../home-page-client/use-search-param-navigation';
 
 const FilterIcon = bundleIcon(Filter20Filled, Filter20Regular);
 const StarIcon = bundleIcon(Star20Filled, Star20Regular);
@@ -27,7 +27,7 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
   const { data } = useSuspenseQuery(subscriptionsQueryOptions);
   const subscription = data?.entities?.subscription?.[streamId!] ?? { title: '全部文章' };
   const { data: items } = useStreamContentsQuery();
-  const navigateWithSearch = useSearchParamsNavigation();
+  const navigateWithSearch = useSearchParamNavigation();
 
   const changePage = useCallback((getPageIndex: (curIndex: number, length: number) => number) => {
     if (curArticleIndex < 0 || !currentArticle) return;
