@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense} from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mergeClasses } from "@fluentui/react-components";
 import {
@@ -10,25 +10,23 @@ import {
   NavSectionHeader,
 } from "@fluentui/react-nav-preview";
 import { INavItem } from "./create-nav";
-import { useMediaQuery } from "@reactuses/core";
 import { useAppStore } from "@/app/providers/app-store-provider";
-import { breakpointQuerys } from '@/theme/tokens';
 import { useClasses } from "./feed-side-nav.style";
 import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
 import { FeedNavList } from "./feed-nav-list";
+import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 
 export interface Props {
   className?: string;
 }
 
-export const FeedSideNav = React.memo(({ className }: Props) =>{
+export const FeedSideNav = React.memo(({ className }: Props) => {
   const classes = useClasses();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);
   const setIsFeedSideNavOpen = useAppStore(store => store.setIsFeedSideNavOpen);
-  const isMobileSSR = useAppStore(store => store.isMobileSSR);
-  const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
+  const isLargeThenMobile = useLargeThenMobile();
   const [actviedItem, setActivedItem] = React.useState<string>("");
 
   const handleLinkClick = (
@@ -36,14 +34,16 @@ export const FeedSideNav = React.memo(({ className }: Props) =>{
     item?: INavItem
   ) => {
     e?.preventDefault();
-    const params: { [key: string]: string } = {};
-    for (let [key, value] of searchParams.entries()) {
-      params[key] = value;
-    }
+    const params: { [key: string]: string } = Object.fromEntries(searchParams.entries());
     if (item?.key) {
       params["streamId"] = item.key;
       setActivedItem(item.key);
     }
+
+    if (!isLargeThenMobile && isFeedSideNavOpen) {
+      setIsFeedSideNavOpen(false);
+    }
+
     router.push(`/?${new URLSearchParams(params).toString()}`);
   };
 
@@ -51,9 +51,10 @@ export const FeedSideNav = React.memo(({ className }: Props) =>{
     <NavDrawer
       open={isFeedSideNavOpen}
       onOpenChange={(_, { open }) => setIsFeedSideNavOpen(open)}
-      type={isWide ? 'inline' : 'overlay'}
+      type={isLargeThenMobile ? 'inline' : 'overlay'}
       selectedValue={actviedItem}
       className={mergeClasses(classes.nav, className)}
+      position={isLargeThenMobile ? "start" : "bottom"}
     >
       <NavDrawerHeader></NavDrawerHeader>
       <NavDrawerBody>

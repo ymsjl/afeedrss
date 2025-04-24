@@ -17,7 +17,7 @@ enum Action {
 }
 
 interface OverSwiperBtnProps {
-  className: string;
+  className?: string;
   text: string;
   onClick: ReactEventHandler;
 }

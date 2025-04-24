@@ -4,6 +4,7 @@ import { db } from '../mock/db'
 import { InoreaderTagListResponse, SubscriptionListResponse } from "./subscription.types"
 import { InoreaderTagType } from "./subscription.types"
 import { getTagNameFromId } from '@/app/(main)/_components/feed-side-nav/create-nav';
+import { joinBewteenFeedAndTag } from '../mock/utils'
 
 export const getSubscriptionListMock: HttpResponseResolver = async () => {
   const subscriptions = db.feed.findMany({}).map(
@@ -79,7 +80,7 @@ export const addSubscriptionMock: HttpResponseResolver = ({ request }) => {
       });
 
       if (folder) {
-        const feedTag = db.feedTag.create({ id: `${feedId}:${folder.id}`, tagId: folder.id, feedId: feedId })
+        const feedTag = db.feedTag.create(joinBewteenFeedAndTag(feedId, folder.id))
         db.feed.update({
           where: {
             id: { equals: feedId }

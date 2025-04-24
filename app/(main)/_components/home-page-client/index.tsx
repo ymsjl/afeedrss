@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, Suspense } from "react";
+import React, { useState, useCallback, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   mergeClasses,
@@ -43,6 +43,8 @@ import {
 } from "@fluentui/react-icons";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { useClasses } from "./useClasses";
+import { MobileBottomBar } from "../mobile-bottom-bar";
+import { useArticleIdSearchParam, useSearchParamsNavigation, useStreamIdSearchParam } from "./use-search-params-navigation";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -61,18 +63,24 @@ interface Props {
   streamContentQueryKey?: string[];
 }
 
+
 export default function Home({ streamContentQueryKey }: Props) {
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
-  const [curArticle, setCurArticle] = useState<StreamContentItem | null>(null);
-  const [isArticlePanelOpen, setIsArticlePanelOpen] = useState(false);
-  const layoutType = useAppStore((state) => state.layoutType);
-  const isLargeThenMobile = useLargeThenMobile()
+  const curArticle = useAppStore(store => store.currentArticle);
+  const isArticlePanelOpen = useAppStore(store => store.isArticlePanelOpen)
+  const setIsArticlePanelOpen = useAppStore(store => store.setIsArticlePanelOpen);
+  const openArticleInReadingPanel = useAppStore(store => store.openArticleInReadingPanel);
+  const closeArticlePanel = useAppStore(store => store.closeArticlePanel);
+
+  const layoutTypeSelected = useAppStore((state) => state.layoutType);
   const setLayoutType = useAppStore((state) => state.setLayoutType);
-  const router = useRouter();
+  const isLargeThenMobile = useLargeThenMobile()
+  const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
+  const navigateWithSearch = useSearchParamsNavigation()
   const searchParams = useSearchParams();
 
   const [unreadOnly, setUnreadOnly] = useState(() => {
@@ -81,12 +89,9 @@ export default function Home({ streamContentQueryKey }: Props) {
 
   const handleCloseArticle = useCallback(() => {
     if (!isArticlePanelOpen) return;
-    setIsArticlePanelOpen(false);
-    setTimeout(() => setCurArticle(null), 500);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.delete("articleId");
-    router.push(`/?${newSearchParams.toString()}`);
-  }, [searchParams, router]);
+    closeArticlePanel();
+    navigateWithSearch('/', { streamId: null, articleId: null });
+  }, [navigateWithSearch]);
 
   useStreamIdUpdateEffect(handleCloseArticle);
 
@@ -99,14 +104,11 @@ export default function Home({ streamContentQueryKey }: Props) {
   useArticleIdUpdateEffect(handleArticleIdUpdate)
 
   const onStreamContentItemClick = useCallback(
-    (item: StreamContentItem) => {
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set("articleId", item.id);
-      router.push(`/?${newSearchParams.toString()}`);
-      setCurArticle(item);
-      setIsArticlePanelOpen(true);
+    (item: StreamContentItem, index: number) => {
+      navigateWithSearch('/', { articleId: item.id });
+      openArticleInReadingPanel(item, index);
     },
-    [router, searchParams]
+    [navigateWithSearch, openArticleInReadingPanel]
   );
 
   const header = () => {
@@ -181,6 +183,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   return (
     <div className={classes.root}>
       <FeedSideNav />
+      <MobileBottomBar onCloseArticle={handleCloseArticle} />
       <div className={pageLayoutClasses.main}>
         <div
           className={mergeClasses(

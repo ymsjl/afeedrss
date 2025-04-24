@@ -117,7 +117,7 @@ const useClasses = makeStyles({
   },
   divider: {
     paddingBlockStart: tokens.spacingVerticalXXXL,
-    paddingBlockEnd: tokens.spacingVerticalXXXL,
+    paddingBlockEnd: '80px',
     marginInline: tokens.spacingHorizontalL,
     width: 'auto'
   },

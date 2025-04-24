@@ -11,7 +11,7 @@ import { useListClasses } from "./stream-content-list-item.style";
 
 interface StreamContentPanelProps {
   curArticleId: string | null;
-  onStreamContentItemClick: (item: StreamContentItem) => void;
+  onStreamContentItemClick: (item: StreamContentItem, index: number) => void;
 }
 
 export function StreamContentPanel(props: StreamContentPanelProps) {
@@ -25,8 +25,8 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const flexClasses = useFlexClasses()
 
   const onSelectArticle = useCallback(
-    (item: StreamContentItemWithPageIndex) => {
-      onStreamContentItemClick(item);
+    (item: StreamContentItemWithPageIndex, index: number) => {
+      onStreamContentItemClick(item, index);
       if (!item.isRead) {
         markItemAsRead(item);
       }
@@ -45,7 +45,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   return (
     <>
       <ul className={listClasses.list}>
-        {items.map((item) => {
+        {items.map((item, index) => {
           if (!item) return null;
           return (
             <li key={item.id}>
@@ -55,7 +55,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
                 showFeedThumbnail={showFeedThumbnail}
                 onMarkAsRead={markItemAsRead}
                 onMarkAboveAsRead={markAboveAsRead}
-                onSelectArticle={onSelectArticle}
+                onSelectArticle={(article) => onSelectArticle(article, index)}
               />
             </li>
           );

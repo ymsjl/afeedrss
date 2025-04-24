@@ -1,4 +1,5 @@
 import { db } from '../mock/db';
+import { joinBewteenArticleAndTag } from '../mock/utils';
 import { SystemStreamIDs } from "./stream.types";
 
 // 检查文章是否具有特定标签
@@ -32,16 +33,10 @@ export const addTagToArticle = (articleId: string, tagId: string) => {
 
   if (!tag) return;
 
-  const articleTag = db.articleTag.create({
-    id: `${articleId}:${tagId}`,
-    articleId,
-    tagId,
-  })
-
+  const articleTag = db.articleTag.create(joinBewteenArticleAndTag(articleId, tagId));
 
   // 检查关系是否已存在
   if (!hasTag(articleId, tagId)) {
-    // 建立文章和标签之间的关系
     db.article.update({
       where: { id: { equals: articleId } },
       data: {

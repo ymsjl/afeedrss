@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { AppTheme } from '../types';
 import { Session } from 'next-auth';
 import Cookies from 'js-cookie';
+import { StreamContentItem } from '@/server/inoreader/stream.types';
 
 export type LayoutType = 'default' | 'split' | 'compact'
 
@@ -11,6 +12,9 @@ export interface AppState {
   layoutType: LayoutType;
   isMobileSSR: boolean;
   isFeedSideNavOpen: boolean;
+  isArticlePanelOpen: boolean;
+  currentArticle: StreamContentItem | null;
+  currentArticleIndex: number;
   theme: AppTheme;
   preferences: {
     fontSize: number;
@@ -23,8 +27,12 @@ export interface AppState {
 export interface AppActions {
   setSession: (session: Session | null) => void;
   setLayoutType: (type: LayoutType) => void;
+  setIsArticlePanelOpen: (open: boolean) => void;
+  setCurrentArticle: (article: StreamContentItem | null, index: number) => void;
   toggleFeedSideNav: () => void;
   setIsFeedSideNavOpen: (open: boolean) => void;
+  openArticleInReadingPanel: (article: StreamContentItem, index: number) => void;
+  closeArticlePanel: () => void;
   setTheme: (theme: AppTheme) => void;
   setPreference: <K extends keyof AppState['preferences']>(
     key: K,
@@ -39,6 +47,9 @@ export const defaultInitState: AppState = {
   isMobileSSR: false,
   layoutType: 'default',
   isFeedSideNavOpen: true,
+  isArticlePanelOpen: false,
+  currentArticle: null,
+  currentArticleIndex: -1,
   theme: 'light' as AppTheme,
   preferences: {
     fontSize: 16,
@@ -68,10 +79,19 @@ export const STORAGE_NAME = 'app-storage'
 export const createAppStore = (initState: Partial<AppState> = {}) => {
   return createStore<AppStore>()(
     persist(
-      (set) => ({
+      (set, get) => ({
         ...({ ...defaultInitState, ...initState }),
         setSession: (session) => set({ session }),
         setLayoutType: (type) => set({ layoutType: type }),
+        setIsArticlePanelOpen: (open) => set({ isArticlePanelOpen: open }),
+        setCurrentArticle: (article, index) => set({ currentArticle: article, currentArticleIndex: index }),
+        openArticleInReadingPanel: (article, index) => set({ isArticlePanelOpen: true, currentArticle: article, currentArticleIndex: index }),
+        closeArticlePanel: () => {
+          set({ isArticlePanelOpen: false });
+          setTimeout(() => {
+            set({ currentArticle: null, currentArticleIndex: -1 });
+          }, 300);
+        },
         setIsFeedSideNavOpen: (open) => set({ isFeedSideNavOpen: open }),
         toggleFeedSideNav: () => set(({ isFeedSideNavOpen }) => ({ isFeedSideNavOpen: !isFeedSideNavOpen })),
         setTheme: (theme) => set({ theme }),
