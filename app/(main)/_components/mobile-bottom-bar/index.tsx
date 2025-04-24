@@ -45,7 +45,7 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
   const onNext = () => changePage((curIndex, length) => Math.min(curIndex + 1, length - 1));
 
   const onToggleUnreadOnly = () => {
-    router.push(`/?${new URLSearchParams({ ...Object.fromEntries(searchParams.entries()), unreadOnly: String(!unreadOnly) }).toString()}`);
+    navigateWithSearch('/', { unreadOnly: String(!unreadOnly), })
   };
 
   const isArticleStarred = true;
@@ -57,7 +57,7 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
           <div className={classes.titleContainer}>
             <Button className={classes.title} onClick={toggleFeedSideNav} size="large">{subscription?.title}</Button>
           </div>
-          <ToggleButton icon={unreadOnly ? <FilterIcon /> : <Filter20Regular />} checked={unreadOnly} onClick={onToggleUnreadOnly} size='large' />
+          <ToggleButton icon={<FilterIcon filled={unreadOnly} />} onClick={onToggleUnreadOnly} size='large' />
         </>
       )
     } else {
@@ -92,7 +92,7 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
           >
             <Button className={classes.title} size="large">{titleDisplay}</Button>
           </Swipeout>
-          <ToggleButton icon={<StarIcon filled={isArticleStarred}  className={classes.starIcon} />} onClick={onToggleUnreadOnly} size='large' />
+          <ToggleButton icon={<StarIcon filled={isArticleStarred} className={classes.starIcon} />} onClick={onToggleUnreadOnly} size='large' />
         </>
       )
     }

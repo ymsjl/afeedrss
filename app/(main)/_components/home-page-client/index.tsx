@@ -227,13 +227,15 @@ export default function Home({ streamContentQueryKey }: Props) {
                 )}
               >
                 {/* 文章面板 header */}
-                <div className={classes.articelPanelHeader}>
-                  <Button
-                    appearance="transparent"
-                    icon={<ChevronLeft20Regular />}
-                    onClick={handleCloseArticle}
-                  />
-                </div>
+                {isLargeThenMobile &&
+                  <div className={classes.articelPanelHeader}>
+                    <Button
+                      appearance="transparent"
+                      icon={<ChevronLeft20Regular />}
+                      onClick={handleCloseArticle}
+                    />
+                  </div>
+                }
                 <ArticleReadPanel
                   onCloseArticle={handleCloseArticle}
                   curArticle={curArticle}
@@ -251,11 +253,6 @@ export default function Home({ streamContentQueryKey }: Props) {
             )}
           >
             <div className={pageLayoutClasses.header}>
-              <Button
-                icon={<ChevronLeft20Regular />}
-                size="large"
-                onClick={handleCloseArticle}
-              ></Button>
               {curArticle ? (
                 <Text
                   className={mergeClasses(
