@@ -46,6 +46,11 @@ const nextConfig = {
         hostname: "www.inoreader.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        port: "",
+      },
     ],
   },
   reactStrictMode: false,

@@ -15,6 +15,9 @@ import { useClasses } from "./feed-side-nav.style";
 import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
 import { FeedNavList } from "./feed-nav-list";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
+import { useSearchParamNavigation } from "../home-page-client/use-search-param-navigation";
+import Image from "next/image";
+import { useFlexClasses } from "@/theme/commonStyles";
 
 export interface Props {
   className?: string;
@@ -22,41 +25,44 @@ export interface Props {
 
 export const FeedSideNav = React.memo(({ className }: Props) => {
   const classes = useClasses();
-  const router = useRouter();
+  const flexClasses = useFlexClasses();
   const searchParams = useSearchParams();
   const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);
   const setIsFeedSideNavOpen = useAppStore(store => store.setIsFeedSideNavOpen);
   const isLargeThenMobile = useLargeThenMobile();
-  const [actviedItem, setActivedItem] = React.useState<string>("");
+  const currentStreamId = searchParams.get("streamId") || undefined;
+  const navigateWithSearch = useSearchParamNavigation()
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavItem
   ) => {
+    if (!item?.key) return;
     e?.preventDefault();
-    const params: { [key: string]: string } = Object.fromEntries(searchParams.entries());
-    if (item?.key) {
-      params["streamId"] = item.key;
-      setActivedItem(item.key);
-    }
-
     if (!isLargeThenMobile && isFeedSideNavOpen) {
       setIsFeedSideNavOpen(false);
     }
-
-    router.push(`/?${new URLSearchParams(params).toString()}`);
+    navigateWithSearch('/', { streamId: item?.key })
   };
+
+  const avatarUrl = 'https://picsum.photos/seed/88/600/400'
 
   return (
     <NavDrawer
       open={isFeedSideNavOpen}
       onOpenChange={(_, { open }) => setIsFeedSideNavOpen(open)}
       type={isLargeThenMobile ? 'inline' : 'overlay'}
-      selectedValue={actviedItem}
+      selectedValue={currentStreamId}
+      size={isLargeThenMobile ? undefined : 'medium'}
       className={mergeClasses(classes.nav, className)}
       position={isLargeThenMobile ? "start" : "bottom"}
     >
-      <NavDrawerHeader></NavDrawerHeader>
+      <NavDrawerHeader>
+        {/* <div className={mergeClasses(flexClasses.flexRow)}>
+          <Image className={classes.avatar} src={avatarUrl} width={32} height={32} alt=""  objectFit="cover" />
+          <div className={mergeClasses(flexClasses.flexGrow)}></div>
+        </div> */}
+      </NavDrawerHeader>
       <NavDrawerBody>
         <NavSectionHeader>订阅源</NavSectionHeader>
         <Suspense fallback={<FeedNavListSkeleton />}>

@@ -82,7 +82,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
   const navigateWithSearch = useSearchParamNavigation()
   const searchParams = useSearchParams();
-  const unreadOnly = !!searchParams.get("unreadOnly")
+  const unreadOnly = searchParams.get("unreadOnly") === 'true'
 
   const handleCloseArticle = useCallback(() => {
     if (!isArticlePanelOpen) return;
@@ -180,7 +180,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   return (
     <div className={classes.root}>
       <FeedSideNav />
-      <MobileBottomBar onCloseArticle={handleCloseArticle} />
+      {!isLargeThenMobile && <MobileBottomBar onCloseArticle={handleCloseArticle} />}
       <div className={pageLayoutClasses.main}>
         <div
           className={mergeClasses(
