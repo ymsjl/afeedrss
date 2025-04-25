@@ -3,8 +3,8 @@ import { Dialog, SelectionEvents, OptionOnSelectData, DialogSurface, DialogBody,
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { getTagNameFromId } from "@/app/(main)/_components/feed-side-nav/create-nav";
 import { QUERY_KEYS } from "@/constants";
-import server from "@/server";
-import { Folder } from "@/server/inoreader/subscription.types";
+import services from "@services/index";
+import { Folder } from "@services/inoreader/subscription.types";
 import { useClasses } from "../../useClasses";
 
 interface Props extends Pick<ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'> {
@@ -20,7 +20,7 @@ export const AddSubscriptionDialog = React.memo(
 
     const addFeedMutation = useMutation({
       mutationFn: ({ feedUrl, folderId }: { feedUrl: string; folderId: string }) =>
-        server.inoreader.addSubscription(`feed/${feedUrl}`, folderId),
+        services.inoreader.addSubscription(`feed/${feedUrl}`, folderId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.SUBSCRIPTIONS_LIST] });
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STREAM_PREFERENCES] });

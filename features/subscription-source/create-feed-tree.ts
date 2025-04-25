@@ -1,5 +1,5 @@
-import { IdValuePair, } from "@server/inoreader/stream.types";
-import { Subscription, Sortable, SortableIdentifiableItem, Tag, Folder, FolderOrTag, FolderWithChildren } from "@/server/inoreader/subscription.types";
+import { IdValuePair, } from "@services/inoreader/stream.types";
+import { Subscription, Sortable, SortableIdentifiableItem, Tag, Folder, FolderOrTag, FolderWithChildren } from "@services/inoreader/subscription.types";
 import { isFolder, isSubscription, isTag } from "./utils";
 
 export function createFeedTree(rootStreamId: string, {

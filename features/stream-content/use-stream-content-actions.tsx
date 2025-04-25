@@ -1,13 +1,10 @@
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import service from "@server/index";
-import { StreamContentItem, StreamContentsResponse, SystemStreamIDs } from "@server/inoreader/stream.types";
+import services from "@services/index";
+import { StreamContentsResponse, SystemStreamIDs } from "@services/inoreader/stream.types";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
 import { useStreamContentQueryKey } from "./stream-content-query-key-context";
-
-export interface StreamContentItemWithPageIndex extends StreamContentItem {
-  pageIndex: number;
-}
+import { StreamContentItemWithPageIndex } from "./use-stream-contents-query";
 
 export const useStreamContentActions = () => {
   const queryClient = useQueryClient();
@@ -33,7 +30,7 @@ export const useStreamContentActions = () => {
         })
       );
       try {
-        await service.inoreader.markArticleAsRead(target.id, target.isRead);
+        await services.inoreader.markArticleAsRead(target.id, target.isRead);
       } catch (e) {
         // 回滚
         queryClient.setQueryData(queryKey, previousData);
@@ -80,7 +77,7 @@ export const useStreamContentActions = () => {
         })
       );
       try {
-        await service.inoreader.markArticleAsRead(pendingIds, !isRead);
+        await services.inoreader.markArticleAsRead(pendingIds, !isRead);
       } catch (e) {
         // 回滚
         queryClient.setQueryData(queryKey, previousData);
@@ -108,7 +105,7 @@ export const useStreamContentActions = () => {
       })
     );
     try {
-      await service.inoreader.markArticleAsRead(target.id, target.isRead);
+      await services.inoreader.markArticleAsRead(target.id, target.isRead);
     } catch (e) {
       // 回滚
       queryClient.setQueryData(queryKey, previousData);

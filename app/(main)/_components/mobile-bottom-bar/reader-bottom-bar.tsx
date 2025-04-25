@@ -5,7 +5,7 @@ import Swipeout from '@/components/swipe-out';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useStreamContentActions } from '@/features/stream-content/use-stream-content-actions';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
-import { useSearchParamNavigation } from '@/utils/use-search-param-navigation';
+import { useSearchParamNavigation } from '@utils/use-search-param-navigation';
 import { useClasses } from './mobile-bottom-bar.style'; // Assuming you create this style file
 
 const StarIcon = bundleIcon(Star20Filled, Star20Regular);

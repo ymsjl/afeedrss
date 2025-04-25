@@ -1,9 +1,12 @@
 import { useStreamContentQueryKey } from "@/features/stream-content/stream-content-query-key-context";
-import { makeStreamContentQueryOptions } from "@/server/inoreader/stream.rquery";
+import { makeStreamContentQueryOptions } from "@services/inoreader/stream.rquery";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { StreamContentItemWithPageIndex } from "./use-stream-content-actions";
-import { SystemStreamIDs } from "@/server/inoreader/stream.types";
+import { StreamContentItem, SystemStreamIDs } from "@services/inoreader/stream.types";
+
+export interface StreamContentItemWithPageIndex extends StreamContentItem {
+  pageIndex: number;
+}
 
 export function useStreamContentsQuery() {
   const queryKey = useStreamContentQueryKey();

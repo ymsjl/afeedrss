@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import qs from "query-string";
 import { clientStore } from '@/store/initialize-app-store';
-import { HttpError } from "./HttpError";
+import { HttpError } from "./http-error";
 
 const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
 const TIMEOUT = 60 * 60 * 1000;

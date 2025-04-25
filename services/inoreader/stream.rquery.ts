@@ -1,10 +1,10 @@
 import { infiniteQueryOptions, QueryFunction } from "@tanstack/react-query";
-import service from "@server/index";
+import services from "@services/index";
 import { StreamContentsResponse } from "./stream.types";
 
 const queryStreamContentsFn: QueryFunction<StreamContentsResponse, string[], string> = async ({ queryKey, pageParam }) => {
   const [, streamId, exclude] = queryKey;
-  const res = await service.inoreader.getStreamContents(streamId, {
+  const res = await services.inoreader.getStreamContents(streamId, {
     exclude,
     continuation: pageParam,
   });

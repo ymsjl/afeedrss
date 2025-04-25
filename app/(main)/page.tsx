@@ -1,4 +1,4 @@
-import { extractFirst } from "@/utils";
+import { extractFirst } from "@utils/index";
 import HomePageClient from "./_components/home-page-client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/auth-options";

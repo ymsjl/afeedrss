@@ -14,8 +14,8 @@ import { useAppStore } from "@/app/providers/app-store-provider";
 import { useClasses } from "./feed-side-nav.style";
 import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
 import { FeedNavList } from "./feed-nav-list";
-import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { useSearchParamNavigation } from "@/utils/use-search-param-navigation";
+import { useLargeThenMobile } from "@utils/use-large-then-mobile";
+import { useSearchParamNavigation } from "@utils/use-search-param-navigation";
 import HalfScreenModal from "@/components/half-screen-modal";
 
 export interface Props {

@@ -3,9 +3,9 @@ import { Button, ToggleButton } from '@fluentui/react-components';
 import { bundleIcon, Filter20Filled, Filter20Regular } from '@fluentui/react-icons';
 import { useSearchParams } from 'next/navigation';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { subscriptionsQueryOptions } from '@/server/inoreader/subscription.rquery';
+import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
 import { useAppStore } from '@/app/providers/app-store-provider';
-import { useSearchParamNavigation } from '@/utils/use-search-param-navigation';
+import { useSearchParamNavigation } from '@utils/use-search-param-navigation';
 import { useClasses } from './mobile-bottom-bar.style';
 
 const FilterIcon = bundleIcon(Filter20Filled, Filter20Regular);

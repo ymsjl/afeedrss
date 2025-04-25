@@ -1,4 +1,4 @@
-import { Folder, Sortable, Subscription } from "@/server/inoreader/subscription.types";
+import { Folder, Sortable, Subscription } from "@services/inoreader/subscription.types";
 import { Dayjs } from "dayjs";
 
 // 主题类型定义

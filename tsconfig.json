@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,21 +15,11 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@components/*": [
-        "./components/*"
-      ],
-      "@features/*": [
-        "./features/*"
-      ],
-      "@server/*": [
-        "./server/*"
-      ],
-      "@utils/*": [
-        "./utils/*"
-      ]
+      "@/*": ["./*"],
+      "@components/*": ["./components/*"],
+      "@features/*": ["./features/*"],
+      "@services/*": ["./services/*"],
+      "@utils/*": ["./utils/*"]
     },
     "plugins": [
       {
@@ -46,10 +32,8 @@
     "**/*.tsx",
     "next-env.d.ts",
     "pages/_documentjs",
-    "server/inoreader/user.mock.ts",
+    "services/inoreader/user.mock.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

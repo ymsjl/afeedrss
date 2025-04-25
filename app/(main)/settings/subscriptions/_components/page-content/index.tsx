@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { SelectTabEvent, SelectTabData } from "@fluentui/react-components";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { denormalize } from "normalizr";
-import { subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
+import { subscriptionsQueryOptions, folderQueryOptions } from "@services/inoreader/subscription.rquery";
 import { folderSchema, subscriptionSchema } from "@/types/feed";
-import { Folder, Subscription } from "@/server/inoreader/subscription.types";
+import { Folder, Subscription } from "@services/inoreader/subscription.types";
 import { TabContextProvider, TabPanel, TabPanels } from '@/components/tab-panes'
 import { useClasses } from "../../useClasses";
 import { SubscriptionTabList } from "../subscription-tab-list";

@@ -4,7 +4,7 @@ import React from "react"
 import { List, ListItem, Text } from "@fluentui/react-components"
 import { getTagNameFromId } from "@/app/(main)/_components/feed-side-nav/create-nav"
 import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
-import { Folder } from "@/server/inoreader/subscription.types"
+import { Folder } from "@services/inoreader/subscription.types"
 
 export const FoldersTabContent = React.memo(({ folders }: { folders: Folder[] }) => {
   const listClasses = useListClasses()

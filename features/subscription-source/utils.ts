@@ -1,4 +1,4 @@
-import { Sortable, SortableIdentifiableItem, Subscription, FolderOrTag, FolderWithChildren, Folder, Tag } from "@/server/inoreader/subscription.types";
+import { Sortable, SortableIdentifiableItem, Subscription, FolderOrTag, FolderWithChildren, Folder, Tag } from "@services/inoreader/subscription.types";
 
 const isSortable = (item: any): item is Sortable => {
   return item && (typeof item === 'object') && ('sortid' in item) && (typeof item.sortid === 'string');

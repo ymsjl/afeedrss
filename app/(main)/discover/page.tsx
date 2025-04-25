@@ -5,9 +5,9 @@ import { SearchBox, Card, CardHeader, CardFooter, SearchBoxChangeEvent, InputOnC
 import { useStyles } from './discover.style'; // 从样式文件中导入 useStyles
 import { Add12Filled } from '@fluentui/react-icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { subscriptionsQueryOptions } from '@/server/inoreader/subscription.rquery';
+import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
 import { denormalize } from 'normalizr';
-import { Subscription } from '@/server/inoreader/subscription.types';
+import { Subscription } from '@services/inoreader/subscription.types';
 import { subscriptionSchema } from '@/types/feed';
 import { useCommonClasses } from '@/theme/commonStyles';
 

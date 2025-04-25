@@ -1,6 +1,6 @@
 'use client'
 import React, { useContext } from "react";
-import { extractFirst } from "@/utils";
+import { extractFirst } from "@utils/index";
 import { useSearchParams } from "next/navigation";
 import { getStreamContentQueryKey } from "@features/stream-content/get-stream-content-query-key";
 import { useAppStore } from "@/app/providers/app-store-provider";

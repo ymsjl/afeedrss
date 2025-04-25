@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from "@/constants";
-import { SystemStreamIDs } from "@/server/inoreader/stream.types";
+import { SystemStreamIDs } from "@services/inoreader/stream.types";
 import { getRootStreamId } from "./get-root-stream-id";
 
 interface StreamContentQueryKeyParmas {

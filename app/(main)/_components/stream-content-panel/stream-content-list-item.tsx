@@ -9,18 +9,11 @@ import {
   Body1Strong
 } from "@fluentui/react-components";
 import { Circle20Regular, CheckmarkCircle20Filled } from "@fluentui/react-icons";
-import { StreamContentItem } from "@/server/inoreader/stream.types";
 import Swipeout from "@components/swipe-out";
-import { filterImgSrcfromHtmlStr } from "@/utils/filterImgSrcfromHtmlStr";
-import dayjs from "@/utils/dayjs";
+import { filterImgSrcfromHtmlStr } from "@utils/filterImgSrcfromHtmlStr";
+import dayjs from "@utils/dayjs";
 import { useClasses, useListClasses } from "./stream-content-list-item.style";
-import { useMediaQuery } from '@reactuses/core';
-import { breakpointQuerys } from "@/theme/tokens";
-import { useAppStore } from "@/app/providers/app-store-provider";
-
-interface StreamContentItemWithPageIndex extends StreamContentItem {
-  pageIndex: number;
-}
+import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 
 interface StreamContentListItemProps {
   item: StreamContentItemWithPageIndex;
@@ -47,8 +40,6 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   const { title } = item;
   const classes = useClasses();
   const listItemClasses = useListClasses();
-  const isMobileSSR = useAppStore(store => store.isMobileSSR);
-  const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
 
   const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -155,5 +146,4 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
 };
 
 export default StreamContentListItem;
-
 

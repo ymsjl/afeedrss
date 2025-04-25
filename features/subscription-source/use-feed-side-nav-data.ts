@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@server/inoreader/subscription.rquery";
+import { streamPreferencesQueryOptions, subscriptionsQueryOptions, folderQueryOptions } from "@services/inoreader/subscription.rquery";
 import { getRootStreamId } from "../stream-content/get-root-stream-id";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { createFeedTree } from './create-feed-tree';
 import { createBuildInNavItem, createNavList } from "@/app/(main)/_components/feed-side-nav/create-nav";
-import { SystemStreamIDs } from '@server/inoreader/stream.types';
+import { SystemStreamIDs } from '@services/inoreader/stream.types';
 
 export const useFeedSideNavData = () => {
   const userId = useAppStore(store => store.session?.user?.id || "");

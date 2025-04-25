@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Spinner, mergeClasses, makeStyles } from "@fluentui/react-components";
-import { StreamContentItem } from "@server/inoreader/stream.types";
-import { StreamContentItemWithPageIndex, useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
+import { useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
+import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';
 import StatusCard, { Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
@@ -11,7 +11,7 @@ import { useListClasses } from "./stream-content-list-item.style";
 
 interface StreamContentPanelProps {
   curArticleId: string | null;
-  onStreamContentItemClick: (item: StreamContentItem, index: number) => void;
+  onStreamContentItemClick: (item: StreamContentItemWithPageIndex, index: number) => void;
 }
 
 export function StreamContentPanel(props: StreamContentPanelProps) {

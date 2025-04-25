@@ -3,7 +3,7 @@ import { Image, mergeClasses, Text } from "@fluentui/react-components";
 import { Folder20Regular } from "@fluentui/react-icons";
 
 import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
-import { Subscription } from "@/server/inoreader/subscription.types";
+import { Subscription } from "@services/inoreader/subscription.types";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useClasses } from "../../useClasses";
 

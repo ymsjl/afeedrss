@@ -21,7 +21,6 @@ import {
 
 import type { LayoutType } from "@/store/app-store";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
-import { StreamContentItem } from "@server/inoreader/stream.types";
 
 import { StreamContentPanel } from "@/app/(main)/_components/stream-content-panel";
 import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/stream-content-panel-skeleton";
@@ -42,9 +41,10 @@ import {
 } from "@fluentui/react-icons";
 import { useClasses } from "./useClasses";
 import { MobileBottomBar } from "../mobile-bottom-bar";
-import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { useSearchParamNavigation } from "@/utils/use-search-param-navigation";
-import { useStateChangeEffect } from "@/utils/use-state-change-effect";
+import { useLargeThenMobile } from "@utils/use-large-then-mobile";
+import { useSearchParamNavigation } from "@utils/use-search-param-navigation";
+import { useStateChangeEffect } from "@utils/use-state-change-effect";
+import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
@@ -101,7 +101,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   })
 
   const onStreamContentItemClick = useCallback(
-    (item: StreamContentItem, index: number) => {
+    (item: StreamContentItemWithPageIndex, index: number) => {
       navigateWithSearch('/', { articleId: item.id });
       openArticleInReadingPanel(item, index);
     },

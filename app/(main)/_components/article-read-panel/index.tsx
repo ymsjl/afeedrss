@@ -8,20 +8,20 @@ import {
   Divider,
 } from "@fluentui/react-components";
 import { WindowNew20Regular } from "@fluentui/react-icons";
-import { StreamContentItem } from "@/server/inoreader/stream.types";
 import {
   useCommonClasses,
   useFlexClasses,
   useTextClasses,
 } from "@/theme/commonStyles";
-import dayjs from "@/utils/dayjs";
+import dayjs from "@utils/dayjs";
 import StatusCard, { Status } from "@/components/status-card";
 import { useProseClasses } from "./proseClasses";
 import { appTokens } from '@/theme/tokens';
+import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 
 interface ArticleReadPanelProps {
   onCloseArticle: () => void;
-  curArticle: StreamContentItem | null;
+  curArticle: StreamContentItemWithPageIndex | null;
 }
 
 export function ArticleReadPanel(props: ArticleReadPanelProps) {

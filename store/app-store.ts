@@ -3,8 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { AppTheme } from '../types';
 import { Session } from 'next-auth';
 import Cookies from 'js-cookie';
-import { StreamContentItem } from '@/server/inoreader/stream.types';
-import { StreamContentItemWithPageIndex } from '@/features/stream-content/use-stream-content-actions';
+import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 
 export type LayoutType = 'default' | 'split' | 'compact'
 
@@ -29,10 +28,10 @@ export interface AppActions {
   setSession: (session: Session | null) => void;
   setLayoutType: (type: LayoutType) => void;
   setIsArticlePanelOpen: (open: boolean) => void;
-  setCurrentArticle: (article: StreamContentItem | null, index: number) => void;
+  setCurrentArticle: (article: StreamContentItemWithPageIndex | null, index: number) => void;
   toggleFeedSideNav: () => void;
   setIsFeedSideNavOpen: (open: boolean) => void;
-  openArticleInReadingPanel: (article: StreamContentItem, index: number) => void;
+  openArticleInReadingPanel: (article: StreamContentItemWithPageIndex, index: number) => void;
   closeArticlePanel: () => void;
   setTheme: (theme: AppTheme) => void;
   setPreference: <K extends keyof AppState['preferences']>(
