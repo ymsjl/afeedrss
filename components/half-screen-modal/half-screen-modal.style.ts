@@ -13,25 +13,29 @@ export const useHalfScreenModalStyles = makeStyles({
   },
 
   modal: {
-    ...shorthands.borderRadius(tokens.borderRadiusLarge, tokens.borderRadiusLarge, 0, 0),
-    backgroundColor: tokens.colorNeutralBackground1,
+    position: "relative",
+    overflow: "hidden",
+    ...shorthands.borderRadius(tokens.borderRadiusXLarge, tokens.borderRadiusXLarge, 0, 0),
     width: "100%",
     paddingInline: tokens.spacingVerticalM,
     paddingBlockEnd: '48px',
-    boxShadow: tokens.shadow16,
-    position: "relative",
-    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column",
     touchAction: "none",
+    backgroundColor: tokens.colorNeutralBackground2,
+    boxShadow: tokens.shadow16,
   },
 
   handle: {
-    width: "40px",
-    height: "4px",
-    ...shorthands.borderRadius(tokens.borderRadiusCircular),
-    backgroundColor: tokens.colorNeutralBackground3,
+    flexShrink: 0,
     marginInline: "auto",
     marginBlockStart: tokens.spacingVerticalS,
-    marginBlockEnd: tokens.spacingVerticalM,
+    marginBlockEnd: tokens.spacingVerticalXXL,
+    width: "80px",
+    height: "4px",
+    ...shorthands.borderRadius(tokens.borderRadiusCircular),
+    backgroundColor: tokens.colorNeutralForeground4,
+    opacity: '0.5',
   },
 
   small: {
@@ -51,7 +55,7 @@ export const useHalfScreenModalStyles = makeStyles({
   },
 
   content: {
-    overflowY: "auto",
-    WebkitOverflowScrolling: "touch",
+    flex: '1',
+    overflow: 'hidden',
   }
 });

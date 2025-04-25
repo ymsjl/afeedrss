@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { mergeClasses } from "@fluentui/react-components";
 import {
   NavDrawer,
@@ -15,9 +15,7 @@ import { useClasses } from "./feed-side-nav.style";
 import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
 import { FeedNavList } from "./feed-nav-list";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { useSearchParamNavigation } from "../../../../utils/use-search-param-navigation";
-import Image from "next/image";
-import { useFlexClasses } from "@/theme/commonStyles";
+import { useSearchParamNavigation } from "@/utils/use-search-param-navigation";
 import HalfScreenModal from "@/components/half-screen-modal";
 
 export interface Props {
@@ -26,11 +24,10 @@ export interface Props {
 
 export const FeedSideNav = React.memo(({ className }: Props) => {
   const classes = useClasses();
-  const flexClasses = useFlexClasses();
-  const searchParams = useSearchParams();
+  const isLargeThenMobile = useLargeThenMobile();
   const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);
   const setIsFeedSideNavOpen = useAppStore(store => store.setIsFeedSideNavOpen);
-  const isLargeThenMobile = useLargeThenMobile();
+  const searchParams = useSearchParams();
   const currentStreamId = searchParams.get("streamId") || undefined;
   const navigateWithSearch = useSearchParamNavigation()
 
@@ -46,14 +43,16 @@ export const FeedSideNav = React.memo(({ className }: Props) => {
     navigateWithSearch('/', { streamId: item?.key })
   };
 
-  const avatarUrl = 'https://picsum.photos/seed/88/600/400'
-
   if (!isLargeThenMobile) {
     return (
       <HalfScreenModal isOpen={isFeedSideNavOpen} onClose={() => setIsFeedSideNavOpen(false)} size='large' >
-        <Suspense fallback={<FeedNavListSkeleton />}>
-          <FeedNavList onClick={handleLinkClick} />
-        </Suspense>
+        <NavDrawer type='inline' className={classes.navDrawerMobile} open={true} selectedValue={currentStreamId} >
+          <NavDrawerBody>
+            <Suspense fallback={<FeedNavListSkeleton />}>
+              <FeedNavList onClick={handleLinkClick} itemClassName={classes.navItemMobile} />
+            </Suspense>
+          </NavDrawerBody>
+        </NavDrawer>
       </HalfScreenModal>
     )
   }
