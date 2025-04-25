@@ -37,6 +37,7 @@ export const db = factory({
     iconUrl: String,
     firstitemmsec: Number,
     sortid: String,
+    description: nullable(String),
     articles: manyOf('article'),
     tags: manyOf('feedTag')
   },

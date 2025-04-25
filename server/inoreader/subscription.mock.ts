@@ -28,7 +28,8 @@ export const getSubscriptionListMock: HttpResponseResolver = async () => {
         })),
         iconUrl: feed.iconUrl,
         unread_count: 0, // TODO: 实际未读数
-        sortid: feed.sortid
+        sortid: feed.sortid,
+        description: feed.description
       })
     }
   )

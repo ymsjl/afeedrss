@@ -177,6 +177,10 @@ export const useCommonClasses = makeStyles({
   h100: { height: "100%" },
   hScreen: { height: "100vh" },
 
+  block: {
+    display: "block",
+  },
+
   // 定位工具类
   absoluteFill: {
     position: "absolute",

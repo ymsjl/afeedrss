@@ -15,85 +15,118 @@ const articleTitles = [
 
 const TIME = 1745308167740
 
-const subscriptionSourceIconUrl = 'https://placehold.co/32x32';
+const defaultColors: [string, string] = ['e0e0e0', 'bdbdbd'];
+
+export const getPlaceholdImagePure = (
+  { w = 32, h = 32, randomColors = false, colors = defaultColors }
+    : { w?: number, h?: number, randomColors?: boolean, colors?: [string, string] } = {
+      w: 32,
+      h: 32,
+      randomColors: false,
+      colors: defaultColors
+    }) => {
+  // 生成随机三位 HEX 深色颜色
+  const randomColor = `${Math.floor(Math.random() * 16777215).toString(16).toUpperCase().padStart(6, '0')}`;
+  const recolors = (randomColors) ? [randomColor, 'FFFFFF'] : colors;
+  const colorsStr = recolors && recolors.length > 1 ? recolors.join('/') : '';
+  return `https://placehold.co/${w}x${h}/${colorsStr}`;
+}
 
 const USER_ID = '1006201176';
 
-const feedSeeds = [
+const baseFeedSeeds = [
   {
-    title: '36氪',
+    name: '36氪',
     url: 'https://36kr.com/feed',
     htmlUrl: 'https://36kr.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '36氪是一个专注于科技、商业和创新的媒体平台，提供最新的行业动态和深度分析。',
   },
   {
-    title: '财经网',
+    name: '财经网',
     url: 'https://www.caijing.com.cn/rss/rss.xml',
     htmlUrl: 'https://www.caijing.com.cn',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '财经网是中国领先的财经新闻网站，提供全面的财经资讯和深度报道。',
   },
 
   {
-    title: '新浪科技',
+    name: '新浪科技',
     url: 'https://tech.sina.com.cn/rss/technews.xml',
     htmlUrl: 'https://tech.sina.com.cn',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '新浪科技是中国最大的科技新闻网站之一，提供最新的科技动态和产品评测。',
   },
   {
-    title: '网易财经',
+    name: '网易财经',
     url: 'https://money.163.com/special/0001386F/rss_newstop.xml',
     htmlUrl: 'https://money.163.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '网易财经是中国领先的财经新闻网站，提供全面的财经资讯和深度报道。',
   },
   {
-    title: '凤凰科技',
+    name: '凤凰科技',
     url: 'https://tech.ifeng.com/rss/index.xml',
     htmlUrl: 'https://tech.ifeng.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '凤凰科技是中国知名的科技新闻网站，提供最新的科技动态和深度分析。',
   },
   {
-    title: '搜狐财经',
+    name: '搜狐财经',
     url: 'https://www.sohu.com/rss/finance.xml',
     htmlUrl: 'https://www.sohu.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '搜狐财经是中国领先的财经新闻网站，提供全面的财经资讯和深度报道。',
   },
   {
-    title: '腾讯科技',
+    name: '腾讯科技',
     url: 'https://tech.qq.com/rss/index.xml',
     htmlUrl: 'https://tech.qq.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '腾讯科技是中国最大的科技新闻网站之一，提供最新的科技动态和产品评测。',
   },
   {
-    title: '澎湃新闻',
+    name: '澎湃新闻',
     url: 'https://www.thepaper.cn/rss_all.xml',
     htmlUrl: 'https://www.thepaper.cn',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '澎湃新闻是中国领先的新闻网站，提供全面的时事新闻和深度报道。',
   },
   {
-    title: '钛媒体',
+    name: '钛媒体',
     url: 'https://www.tmtpost.com/rss',
     htmlUrl: 'https://www.tmtpost.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '钛媒体是中国领先的科技和商业媒体，提供最新的行业动态和深度分析。',
   },
   {
-    title: "南风窗",
+    name: "南风窗",
     url: 'https://www.nfcmag.com/rss',
     htmlUrl: 'https://www.nfcmag.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '南风窗是中国知名的时事新闻和深度报道网站，提供全面的社会、政治和经济分析。',
   },
   {
-    title: "南方周末",
+    name: "南方周末",
     url: 'https://www.infzm.com/rss',
     htmlUrl: 'https://www.infzm.com',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '南方周末是中国知名的时事新闻和深度报道网站，提供全面的社会、政治和经济分析。',
   },
   {
-    title: "新京报",
+    name: "新京报",
     url: 'https://www.bjnews.com.cn/rss',
     htmlUrl: 'https://www.bjnews.com.cn',
-    iconUrl: subscriptionSourceIconUrl,
+    iconUrl: getPlaceholdImagePure({ randomColors: true }),
+    description: '新京报是中国知名的时事新闻和深度报道网站，提供全面的社会、政治和经济分析。',
   }
 ]
+
+export const feedSeeds = baseFeedSeeds.map((feedSeed, feedIndex) => ({
+  ...feedSeed,
+  id: feedStreamIdGenerator(feedSeed.url),
+  sortId: makeSortIdGenerator('feed')(feedIndex),
+}))
 
 /**
  * 创建模拟用户
@@ -184,23 +217,24 @@ const seedStreamPrefs = (tagIdGenerator: ReturnType<typeof makeStreamIdGenerator
  * 创建订阅源
  * @param tagIdGenerator 标签ID生成器
  */
-const seedFeeds = (seeds: ({ title: string, url: string, htmlUrl: string, iconUrl: string })[]) => {
+const seedFeeds = (seeds: ({ id: string, sortId: string, name: string, url: string, htmlUrl: string, iconUrl: string, description: string })[]) => {
   if (db.feed.count() !== 0) return;
   const ARTICLE_NUM_PER_FEED = 10;
 
   seeds.forEach((feedSeed, feedIndex) => {
     // 创建订阅源
-    const feedId = feedStreamIdGenerator(feedSeed.url);
+    const feedId = feedSeed.id;
     const feedEntry = db.feed.create({
       id: feedId,
-      title: feedSeed.title,
+      title: feedSeed.name,
       url: feedSeed.url,
       htmlUrl: feedSeed.htmlUrl,
       iconUrl: feedSeed.iconUrl,
       tags: [],
       articles: [],
       firstitemmsec: TIME, // 2天前
-      sortid: makeSortIdGenerator('feed')(feedIndex),
+      sortid: feedSeed.sortId,
+      description: feedSeed.description,
     });
 
     // 创建文章

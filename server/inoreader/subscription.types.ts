@@ -42,6 +42,7 @@ export interface Subscription extends SortableIdentifiableItem {
   url: string;
   htmlUrl: string;
   categories: Category[];
+  description?: string | null;
 }
 
 export interface FolderOrTag extends SortableIdentifiableItem {
