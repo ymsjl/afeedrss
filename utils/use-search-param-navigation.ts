@@ -5,7 +5,7 @@ import qs from 'query-string';
 export const useSearchParamNavigation = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const navigation = useCallback((pathname: string, newParams: { [key: string]: string | string[] | null | undefined }) => {
+  const navigation = useCallback((pathname: string, newParams: { [key: string]: string | string[] | null | undefined }, replace = false) => {
     const searchParamsObj = Object
       .entries(newParams)
       .reduce((acc, [key, value]) => {
@@ -16,7 +16,12 @@ export const useSearchParamNavigation = () => {
         }
         return acc;
       }, qs.parse(searchParams.toString()));
-    router.push(`${pathname}?${qs.stringify(searchParamsObj)}`);
+    const href = `${pathname}?${qs.stringify(searchParamsObj)}`
+    if (replace) {
+      router.replace(href);
+    } else {
+      router.push(href);
+    }
   }, [searchParams, router]);
   return navigation;
 };

@@ -4,6 +4,7 @@ import { AppTheme } from '../types';
 import { Session } from 'next-auth';
 import Cookies from 'js-cookie';
 import { StreamContentItem } from '@/server/inoreader/stream.types';
+import { StreamContentItemWithPageIndex } from '@/features/stream-content/use-stream-content-actions';
 
 export type LayoutType = 'default' | 'split' | 'compact'
 
@@ -13,7 +14,7 @@ export interface AppState {
   isMobileSSR: boolean;
   isFeedSideNavOpen: boolean;
   isArticlePanelOpen: boolean;
-  currentArticle: StreamContentItem | null;
+  currentArticle: StreamContentItemWithPageIndex | null;
   currentArticleIndex: number;
   theme: AppTheme;
   preferences: {

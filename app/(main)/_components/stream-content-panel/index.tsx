@@ -17,7 +17,7 @@ interface StreamContentPanelProps {
 export function StreamContentPanel(props: StreamContentPanelProps) {
   const { curArticleId, onStreamContentItemClick } = props;
   const listClasses = useListClasses();
-  const { markAboveAsRead, markItemAsRead } = useStreamContentActions();
+  const { markAboveAsRead, markItemAsRead, markItemAsStar } = useStreamContentActions();
   const { data: items, isFetching, isFetched, error } = useStreamContentsQuery();
   const showFeedThumbnail = useAppStore(store => store.preferences.showFeedThumbnail);
   const classes = useClasses();
@@ -54,6 +54,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
                 isSelected={curArticleId === item.id}
                 showFeedThumbnail={showFeedThumbnail}
                 onMarkAsRead={markItemAsRead}
+                onMarkAsStar={markItemAsStar}
                 onMarkAboveAsRead={markAboveAsRead}
                 onSelectArticle={(article) => onSelectArticle(article, index)}
               />

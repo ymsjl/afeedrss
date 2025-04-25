@@ -27,6 +27,7 @@ interface StreamContentListItemProps {
   isSelected: boolean;
   showFeedThumbnail: boolean;
   onMarkAsRead: (item: StreamContentItemWithPageIndex) => void;
+  onMarkAsStar: (item: StreamContentItemWithPageIndex) => void;
   onMarkAboveAsRead: (
     item: StreamContentItemWithPageIndex,
     isRead: boolean
@@ -39,13 +40,14 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   isSelected,
   showFeedThumbnail,
   onMarkAsRead,
+  onMarkAsStar,
   onMarkAboveAsRead,
   onSelectArticle,
 }) => {
   const { title } = item;
   const classes = useClasses();
   const listItemClasses = useListClasses();
-  const isMobileSSR = useAppStore(store=> store.isMobileSSR);
+  const isMobileSSR = useAppStore(store => store.isMobileSSR);
   const isWide = useMediaQuery(breakpointQuerys.medium, !isMobileSSR);
 
   const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -54,9 +56,9 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
     onMarkAsRead(item);
   };
 
-  const onReadAbove: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onStar: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    onMarkAboveAsRead(item, true);
+    onMarkAsStar(item);
   };
 
   const src = filterImgSrcfromHtmlStr(item.summary.content);
@@ -64,16 +66,18 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   return (
     <Swipeout
       className={mergeClasses(listItemClasses.listItem, classes.swipeoutContainer, isSelected && classes.selectedItem,)}
+      leftBtnsProps={[
+        {
+          className: classes.swipeoutButtonStar,
+          text: "收藏",
+          onClick: onStar,
+        },
+      ]}
       rightBtnsProps={[
         {
           className: classes.leftButton,
           text: "已读",
           onClick: onRead,
-        },
-        {
-          className: classes.leftButtonAbove,
-          text: "上方已读",
-          onClick: onReadAbove,
         },
       ]}
       overswipeRatio={0.3}

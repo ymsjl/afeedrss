@@ -15,9 +15,10 @@ import { useClasses } from "./feed-side-nav.style";
 import { FeedNavListSkeleton } from "./feed-nav-list-skeleton";
 import { FeedNavList } from "./feed-nav-list";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { useSearchParamNavigation } from "../home-page-client/use-search-param-navigation";
+import { useSearchParamNavigation } from "../../../../utils/use-search-param-navigation";
 import Image from "next/image";
 import { useFlexClasses } from "@/theme/commonStyles";
+import HalfScreenModal from "@/components/half-screen-modal";
 
 export interface Props {
   className?: string;
@@ -47,21 +48,25 @@ export const FeedSideNav = React.memo(({ className }: Props) => {
 
   const avatarUrl = 'https://picsum.photos/seed/88/600/400'
 
+  if (!isLargeThenMobile) {
+    return (
+      <HalfScreenModal isOpen={isFeedSideNavOpen} onClose={() => setIsFeedSideNavOpen(false)} size='large' >
+        <Suspense fallback={<FeedNavListSkeleton />}>
+          <FeedNavList onClick={handleLinkClick} />
+        </Suspense>
+      </HalfScreenModal>
+    )
+  }
+
   return (
     <NavDrawer
       open={isFeedSideNavOpen}
       onOpenChange={(_, { open }) => setIsFeedSideNavOpen(open)}
-      type={isLargeThenMobile ? 'inline' : 'overlay'}
+      type='inline'
       selectedValue={currentStreamId}
-      size={isLargeThenMobile ? undefined : 'medium'}
       className={mergeClasses(classes.nav, className)}
-      position={isLargeThenMobile ? "start" : "bottom"}
     >
       <NavDrawerHeader>
-        {/* <div className={mergeClasses(flexClasses.flexRow)}>
-          <Image className={classes.avatar} src={avatarUrl} width={32} height={32} alt=""  objectFit="cover" />
-          <div className={mergeClasses(flexClasses.flexGrow)}></div>
-        </div> */}
       </NavDrawerHeader>
       <NavDrawerBody>
         <NavSectionHeader>订阅源</NavSectionHeader>

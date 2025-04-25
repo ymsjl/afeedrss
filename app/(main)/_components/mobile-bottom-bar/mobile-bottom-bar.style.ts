@@ -25,7 +25,7 @@ export const useClasses = makeStyles({
     textOverflow: 'ellipsis',
     width: '100%',
   },
-  starIcon: {
+  highlight: {
     color: tokens.colorPaletteYellowForeground3,
   }
 })

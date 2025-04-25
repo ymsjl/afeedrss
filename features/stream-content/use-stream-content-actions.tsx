@@ -1,6 +1,6 @@
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import service from "@server/index";
-import { StreamContentItem, StreamContentsResponse } from "@server/inoreader/stream.types";
+import { StreamContentItem, StreamContentsResponse, SystemStreamIDs } from "@server/inoreader/stream.types";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
 import { useStreamContentQueryKey } from "./stream-content-query-key-context";
@@ -23,7 +23,12 @@ export const useStreamContentActions = () => {
           const { items } = draft.pages[target.pageIndex];
           const draftTarget = items.find(({ id }) => id === target.id);
           if (draftTarget) {
-            draftTarget.isRead = !target.isRead;
+            const starredTagIndex = draftTarget.categories.indexOf(SystemStreamIDs.READ);
+            if (starredTagIndex > -1) {
+              draftTarget.categories.splice(starredTagIndex, 1);
+            } else {
+              draftTarget.categories.push(SystemStreamIDs.READ);
+            }
           }
         })
       );
@@ -62,6 +67,14 @@ export const useStreamContentActions = () => {
             .filter(({ isRead }) => !isRead)
             .forEach((item) => {
               item.isRead = true;
+              if (item) {
+                const starredTagIndex = item.categories.indexOf(SystemStreamIDs.READ);
+                if (starredTagIndex > -1) {
+                  item.categories.splice(starredTagIndex, 1);
+                } else {
+                  item.categories.push(SystemStreamIDs.READ);
+                }
+              }
               pendingIds.push(item.id);
             });
         })
@@ -77,7 +90,31 @@ export const useStreamContentActions = () => {
     [queryClient, queryKey]
   );
 
-  const markItemAsStar = useCallback(() => { }, []);
+  const markItemAsStar = useCallback(async (target: StreamContentItemWithPageIndex) => {
+    const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
+    queryClient.setQueryData<InfiniteData<StreamContentsResponse>>(
+      queryKey,
+      produce<InfiniteData<StreamContentsResponse>>((draft) => {
+        const { items } = draft.pages[target.pageIndex];
+        const draftTarget = items.find(({ id }) => id === target.id);
+        if (draftTarget) {
+          const starredTagIndex = draftTarget.categories.indexOf(SystemStreamIDs.STARRED);
+          if (starredTagIndex > -1) {
+            draftTarget.categories.splice(starredTagIndex, 1);
+          } else {
+            draftTarget.categories.push(SystemStreamIDs.STARRED);
+          }
+        }
+      })
+    );
+    try {
+      await service.inoreader.markArticleAsRead(target.id, target.isRead);
+    } catch (e) {
+      // 回滚
+      queryClient.setQueryData(queryKey, previousData);
+      throw e;
+    }
+  }, []);
 
   return useMemo(() => {
     return {

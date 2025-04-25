@@ -1,5 +1,5 @@
 import { fetch } from "../index";
-import { StreamContentsParams, StreamPreferenceListResponse, StreamContentsResponse, MarkArticleParmas, SystemStreamIDs } from "./stream.types";
+import { StreamContentsParams, StreamPreferenceListResponse, StreamContentsResponse, StreamItemsIdsResponse, MarkArticleParmas, SystemStreamIDs, StreamItemsIdsParams } from "./stream.types";
 
 /**
  * 获取 Feed 流的文章列表
@@ -17,6 +17,25 @@ export function getStreamContents(
         xt: exclude,
         it: "",
         c: continuation,
+      },
+    }
+  );
+}
+
+export function getStreamItemIds(
+  streamId: string,
+  { exclude, continuation }: any | undefined
+) {
+  return fetch.get<StreamItemsIdsResponse, StreamItemsIdsParams>(
+    `/reader/api/0/stream/items/ids`,
+    {
+      params: {
+        n: 20,
+        r: "",
+        xt: exclude,
+        it: "",
+        c: continuation,
+        s: streamId,
       },
     }
   );

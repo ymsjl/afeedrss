@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, Suspense, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   mergeClasses,
   Breadcrumb,
@@ -27,7 +27,6 @@ import { StreamContentPanel } from "@/app/(main)/_components/stream-content-pane
 import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/stream-content-panel-skeleton";
 import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { extractFirst } from "@utils/index";
 import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 import { useAppStore } from "../../../providers/app-store-provider";
@@ -41,19 +40,22 @@ import {
   LayoutColumnOneThirdLeft20Filled,
   ChevronLeft20Regular,
 } from "@fluentui/react-icons";
-import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { useClasses } from "./useClasses";
 import { MobileBottomBar } from "../mobile-bottom-bar";
-import { useSearchParamNavigation } from "./use-search-param-navigation";
+import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
+import { useSearchParamNavigation } from "@/utils/use-search-param-navigation";
+import { useStateChangeEffect } from "@/utils/use-state-change-effect";
 
 const LayoutColumnTwoSplitLeftIcon = bundleIcon(
   LayoutColumnTwoSplitLeft20Filled,
   LayoutColumnTwoSplitLeft20Regular
 );
+
 const LayoutColumnTwoIcon = bundleIcon(
   LayoutColumnTwo20Filled,
   LayoutColumnTwo20Regular
 );
+
 const LayoutColumnOneIcon = bundleIcon(
   LayoutColumnOneThirdLeft20Filled,
   LayoutColumnOneThirdLeft20Regular
@@ -63,13 +65,13 @@ interface Props {
   streamContentQueryKey?: string[];
 }
 
-
 export default function Home({ streamContentQueryKey }: Props) {
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
+
   const curArticle = useAppStore(store => store.currentArticle);
   const isArticlePanelOpen = useAppStore(store => store.isArticlePanelOpen)
   const setIsArticlePanelOpen = useAppStore(store => store.setIsArticlePanelOpen);
@@ -90,15 +92,13 @@ export default function Home({ streamContentQueryKey }: Props) {
     navigateWithSearch('/', { streamId: null, articleId: null });
   }, [navigateWithSearch]);
 
-  useStreamIdUpdateEffect(handleCloseArticle);
+  useStateChangeEffect(searchParams.get('streamId'), handleCloseArticle)
 
-  const handleArticleIdUpdate: Parameters<typeof useArticleIdUpdateEffect>[0] = useCallback((prev, current) => {
-    if (prev && !current) {
+  useStateChangeEffect(searchParams.get('articleId'), (prevArticleId, currentArticleId) => {
+    if (prevArticleId && !currentArticleId) {
       setIsArticlePanelOpen(false);
     }
-  }, [handleCloseArticle])
-
-  useArticleIdUpdateEffect(handleArticleIdUpdate)
+  })
 
   const onStreamContentItemClick = useCallback(
     (item: StreamContentItem, index: number) => {
@@ -289,41 +289,3 @@ export default function Home({ streamContentQueryKey }: Props) {
     </div>
   );
 }
-
-const useStreamIdUpdateEffect = (cb: () => void) => {
-  const searchParams = useSearchParams();
-  const prevStreamIdRef = React.useRef<string | null>(null);
-  const streamId = searchParams.get("streamId");
-
-  useEffect(() => {
-    () => {
-      prevStreamIdRef.current = streamId;
-    };
-  }, [streamId]);
-
-  useEffect(() => {
-    if (streamId !== prevStreamIdRef.current) {
-      prevStreamIdRef.current = streamId;
-      cb();
-    }
-  }, [cb, streamId]);
-};
-
-const useArticleIdUpdateEffect = (cb: (prev: string | null, current: string | null) => void) => {
-  const searchParams = useSearchParams();
-  const prevStreamIdRef = React.useRef<string | null>(null);
-  const articleId = searchParams.get("articleId");
-
-  useEffect(() => {
-    () => {
-      prevStreamIdRef.current = articleId;
-    };
-  }, [articleId]);
-
-  useEffect(() => {
-    if (articleId !== prevStreamIdRef.current) {
-      cb(prevStreamIdRef.current, articleId);
-      prevStreamIdRef.current = articleId;
-    }
-  }, [cb, articleId]);
-};

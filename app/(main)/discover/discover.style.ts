@@ -23,6 +23,8 @@ export const useStyles = makeStyles({
     height: '100%',
   },
   icon: {
+    width: '32px',
+    height: '32px',
     ...shorthands.borderRadius(tokens.borderRadiusSmall),
   },
   skeletonCardFooter: {

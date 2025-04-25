@@ -10,7 +10,6 @@ export interface StreamContentsParams {
   annotations?: boolean; // Set this to 1 or true if you want to get an array of your annotations for each article.
 }
 
-
 export interface StreamPreferenceListResponse {
   streamprefs: {
     [key: string]: IdValuePair[];
@@ -46,6 +45,7 @@ export interface StreamContentItem {
   title: string;
   updated: number;
   isRead?: boolean;
+  isStarred?: boolean;
 }
 
 export interface StreamContentsResponse {
@@ -58,6 +58,17 @@ export interface StreamContentsResponse {
   title?: string;
   updated: number;
 }
+
+
+export interface StreamItemsIdsParams extends Omit<StreamContentsParams, "annotations"> {
+  s?: string // Stream ID
+}
+
+export interface StreamItemsIdsResponse {
+  items: string[];
+  itemRefs: (Pick<StreamContentItem, "id"> & { directStreamIds: string[],timestampUsec: string })[]
+}
+
 
 export type TextDirection = "auto" | "ltr" | "rtl";
 

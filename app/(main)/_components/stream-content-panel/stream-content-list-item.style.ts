@@ -49,6 +49,10 @@ export const useClasses = makeStyles({
     color: "white",
     fontWeight: "500",
   },
+  swipeoutButtonStar: {
+    backgroundColor: tokens.colorPaletteYellowBackground3,
+    fontWeight: "500",
+  },
   leftButtonAbove: {
     backgroundColor: tokens.colorBrandBackground3Static,
     color: "white",
