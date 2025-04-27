@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button, ToggleButton } from '@fluentui/react-components';
-import { bundleIcon, Filter20Filled, Filter20Regular, Settings20Filled, Settings20Regular } from '@fluentui/react-icons';
+import { Button } from '@fluentui/react-components';
+import { bundleIcon, ArrowSync20Filled, ArrowSync20Regular, Settings20Filled, Settings20Regular } from '@fluentui/react-icons';
 import { useSearchParams } from 'next/navigation';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
 import { useAppStore } from '@/app/providers/app-store-provider';
-import { useSearchParamNavigation } from '@utils/use-search-param-navigation';
 import { useClasses } from './mobile-bottom-bar.style';
 import Link from 'next/link';
+import { useStreamContentQueryKey } from '@/features/stream-content/stream-content-query-key-context';
 
-const FilterIcon = bundleIcon(Filter20Filled, Filter20Regular);
+const RefreshIcon = bundleIcon(ArrowSync20Filled, ArrowSync20Regular);
 const SettingsIcon = bundleIcon(Settings20Filled, Settings20Regular);
 
 export const ArticleListBottomBar = React.memo(() => {
@@ -19,10 +19,10 @@ export const ArticleListBottomBar = React.memo(() => {
   const streamId = searchParams.get("streamId");
   const { data } = useSuspenseQuery(subscriptionsQueryOptions);
   const subscription = data?.entities?.subscription?.[streamId!] ?? { title: '全部文章' };
-
-  const navigateWithSearch = useSearchParamNavigation();
+  const queryClient = useQueryClient()
   const toggleFeedSideNav = useAppStore(store => store.toggleFeedSideNav);
-  const onToggleUnreadOnly = () => navigateWithSearch('/', { unreadOnly: unreadOnly ? null : 'true' });
+  const streamContentQueryKey = useStreamContentQueryKey();
+  const onRefetch = () => queryClient.refetchQueries({queryKey: streamContentQueryKey});
 
   return (
     <>
@@ -32,7 +32,7 @@ export const ArticleListBottomBar = React.memo(() => {
       <div className={classes.titleContainer}>
         <Button className={classes.title} onClick={toggleFeedSideNav} size="large">{subscription?.title}</Button>
       </div>
-      <ToggleButton icon={<FilterIcon filled={unreadOnly} />} onClick={onToggleUnreadOnly} size='large' />
+      <Button icon={<RefreshIcon filled={unreadOnly} />} onClick={onRefetch} size='large' />
     </>
   );
 });

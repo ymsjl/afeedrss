@@ -27,6 +27,7 @@ export interface AppState {
 export interface AppActions {
   setSession: (session: Session | null) => void;
   setLayoutType: (type: LayoutType) => void;
+  toggleLayoutType: () => void;
   setIsArticlePanelOpen: (open: boolean) => void;
   setCurrentArticle: (article: StreamContentItemWithPageIndex | null, index: number) => void;
   toggleFeedSideNav: () => void;
@@ -38,6 +39,7 @@ export interface AppActions {
     key: K,
     value: AppState['preferences'][K]
   ) => void;
+  toggleIsShowFeedThumbnaill: () => void;
 }
 
 export type AppStore = AppState & AppActions
@@ -83,6 +85,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
         ...({ ...defaultInitState, ...initState }),
         setSession: (session) => set({ session }),
         setLayoutType: (type) => set({ layoutType: type }),
+        toggleLayoutType: () => set({ layoutType: get().layoutType === 'default' ? 'split' : 'default' }),
         setIsArticlePanelOpen: (open) => set({ isArticlePanelOpen: open }),
         setCurrentArticle: (article, index) => set({ currentArticle: article, currentArticleIndex: index }),
         openArticleInReadingPanel: (article, index) => set({ isArticlePanelOpen: true, currentArticle: article, currentArticleIndex: index }),
@@ -101,6 +104,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
             [key]: value,
           }
         })),
+        toggleIsShowFeedThumbnaill: () => set({ preferences: { ...get().preferences, showFeedThumbnail: !get().preferences.showFeedThumbnail } })
       }),
       {
         name: STORAGE_NAME,

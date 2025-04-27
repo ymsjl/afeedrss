@@ -7,7 +7,6 @@ export const useClasses = makeStyles({
     display: "flex",
     height: "100%",
     flex: 1,
-    overflowX: 'hidden',
     [appTokens.breakpoints.medium]: {
       gap: tokens.spacingHorizontalM,
     }

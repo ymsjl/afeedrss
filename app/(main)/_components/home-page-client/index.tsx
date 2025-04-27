@@ -17,6 +17,7 @@ import {
   MenuGroup,
   MenuItemRadio,
   Text,
+  ToggleButton,
 } from "@fluentui/react-components";
 
 import type { LayoutType } from "@/store/app-store";
@@ -46,17 +47,7 @@ import { useSearchParamNavigation } from "@utils/use-search-param-navigation";
 import { useStateChangeEffect } from "@utils/use-state-change-effect";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 
-const LayoutColumnTwoSplitLeftIcon = bundleIcon(
-  LayoutColumnTwoSplitLeft20Filled,
-  LayoutColumnTwoSplitLeft20Regular
-);
-
-const LayoutColumnTwoIcon = bundleIcon(
-  LayoutColumnTwo20Filled,
-  LayoutColumnTwo20Regular
-);
-
-const LayoutColumnOneIcon = bundleIcon(
+const LayoutIcon = bundleIcon(
   LayoutColumnOneThirdLeft20Filled,
   LayoutColumnOneThirdLeft20Regular
 );
@@ -79,7 +70,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const closeArticlePanel = useAppStore(store => store.closeArticlePanel);
 
   const layoutTypeSelected = useAppStore((state) => state.layoutType);
-  const setLayoutType = useAppStore((state) => state.setLayoutType);
+  const toggleLayoutType = useAppStore((state) => state.toggleLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
   const navigateWithSearch = useSearchParamNavigation()
@@ -134,44 +125,6 @@ export default function Home({ streamContentQueryKey }: Props) {
           </Breadcrumb>
 
           <div className={flexClasses.flexGrow}></div>
-          <Menu
-            positioning={{ align: "end" }}
-            checkedValues={{
-              layoutType: [layoutType],
-              unreadOnly: [String(unreadOnly)],
-            }}
-            onCheckedValueChange={(_, { name, checkedItems }) => {
-              if (name === "layoutType") {
-                setLayoutType(checkedItems[0] as LayoutType);
-              }
-            }}
-          >
-            <MenuTrigger disableButtonEnhancement>
-              <MenuButton icon={<LayoutColumnTwoSplitLeftIcon />}>
-                布局
-              </MenuButton>
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                <MenuGroup>
-                  <MenuItemRadio
-                    icon={<LayoutColumnOneIcon />}
-                    name="layoutType"
-                    value="default"
-                  >
-                    默认布局
-                  </MenuItemRadio>
-                  <MenuItemRadio
-                    icon={<LayoutColumnTwoIcon />}
-                    name="layoutType"
-                    value="split"
-                  >
-                    分栏布局
-                  </MenuItemRadio>
-                </MenuGroup>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
         </div>
       </div>
     )

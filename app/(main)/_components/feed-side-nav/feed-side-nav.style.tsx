@@ -51,5 +51,20 @@ export const useClasses = makeStyles({
     width: '32px',
     height: '32px',
     ...shorthands.borderRadius('9999px'),
+  },
+  footerButtons: {
+    display: 'flex',
+    gap: tokens.spacingHorizontalS,
+    width: '100%',
+    paddingBlock: tokens.spacingVerticalS,
+    [appTokens.breakpoints.medium]: {
+      paddingBlockEnd: tokens.spacingVerticalXL,
+    }
+  },
+  footerButton: {
+    maxWidth: "100%",
+    flexGrow: 1,
+    flexDirection: 'column',
+    fontSize: tokens.fontSizeBase200
   }
 });
