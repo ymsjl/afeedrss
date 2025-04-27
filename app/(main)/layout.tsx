@@ -17,7 +17,7 @@ export default async function Layout({ children }: PropsWithChildren<{}>) {
   const isMobile = detectIsMobile(userAgent ?? '').any;
   const appState: { state: AppState } = JSON.parse(cks.get(STORAGE_NAME)?.value ?? "{}")
   return (
-    <AppStoreProvider initialState={{ ...appState.state, session, isMobileSSR: isMobile, isFeedSideNavOpen: !isMobile, }}>
+    <AppStoreProvider initialState={{ ...appState.state, session, isMobileSSR: isMobile, }}>
       <HomePageLayout>{children}</HomePageLayout>
     </AppStoreProvider>
   );

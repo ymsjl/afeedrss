@@ -46,7 +46,7 @@ export const defaultInitState: AppState = {
   session: null,
   isMobileSSR: false,
   layoutType: 'default',
-  isFeedSideNavOpen: true,
+  isFeedSideNavOpen: false,
   isArticlePanelOpen: false,
   currentArticle: null,
   currentArticleIndex: -1,
