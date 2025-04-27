@@ -12,7 +12,6 @@ export const useFeeSideNavState = () => {
   const searchParams = useSearchParams();
   const currentStreamId = searchParams.get("streamId") || undefined;
   const navigateWithSearch = useSearchParamNavigation()
-  const isLargeThenMobile = useLargeThenMobile();
 
   const handleLinkClick = (
     e?: React.MouseEvent<HTMLElement>,
@@ -22,12 +21,6 @@ export const useFeeSideNavState = () => {
     e?.preventDefault();
     navigateWithSearch('/', { streamId: item?.key })
   };
-
-  useLayoutEffect(() => {
-    if (isLargeThenMobile) {
-      setIsFeedSideNavOpen(true);
-    }
-  }, [isLargeThenMobile])
 
   const onClose = () => {
     setIsFeedSideNavOpen(false);

@@ -1,12 +1,16 @@
 'use client';
-import { mergeClasses } from '@fluentui/react-components';
-import { NavDrawer, NavDrawerBody, NavDrawerHeader, NavSectionHeader } from '@fluentui/react-nav-preview';
+
 import React, { Suspense } from 'react';
+import { mergeClasses } from '@fluentui/react-components';
+import { NavDrawerBody, NavDrawerHeader, NavSectionHeader } from '@fluentui/react-nav-preview';
 import { Props } from "./feed-side-nav.types";
 import { useFeeSideNavState } from './use-feed-side-nav-state';
 import { FeedNavList } from './feed-nav-list';
 import { FeedNavListSkeleton } from './feed-nav-list-skeleton';
 import { useClasses } from './feed-side-nav.style';
+import dynamic from 'next/dynamic';
+
+const NavDrawer = dynamic(()=>import('@fluentui/react-nav-preview').then(module=>module.NavDrawer));
 
 export const FeedSideNavDesktop = React.memo(({ className }: Props) => {
   const classes = useClasses();
