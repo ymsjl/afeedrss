@@ -44,6 +44,7 @@ body {
   margin: 0;
   line-height: inherit;
   -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: contain;
 }
 
 hr {

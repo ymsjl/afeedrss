@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useClasses } from './mobile-bottom-bar.style';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { ReaderBottomBar } from './reader-bottom-bar';
@@ -12,13 +12,15 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
     if (!isArticlePanelOpen) {
       return <ArticleListBottomBar />;
     } else {
-      return <ReaderBottomBar onCloseArticle={onCloseArticle}/>
+      return <ReaderBottomBar onCloseArticle={onCloseArticle} />
     }
   }
 
   return (
     <div className={classes.root}>
-      {contentRender()}
+      <Suspense fallback={<div />}>
+        {contentRender()}
+      </Suspense>
     </div>
   )
 })

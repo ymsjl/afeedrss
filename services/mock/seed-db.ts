@@ -32,8 +32,6 @@ export const getPlaceholdImagePure = (
   return `https://placehold.co/${w}x${h}/${colorsStr}`;
 }
 
-const USER_ID = '1006201176';
-
 const baseFeedSeeds = [
   {
     name: '36氪',
@@ -128,18 +126,26 @@ export const feedSeeds = baseFeedSeeds.map((feedSeed, feedIndex) => ({
   sortId: makeSortIdGenerator('feed')(feedIndex),
 }))
 
+export const USER_ID = '1006201176';
+
+export const mockUser = {
+  id: USER_ID,
+  name: '胡八一',
+  email: 'momo@ob.com',
+  image: getPlaceholdImagePure({ w: 32, h: 32, randomColors: true })
+}
+
 /**
  * 创建模拟用户
  * @param userId 用户ID
  */
-const seedUser = (userId: string) => {
+const seedUser = (user: {id:string, name:string, email:string}) => {
   if (db.user.count() === 0) {
     db.user.create({
-      id: userId,
-      userName: 'Mock User',
+      id: mockUser.id,
+      userName: mockUser.name,
       userProfileId: 'mock-profile-id',
-      userEmail: 'mock@example.com',
-      isBloggerUser: false,
+      userEmail: user.email,
       signupTimeSec: 1617235200, // 2021-04-01
       isMultiLoginEnabled: true
     });
@@ -312,7 +318,7 @@ const seedFolders = (seeds: ({ title: string })[], tagIdGenerator: ReturnType<ty
  */
 export const seedDb = () => {
   const tagIdGenerator = makeStreamIdGenerator(USER_ID);
-  seedUser(USER_ID);
+  seedUser(mockUser);
   seedFeeds(feedSeeds);
   seedFolders(folderSeeds, tagIdGenerator);
   seedStreamPrefs(tagIdGenerator);

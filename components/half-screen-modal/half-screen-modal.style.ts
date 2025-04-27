@@ -9,7 +9,12 @@ export const useHalfScreenModalStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
+    overflow: "hidden",
     touchAction: "none",
+    '::-webkit-scrollbar': {
+      height: '0px',
+      width: '0px',
+    }
   },
 
   modal: {

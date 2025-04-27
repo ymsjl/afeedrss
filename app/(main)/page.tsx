@@ -18,7 +18,7 @@ export default async function Home({
   const streamId = extractFirst(searchParams.streamId);
   const unreadOnly = !!extractFirst(searchParams.unreadOnly);
 
-  if (!process.env.ENABLE_MSW && !session?.user.id) {
+  if (!session?.user.id) {
     redirect("/auth/signin");
   }
 

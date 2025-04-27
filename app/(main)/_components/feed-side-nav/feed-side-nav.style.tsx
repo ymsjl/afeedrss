@@ -20,6 +20,9 @@ export const useClasses = makeStyles({
     width: "100%",
     alignItems: "center",
   },
+  navDrawerBody: {
+    overscrollBehaviorY: 'contain',
+  },
   navItemMobile: {
     backgroundColor: tokens.colorNeutralBackground1,
     borderRadius: 0,

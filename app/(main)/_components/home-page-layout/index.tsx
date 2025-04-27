@@ -6,7 +6,6 @@ import { useMediaQuery } from "@reactuses/core";
 import { breakpointQuerys } from '@/theme/tokens';
 
 import { AppSideNav } from "../app-side-nav";
-import { AppTabBar } from "../app-tab-bar";
 import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface Props {

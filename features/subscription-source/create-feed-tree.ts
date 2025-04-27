@@ -75,8 +75,8 @@ function createSortedItemDict({
   }
 
   function getChildrenByStreamId(streamId: string): (Folder | FolderOrTag | Subscription)[] {
-    const SubscriptionOrdering = getSubscriptionOrdering(streamId);
-    const reuslt = chunck(SubscriptionOrdering).map(sortId => dict[sortId])
+    const subscriptionOrdering = getSubscriptionOrdering(streamId);
+    const reuslt = chunck(subscriptionOrdering).map(sortId => dict[sortId])
     return reuslt;
   }
 
