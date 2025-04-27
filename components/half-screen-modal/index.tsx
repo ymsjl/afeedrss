@@ -33,6 +33,7 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
   const touchStartY = useRef<number | null>(null);
   const touchStartTime = useRef<number>(0);
   const isScrollingElement = useRef<boolean>(false);
+  const scrollParentScrollTop = useRef<number | null>(null);
   const scrollableParentRef = useRef<HTMLElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
   const originalBodyOverflow = useRef<string>('');
@@ -191,8 +192,12 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
     const target = e.target as HTMLElement;
     scrollableParentRef.current = findScrollableParent(target);
     isScrollingElement.current = scrollableParentRef.current !== null;
+    if (isScrollingElement.current){
+      scrollParentScrollTop.current = scrollableParentRef.current?.scrollTop ?? 0;
+    }
     touchStartY.current = e.touches[0].clientY;
     touchStartTime.current = Date.now();
+
     
     // 直接移除过渡效果
     if (modalRef.current) {
@@ -206,20 +211,22 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
 
     // 使用节流函数减少触发频率
     const currentY = e.touches[0].clientY;
-    const deltaY = currentY - touchStartY.current!;
+    let deltaY = currentY - touchStartY.current!;
     const isScrollingDown = deltaY > 0;
 
     // 如果是在可滚动元素上滑动
-    // if (isScrollingElement.current && scrollableParentRef.current) {
-    //   // 只有当滚动到顶部并且向下滑动时，才处理模态框的拖动
-    //   const canHandleModalDrag = isScrollingDown &&
-    //     isAtScrollBoundary(scrollableParentRef.current, 'up');
-
-    //   if (!canHandleModalDrag) {
-    //     return; // 不处理模态框的拖动
-    //   }
-    // }
-
+    if (isScrollingElement.current && scrollableParentRef.current) {
+      // 只有当滚动到顶部并且向下滑动时，才处理模态框的拖动
+      const canHandleModalDrag = isScrollingDown &&
+      isAtScrollBoundary(scrollableParentRef.current, 'up');
+      
+      if (!canHandleModalDrag) {
+        return; // 不处理模态框的拖动
+      } else {
+        deltaY -= scrollParentScrollTop.current ?? 0;
+      }
+    }
+    
     // 只允许向下拖动
     if (deltaY < 0) return;
 
@@ -251,6 +258,7 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
     // 如果是在可滚动元素上滑动结束，不处理关闭逻辑
     if (isScrollingElement.current) {
       const deltaY = currentTranslateY.current;
+      scrollParentScrollTop.current = 0;
       // 只有当拖动距离大于0时才可能关闭
       if (deltaY <= 0) {
         touchStartY.current = null;

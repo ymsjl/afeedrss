@@ -16,7 +16,6 @@ export const FeedSideNavMobile = React.memo(({ className }: Props) => {
   const classes = useClasses();
   const { isOpen, onClose, selectedValue, handleLinkClick, } = useFeeSideNavState();
   const session = useAppStore(store => store.session);
-  console.log("session", session);
   const handleNavItemClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavItem
