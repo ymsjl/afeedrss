@@ -51,7 +51,6 @@ export const handlers = [
   http.get(`${baseURL}/tag/list`, getFolderOrTagListMock),
 
   http.post(`${process.env.INOREADER_SERVER_URL}/oauth2/token`, (...args) => {
-    console.log('mock token', args)
     const oauthResponse = {
       access_token: '1000000',
       token_type: "bearer",
@@ -68,7 +67,6 @@ export const handlers = [
         id: { equals: USER_ID },
       },
     });
-    console.log('用户是：', user)
     const token = {
       name: user?.userName,
       email: user?.userEmail,
