@@ -3,8 +3,10 @@
 import React from "react";
 import { useLargeThenMobile } from "@utils/use-large-then-mobile";
 import { FeedSideNavMobile } from "./feed-side-nav-mobile";
-import { FeedSideNavDesktop } from "./feed-side-nav-desktop";
 import { Props } from "./feed-side-nav.types";
+import dynamic from 'next/dynamic';
+
+const FeedSideNavDesktop = dynamic(()=>import('./feed-side-nav-desktop'))
 
 export const FeedSideNav = React.memo(({ className }: Props) => {
   const isLargeThenMobile = useLargeThenMobile();
