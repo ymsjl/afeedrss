@@ -3,7 +3,7 @@
 import React, { Suspense, useState } from "react";
 import { Button } from "@fluentui/react-components";
 import { Add20Regular } from "@fluentui/react-icons";
-import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/_components/settings-page-layout";
 import { SubscriptionPageContentSkeleton } from "./_components/page-content/skeleton";
 import { SubscriptionPageContent } from "./_components/page-content";
 

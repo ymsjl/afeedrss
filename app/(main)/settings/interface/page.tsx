@@ -13,7 +13,7 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { useFlexClasses } from "@/theme/commonStyles";
-import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/_components/settings-page-layout";
 
 import { useListClasses } from "../../_components/stream-content-panel/stream-content-list-item.style";
 import { useAppStore } from "@/app/providers/app-store-provider";

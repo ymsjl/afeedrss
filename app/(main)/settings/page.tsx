@@ -10,7 +10,7 @@ import {
   mergeClasses,
   tokens,
 } from "@fluentui/react-components";
-import { SettingsPageLayout } from "@/app/(main)/settings/settings-page-layout";
+import { SettingsPageLayout } from "@/app/(main)/settings/_components/settings-page-layout";
 import {
   PersonAccounts20Regular,
   EyeLines20Regular,
