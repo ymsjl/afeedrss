@@ -1,9 +1,13 @@
+import { appTokens } from "@/theme/tokens";
 import { tokens, makeStyles, shorthands } from "@fluentui/react-components";
 
 export const useProseClasses = makeStyles({
   root: {
     color: tokens.colorNeutralForeground1,
     maxWidth: "75ch",
+    [appTokens.breakpoints.xxxl]: {
+      maxWidth: "96ch",
+    },
     lineHeight: tokens.lineHeightBase500, // Default line height
     fontSize: tokens.fontSizeBase300, // Default font size (16px)
 

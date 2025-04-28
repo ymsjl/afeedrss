@@ -9,18 +9,9 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  MenuGroup,
-  MenuItemRadio,
   Text,
-  ToggleButton,
 } from "@fluentui/react-components";
 
-import type { LayoutType } from "@/store/app-store";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 
 import { StreamContentPanel } from "@/app/(main)/_components/stream-content-panel";
@@ -30,27 +21,16 @@ import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/common
 import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 import { useAppStore } from "../../../providers/app-store-provider";
-import {
-  bundleIcon,
-  LayoutColumnTwoSplitLeft20Regular,
-  LayoutColumnTwoSplitLeft20Filled,
-  LayoutColumnTwo20Regular,
-  LayoutColumnTwo20Filled,
-  LayoutColumnOneThirdLeft20Regular,
-  LayoutColumnOneThirdLeft20Filled,
-  ChevronLeft20Regular,
-} from "@fluentui/react-icons";
-import { useClasses } from "./useClasses";
+import { ChevronLeft20Regular } from "@fluentui/react-icons";
+import { useClasses } from "./home-page-client.styles";
 import { MobileBottomBar } from "../mobile-bottom-bar";
 import { useLargeThenMobile } from "@utils/use-large-then-mobile";
 import { useSearchParamNavigation } from "@utils/use-search-param-navigation";
 import { useStateChangeEffect } from "@utils/use-state-change-effect";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
+import { RefreshButton } from "../refresh-button";
+import { ArticleListLayout } from "./article-list-layout";
 
-const LayoutIcon = bundleIcon(
-  LayoutColumnOneThirdLeft20Filled,
-  LayoutColumnOneThirdLeft20Regular
-);
 
 interface Props {
   streamContentQueryKey?: string[];
@@ -70,7 +50,6 @@ export default function Home({ streamContentQueryKey }: Props) {
   const closeArticlePanel = useAppStore(store => store.closeArticlePanel);
 
   const layoutTypeSelected = useAppStore((state) => state.layoutType);
-  const toggleLayoutType = useAppStore((state) => state.toggleLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
   const navigateWithSearch = useSearchParamNavigation()
@@ -125,6 +104,9 @@ export default function Home({ streamContentQueryKey }: Props) {
           </Breadcrumb>
 
           <div className={flexClasses.flexGrow}></div>
+          <div className={flexClasses.flexDisableShrink}>
+            <RefreshButton />
+          </div>
         </div>
       </div>
     )
@@ -145,17 +127,7 @@ export default function Home({ streamContentQueryKey }: Props) {
 
           <div className={classes.body}>
             {/* 文章列表 */}
-            <div
-              tabIndex={-1}
-              className={mergeClasses(
-                classes.streamContentPanel,
-                commonClasses.noScrollbar,
-                layoutType !== "split" &&
-                (isArticlePanelOpen
-                  ? classes.streamContentPanelClosed
-                  : classes.streamContentPanelOpened)
-              )}
-            >
+            <ArticleListLayout>
               <StreamContentQueryKeyProvider initValue={streamContentQueryKey}>
                 <Suspense fallback={<StreamContentPanelSkeleton />}>
                   <StreamContentPanel
@@ -164,7 +136,7 @@ export default function Home({ streamContentQueryKey }: Props) {
                   />
                 </Suspense>
               </StreamContentQueryKeyProvider>
-            </div>
+            </ArticleListLayout>
 
             {/* 文章面板 */}
             {layoutType !== "split" && (

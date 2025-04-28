@@ -4,16 +4,19 @@ import * as React from "react";
 import {
   FluentProvider,
   webLightTheme,
+  webDarkTheme,
   SSRProvider,
   RendererProvider,
   createDOMRenderer,
   renderToStyleElements,
 } from "@fluentui/react-components";
 import { useServerInsertedHTML } from "next/navigation";
+import { useAppStore } from "./app-store-provider";
 
 export function FluentSSRProvider({ children }: { children: React.ReactNode }) {
   const [renderer] = React.useState(() => createDOMRenderer());
   const didRenderRef = React.useRef(false);
+  const isDarkMode = useAppStore((state) => state.theme) === "dark";
 
   useServerInsertedHTML(() => {
     if (didRenderRef.current) {
@@ -26,7 +29,7 @@ export function FluentSSRProvider({ children }: { children: React.ReactNode }) {
   return (
     <RendererProvider renderer={renderer}>
       <SSRProvider>
-        <FluentProvider theme={webLightTheme}>{children}</FluentProvider>
+        <FluentProvider theme={isDarkMode ? webDarkTheme : webLightTheme}>{children}</FluentProvider>
       </SSRProvider>
     </RendererProvider>
   );

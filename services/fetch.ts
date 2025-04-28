@@ -23,7 +23,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
     const response = await fetch(url, {
       ...options,
       signal: controller.signal,
-      cache: 'no-cache'
+      cache: 'no-store'
     });
     clearTimeout(timeoutId);
     return response;

@@ -62,6 +62,7 @@ export const ReaderBottomBar = React.memo(({
       />
       <Swipeout
         className={classes.titleContainer}
+        overswipeRatio={0.32}
         leftBtnsProps={[
           {
             text: '上一篇',

@@ -13,6 +13,7 @@ export interface AppState {
   isMobileSSR: boolean;
   isFeedSideNavOpen: boolean;
   isArticlePanelOpen: boolean;
+  articleListScrollPage: number;
   currentArticle: StreamContentItemWithPageIndex | null;
   currentArticleIndex: number;
   theme: AppTheme;
@@ -31,10 +32,11 @@ export interface AppActions {
   setIsArticlePanelOpen: (open: boolean) => void;
   setCurrentArticle: (article: StreamContentItemWithPageIndex | null, index: number) => void;
   toggleFeedSideNav: () => void;
+  articleListPageChange: (n: number) => void;
   setIsFeedSideNavOpen: (open: boolean) => void;
   openArticleInReadingPanel: (article: StreamContentItemWithPageIndex, index: number) => void;
   closeArticlePanel: () => void;
-  setTheme: (theme: AppTheme) => void;
+  toggleTheme: () => void;
   setPreference: <K extends keyof AppState['preferences']>(
     key: K,
     value: AppState['preferences'][K]
@@ -50,6 +52,7 @@ export const defaultInitState: AppState = {
   layoutType: 'default',
   isFeedSideNavOpen: false,
   isArticlePanelOpen: false,
+  articleListScrollPage: 0,
   currentArticle: null,
   currentArticleIndex: -1,
   theme: 'light' as AppTheme,
@@ -87,6 +90,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
         setLayoutType: (type) => set({ layoutType: type }),
         toggleLayoutType: () => set({ layoutType: get().layoutType === 'default' ? 'split' : 'default' }),
         setIsArticlePanelOpen: (open) => set({ isArticlePanelOpen: open }),
+        articleListPageChange: (direct: number) => set({ articleListScrollPage: get().articleListScrollPage + direct  }),
         setCurrentArticle: (article, index) => set({ currentArticle: article, currentArticleIndex: index }),
         openArticleInReadingPanel: (article, index) => set({ isArticlePanelOpen: true, currentArticle: article, currentArticleIndex: index }),
         closeArticlePanel: () => {
@@ -97,7 +101,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
         },
         setIsFeedSideNavOpen: (open) => set({ isFeedSideNavOpen: open }),
         toggleFeedSideNav: () => set(({ isFeedSideNavOpen }) => ({ isFeedSideNavOpen: !isFeedSideNavOpen })),
-        setTheme: (theme) => set({ theme }),
+        toggleTheme: () => set({ theme: get().theme === 'light' ? 'dark' : 'light' }),
         setPreference: (key, value) => set((state) => ({
           preferences: {
             ...state.preferences,

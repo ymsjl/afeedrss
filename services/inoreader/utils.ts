@@ -4,9 +4,9 @@ import { SystemStreamIDs } from "./stream.types";
 
 // 检查文章是否具有特定标签
 export const hasTag = (articleId: string, tagId: string) => {
-  return !!db.articleTag.count({
+  return db.articleTag.count({
     where: { articleId: { equals: articleId }, tagId: { equals: tagId } }
-  });
+  }) !== 0;
 };
 
 // 检查文章是否已读
@@ -33,10 +33,10 @@ export const addTagToArticle = (articleId: string, tagId: string) => {
 
   if (!tag) return;
 
-  const articleTag = db.articleTag.create(joinBewteenArticleAndTag(articleId, tagId));
-
   // 检查关系是否已存在
   if (!hasTag(articleId, tagId)) {
+    const articleTag = db.articleTag.create(joinBewteenArticleAndTag(articleId, tagId));
+
     db.article.update({
       where: { id: { equals: articleId } },
       data: {

@@ -1,4 +1,3 @@
-"use client";
 import { appTokens } from "@/theme/tokens";
 import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
 

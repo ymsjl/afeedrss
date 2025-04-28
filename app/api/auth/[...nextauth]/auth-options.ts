@@ -1,4 +1,4 @@
-import { AuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import { Provider } from "next-auth/providers";
 
 const INOREADER_SERVER_URL = process.env.INOREADER_SERVER_URL;
@@ -28,7 +28,7 @@ export const inoreaderOauthProvider: Provider = {
   },
 }
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [inoreaderOauthProvider],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {

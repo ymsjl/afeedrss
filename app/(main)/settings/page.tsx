@@ -87,13 +87,13 @@ export default function Settings() {
 
   return (
     <SettingsPageLayout>
-      <List className={listClasses.list}>
+      <ul className={listClasses.list}>
         {NAV_LIST.map((item) => (
-          <ListItem key={item.key} className={listClasses.listItem}>
+          <li key={item.key} className={listClasses.listItem}>
             {onRenderNavItem(item)}
-          </ListItem>
+          </li>
         ))}
-      </List>
+      </ul>
     </SettingsPageLayout>
   );
 }

@@ -20,7 +20,7 @@ export const useListClasses = makeStyles({
     ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
     backgroundColor: tokens.colorNeutralBackground1,
     "&:hover": {
-      backgroundColor: tokens.colorBrandBackgroundInvertedHover,
+      backgroundColor: tokens.colorBrandBackground2Hover,
     },
     [appTokens.breakpoints.medium]: {
       ...shorthands.borderRadius(tokens.borderRadiusMedium),
