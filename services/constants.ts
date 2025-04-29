@@ -7,4 +7,3 @@ export const QUERY_KEYS = {
 };
 
 export const readerBaseUrl = `/reader/api/0`;
-
