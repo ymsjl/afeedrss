@@ -1,10 +1,23 @@
-import { delay, HttpResponse, HttpResponseResolver } from 'msw'
-import { FeedActionType, SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
+import { delay, HttpResponse, HttpResponseResolver, http } from 'msw'
+import { SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
 import { db } from '../mock/db'
 import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from './utils'
+import { endpoints } from './stream.endpoints'
 
-export const getStreamContentsMock: HttpResponseResolver = async ({ request }) => {
-  const url = new URL(request.url)
+const mockHandlers = [
+  http.get(`${endpoints.getStreamContents}/*`, getStreamContentsMock),
+
+  http.get(endpoints.getStreamPreferenceList, getStreamPreferenceListMock),
+
+  http.post(endpoints.markAllAsRead, markAllAsReadMock),
+
+  http.post(endpoints.editArticleTag, (...args) => editTag(...args)),
+];
+
+export default mockHandlers
+
+async function getStreamContentsMock({ request }: Parameters<HttpResponseResolver>[0]) {
+  const url = new URL(request.url);
   const streamId = url.pathname.split('/').pop() || ''
 
   // 解析请求参数
@@ -19,19 +32,19 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
     const feed = db.feed.findFirst({
       where: {
         id: { equals: streamId },
-      }
+      },
     })
 
     if (feed) {
       articles = db.article.findMany({
         where: { origin: { id: { equals: streamId } } },
-        take: numberOfItems
+        take: numberOfItems,
       })
     }
   } else if (streamId === SystemStreamIDs.STARRED) {
     // 获取所有加星标的文章
     const starredTag = db.tag.findFirst({
-      where: { id: { equals: SystemStreamIDs.STARRED } }
+      where: { id: { equals: SystemStreamIDs.STARRED } },
     })
 
     if (starredTag && starredTag.articles) {
@@ -45,11 +58,11 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
 
   // 处理exclude标记（跳过已读文章）
   if (excludeTarget === SystemStreamIDs.READ) {
-    articles = articles.filter(article => !isArticleRead(article.id))
+    articles = articles.filter((article) => !isArticleRead(article.id))
   }
 
   // 将文章转换为响应格式
-  const items: StreamContentsResponse['items'] = articles.map(article => {
+  const items: StreamContentsResponse['items'] = articles.map((article) => {
     const origin = article.origin || { id: '', title: '' }
 
     return {
@@ -76,8 +89,8 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
       likingUsers: [],
       canonical: [],
       direction: 'ltr',
-      self: { href: '' }
-    }
+      self: { href: '' },
+    };
   })
 
   // 找到相关的Feed信息
@@ -106,7 +119,7 @@ export const getStreamContentsMock: HttpResponseResolver = async ({ request }) =
   })
 }
 
-export const getStreamPreferenceListMock: HttpResponseResolver = () => {
+function getStreamPreferenceListMock() {
   const streamPrefList = db.streamPref.findMany({})
   const streamprefs = streamPrefList.reduce((acc, pref) => {
     acc[pref.id] = JSON.parse(pref.value) as IdValuePair[]
@@ -115,7 +128,7 @@ export const getStreamPreferenceListMock: HttpResponseResolver = () => {
   return HttpResponse.json({ streamprefs })
 }
 
-export const markAllAsReadMock: HttpResponseResolver = ({ request }) => {
+function markAllAsReadMock({ request }: Parameters<HttpResponseResolver>[0]) {
   const url = new URL(request.url)
   const streamId = url.searchParams.get('s') || ''
 
@@ -124,71 +137,46 @@ export const markAllAsReadMock: HttpResponseResolver = ({ request }) => {
   if (streamId && streamId.startsWith('feed/')) {
     // 获取指定订阅源的所有文章
     const feed = db.feed.findFirst({
-      where: { id: { equals: streamId } }
+      where: { id: { equals: streamId } },
     })
 
     if (feed) {
       articlesToMark = db.article.findMany({
-        where: { origin: { id: { equals: streamId } } }
+        where: { origin: { id: { equals: streamId } } },
       })
     }
   } else {
     // 获取所有未读文章
-    articlesToMark = db.article.findMany({}).filter(article => !isArticleRead(article.id))
+    articlesToMark = db.article.findMany({}).filter((article) => !isArticleRead(article.id))
   }
 
   // 为每篇文章添加已读标签
-  articlesToMark.forEach(article => {
+  articlesToMark.forEach((article) => {
     addTagToArticle(article.id, SystemStreamIDs.READ)
   })
 
   return HttpResponse.json({ success: true })
 }
 
-export const markArticleAsReadMock: HttpResponseResolver = ({ request }) => {
+function editTag({ request }: Parameters<HttpResponseResolver>[0]) {
   const url = new URL(request.url)
-  const action = url.searchParams.get('a')
+  const tagToAdd = url.searchParams.get('a')
+  const tagToRemove = url.searchParams.get('r')
   const articleIds = url.searchParams.get('i')
 
-  if ((action === FeedActionType.markAsRead || action === FeedActionType.markAsUnread) && articleIds) {
-    const ids = articleIds.split(',')
-
-    ids.forEach(articleId => {
-      if (action === FeedActionType.markAsRead) {
-        // 添加已读标签
-        addTagToArticle(articleId, SystemStreamIDs.READ)
-      } else {
-        // 移除已读标签
-        removeTagFromArticle(articleId, SystemStreamIDs.READ)
-      }
-    })
-
-    return HttpResponse.json({ success: true })
+  if (!articleIds || articleIds.length === 0) {
+    return HttpResponse.json({ success: false }, { status: 400 });
   }
 
-  return HttpResponse.json({ success: false }, { status: 400 })
-}
+  const ids = articleIds.split(',')
 
-export const markArticleAsStarMock: HttpResponseResolver = ({ request }) => {
-  const url = new URL(request.url)
-  const action = url.searchParams.get('a')
-  const articleIds = url.searchParams.get('i')
+  ids.forEach((articleId) => {
+    if (tagToAdd) {
+      addTagToArticle(articleId, tagToAdd)
+    } else if (tagToRemove) {
+      removeTagFromArticle(articleId, tagToRemove)
+    }
+  })
 
-  if ((action === FeedActionType.markAsStar || action === FeedActionType.markAsUnstar) && articleIds) {
-    const ids = articleIds.split(',')
-
-    ids.forEach(articleId => {
-      if (action === FeedActionType.markAsStar) {
-        // 添加星标标签
-        addTagToArticle(articleId, SystemStreamIDs.STARRED)
-      } else {
-        // 移除星标标签
-        removeTagFromArticle(articleId, SystemStreamIDs.STARRED)
-      }
-    })
-
-    return HttpResponse.json({ success: true })
-  }
-
-  return HttpResponse.json({ success: false }, { status: 400 })
+  return HttpResponse.json({ success: true })
 }

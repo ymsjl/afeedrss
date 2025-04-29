@@ -8,7 +8,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
 import { denormalize } from 'normalizr';
 import { Subscription } from '@services/inoreader/subscription.types';
-import { subscriptionSchema } from '@/types/feed';
+import { subscriptionSchema } from "@/services/inoreader/subscription.entity";
 import { useCommonClasses } from '@/theme/commonStyles';
 
 const FeedGallery = React.memo(() => {

@@ -10,48 +10,47 @@ export const useStreamContentActions = () => {
   const queryClient = useQueryClient();
   const queryKey = useStreamContentQueryKey();
 
-  const markItemAsRead = useCallback(
-    async (target: StreamContentItemWithPageIndex) => {
-      // 乐观更新：先本地更新
+  const toggleItemTag = useCallback(
+    async (target: StreamContentItemWithPageIndex, tag: string) => {
       const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
+      const tagIndex = target.categories.indexOf(tag);
       queryClient.setQueryData<InfiniteData<StreamContentsResponse>>(
         queryKey,
         produce<InfiniteData<StreamContentsResponse>>((draft) => {
           const { items } = draft.pages[target.pageIndex];
           const draftTarget = items.find(({ id }) => id === target.id);
-          if (draftTarget) {
-            const starredTagIndex = draftTarget.categories.indexOf(SystemStreamIDs.READ);
-            if (starredTagIndex > -1) {
-              draftTarget.categories.splice(starredTagIndex, 1);
-            } else {
-              draftTarget.categories.push(SystemStreamIDs.READ);
-            }
+          if (draftTarget === null || draftTarget === undefined) return;
+          if (tagIndex > -1) {
+            draftTarget.categories.splice(tagIndex, 1);
+          } else {
+            draftTarget.categories.push(tag);
           }
         })
       );
       try {
-        await services.inoreader.markArticleAsRead(target.id, target.isRead);
+        await services.inoreader.editArticleTag(target.id, tag, tagIndex < 0);
       } catch (e) {
-        // 回滚
         queryClient.setQueryData(queryKey, previousData);
         throw e;
       }
-    },
-    [queryClient, queryKey]
-  );
+    }, [])
+
+
+  const markItemAsRead = useCallback((target: StreamContentItemWithPageIndex) => toggleItemTag(target, SystemStreamIDs.READ), [toggleItemTag]);
+
+  const markItemAsStar = useCallback(async (target: StreamContentItemWithPageIndex) => toggleItemTag(target, SystemStreamIDs.STARRED), [toggleItemTag]);
 
   const markAboveAsRead = useCallback(
-    async (target: StreamContentItemWithPageIndex, isRead: boolean) => {
+    async (target: StreamContentItemWithPageIndex, isRead = true) => {
       const pendingIds: string[] = [];
-      // 乐观更新：先保存旧数据
+      const tag = SystemStreamIDs.READ;
       const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
       queryClient.setQueryData(
         queryKey,
         produce<InfiniteData<StreamContentsResponse>>((draft) => {
           const itemsToUpdate = [];
           for (const pageIndex in draft.pages) {
-            if (!Object.prototype.hasOwnProperty.call(draft.pages, pageIndex))
-              return;
+            if (!Object.prototype.hasOwnProperty.call(draft.pages, pageIndex)) return;
             const { items } = draft.pages[pageIndex];
             if (Number(pageIndex) < target.pageIndex) {
               itemsToUpdate.push(...items);
@@ -61,57 +60,29 @@ export const useStreamContentActions = () => {
             }
           }
           itemsToUpdate
-            .filter(({ isRead }) => !isRead)
             .forEach((item) => {
-              item.isRead = true;
-              if (item) {
-                const starredTagIndex = item.categories.indexOf(SystemStreamIDs.READ);
-                if (starredTagIndex > -1) {
-                  item.categories.splice(starredTagIndex, 1);
-                } else {
-                  item.categories.push(SystemStreamIDs.READ);
-                }
+              const tagIndex = item.categories.indexOf(tag);
+              if (tagIndex === - 1 && !isRead) return;
+              if (tagIndex > - 1 && isRead) return;
+              if (isRead) {
+                item.categories.push(tag);
+              } else {
+                item.categories.splice(tagIndex, 1);
               }
               pendingIds.push(item.id);
             });
         })
       );
+
       try {
-        await services.inoreader.markArticleAsRead(pendingIds, !isRead);
+        await services.inoreader.editArticleTag(pendingIds, tag, isRead);
       } catch (e) {
-        // 回滚
         queryClient.setQueryData(queryKey, previousData);
         throw e;
       }
     },
     [queryClient, queryKey]
   );
-
-  const markItemAsStar = useCallback(async (target: StreamContentItemWithPageIndex) => {
-    const previousData = queryClient.getQueryData<InfiniteData<StreamContentsResponse>>(queryKey);
-    queryClient.setQueryData<InfiniteData<StreamContentsResponse>>(
-      queryKey,
-      produce<InfiniteData<StreamContentsResponse>>((draft) => {
-        const { items } = draft.pages[target.pageIndex];
-        const draftTarget = items.find(({ id }) => id === target.id);
-        if (draftTarget) {
-          const starredTagIndex = draftTarget.categories.indexOf(SystemStreamIDs.STARRED);
-          if (starredTagIndex > -1) {
-            draftTarget.categories.splice(starredTagIndex, 1);
-          } else {
-            draftTarget.categories.push(SystemStreamIDs.STARRED);
-          }
-        }
-      })
-    );
-    try {
-      await services.inoreader.markArticleAsRead(target.id, target.isRead);
-    } catch (e) {
-      // 回滚
-      queryClient.setQueryData(queryKey, previousData);
-      throw e;
-    }
-  }, []);
 
   return useMemo(() => {
     return {

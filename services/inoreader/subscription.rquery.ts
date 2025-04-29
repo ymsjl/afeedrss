@@ -2,10 +2,10 @@ import { normalize } from "normalizr";
 import { queryOptions } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../constants";
 import services from "@services/index";
-import { SubscriptionEntity, FolderEntity } from "../../types";
+import { SubscriptionEntity, FolderEntity } from "./subscription.types";
 import { FolderOrTag } from "./subscription.types";
 import { Subscription } from "./subscription.types";
-import { folderSchema, subscriptionSchema } from "@/types/feed";
+import { folderSchema, subscriptionSchema } from "./subscription.entity";
 
 export const subscriptionsQueryOptions = queryOptions({
   queryKey: [QUERY_KEYS.SUBSCRIPTIONS_LIST],

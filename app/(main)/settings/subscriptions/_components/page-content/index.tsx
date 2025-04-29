@@ -5,7 +5,7 @@ import { SelectTabEvent, SelectTabData } from "@fluentui/react-components";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { denormalize } from "normalizr";
 import { subscriptionsQueryOptions, folderQueryOptions } from "@services/inoreader/subscription.rquery";
-import { folderSchema, subscriptionSchema } from "@/types/feed";
+import { folderSchema, subscriptionSchema } from "@/services/inoreader/subscription.entity";
 import { Folder, Subscription } from "@services/inoreader/subscription.types";
 import { TabContextProvider, TabPanel, TabPanels } from '@/components/tab-panes'
 import { useClasses } from "../../useClasses";

@@ -1,13 +1,12 @@
 // HTTP 错误状态码常量
-
 export const HTTP_ERROR_CODES = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   SERVER_ERROR: 500,
 };
-// 自定义 HTTP 错误类型
 
+// 自定义 HTTP 错误类型
 export class HttpError extends Error {
   status: number;
   statusText: string;
@@ -40,6 +39,7 @@ export class HttpError extends Error {
     this.statusText = statusText;
     this.responseText = responseText;
     this.isHttpError = true;
+    
     // 401 和 403 错误需要重新认证
     this.needsAuthentication = status === HTTP_ERROR_CODES.UNAUTHORIZED || status === HTTP_ERROR_CODES.FORBIDDEN;
 

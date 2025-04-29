@@ -32,7 +32,6 @@
     "**/*.tsx",
     "next-env.d.ts",
     "pages/_documentjs",
-    "services/inoreader/user.mock.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]

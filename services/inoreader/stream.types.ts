@@ -77,16 +77,6 @@ export interface IdValuePair {
   value: string;
 }
 
-export enum FeedActionType {
-  edit = "edit",
-  subscribe = "subscribe",
-  unsubscribe = "unsubscribe",
-  markAsRead = "user/-/state/com.google/read",
-  markAsUnread = "user/-/state/com.google/unread",
-  markAsStar = "user/-/state/com.google/starred",
-  markAsUnstar = "user/-/state/com.google/unstarred"
-}
-
 export enum SystemStreamIDs {
   READ = "user/-/state/com.google/read",// Read articles.
   STARRED = "user/-/state/com.google/starred",// Starred articles.
@@ -98,7 +88,7 @@ export enum SystemStreamIDs {
 
 export interface MarkArticleParmas {
   i: string | string[];
-  a?: SystemStreamIDs;
-  r?: SystemStreamIDs;
+  a?: string;
+  r?: string;
 }
 

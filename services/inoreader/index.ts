@@ -1,3 +1,3 @@
 export * from './stream' 
 export * from './user' 
-export * from './subscription' 
+export * from './subscription.endpoints' 

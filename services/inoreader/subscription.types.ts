@@ -1,4 +1,3 @@
-import { FeedActionType } from "./stream.types";
 
 export interface SubscriptionListResponse {
   subscriptions: Subscription[];
@@ -65,3 +64,16 @@ export type InoreaderTagType = "tag" | "folder" | "active_search" | 'buildIn';
 export interface FolderWithChildren extends Folder {
   children: (Subscription | Tag | FolderWithChildren)[];
 }
+
+export interface SubscriptionEntity {
+  subscription: { [key: string]: Subscription; };
+}
+
+export interface FolderEntity {
+  folder: { [key: string]: Folder; };
+}export enum FeedActionType {
+  edit = "edit",
+  subscribe = "subscribe",
+  unsubscribe = "unsubscribe"
+}
+

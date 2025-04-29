@@ -1,9 +1,10 @@
 import { createStore } from 'zustand/vanilla';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { AppTheme } from '../types';
 import { Session } from 'next-auth';
 import Cookies from 'js-cookie';
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
+
+export type AppTheme = 'light' | 'dark';
 
 export type LayoutType = 'default' | 'split' | 'compact'
 
