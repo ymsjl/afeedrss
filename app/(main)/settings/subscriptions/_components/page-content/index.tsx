@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { SelectTabEvent, SelectTabData } from "@fluentui/react-components";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { denormalize } from "normalizr";
 import { subscriptionsQueryOptions, folderQueryOptions } from "@/services/subscription/subscription.rquery";
 import { folderSchema, subscriptionSchema } from "@/services/subscription/subscription.entity";
