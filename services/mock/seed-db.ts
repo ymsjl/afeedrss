@@ -1,5 +1,5 @@
 import { db } from './db';
-import { SystemStreamIDs } from "../inoreader/stream.types";
+import { SystemStreamIDs } from "../stream";
 import { feedStreamIdGenerator, generateArticleContent, joinBewteenFeedAndTag, makeSortIdGenerator, makeStreamIdGenerator } from './utils';
 
 const articleTitles = [

@@ -1,5 +1,5 @@
-import { fetch, } from "../index";
-import { readerBaseUrl } from "./constants";
+import fetch from "@services/fetch";
+import { readerBaseUrl } from "../constants";
 import { FeedActionType } from "./subscription.types";
 import { SubscriptionEditParams, SubscriptionListResponse, FolderTagListParams, InoreaderTagListResponse } from "./subscription.types";
 
@@ -17,7 +17,7 @@ export const endpoints = {
  * @params folder 订阅源文件夹 ID
  * @returns
  */
-export function addSubscription(url: string, folder?: string) {
+function addSubscription(url: string, folder?: string) {
   const params: SubscriptionEditParams = {
     ac: FeedActionType.subscribe,
     s: url,
@@ -31,7 +31,7 @@ export function addSubscription(url: string, folder?: string) {
  * @params streamId 订阅源 ID
  * @returns 
  */
-export function unsubscription(streamId: string) {
+function unsubscription(streamId: string) {
   const params: SubscriptionEditParams = {
     ac: FeedActionType.unsubscribe,
     s: streamId,
@@ -45,7 +45,7 @@ export function unsubscription(streamId: string) {
  * @params title 订阅源名称
  * @returns
  */
-export function renameSubscription(streamId: string, title: string) {
+function renameSubscription(streamId: string, title: string) {
   const params: SubscriptionEditParams = {
     ac: FeedActionType.edit,
     s: streamId,
@@ -58,7 +58,7 @@ export function renameSubscription(streamId: string, title: string) {
  * 获取订阅列表
  * @returns
  */
-export function getSubscriptionList() {
+function getSubscriptionList() {
   return fetch.get<SubscriptionListResponse>(endpoints.getSubscriptionList);
 }
 
@@ -69,6 +69,14 @@ export function getSubscriptionList() {
  * @params params.counts 是否包含未读数量
  * @returns 
  */
-export function getFolderOrTagList(params?: FolderTagListParams) {
+function getFolderOrTagList(params?: FolderTagListParams) {
   return fetch.get<InoreaderTagListResponse, FolderTagListParams>(endpoints.getFolderOrTagList, { params });
+}
+
+export default {
+  addSubscription,
+  unsubscription,
+  renameSubscription,
+  getSubscriptionList,
+  getFolderOrTagList,
 }

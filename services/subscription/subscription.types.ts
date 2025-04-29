@@ -71,7 +71,9 @@ export interface SubscriptionEntity {
 
 export interface FolderEntity {
   folder: { [key: string]: Folder; };
-}export enum FeedActionType {
+}
+
+export enum FeedActionType {
   edit = "edit",
   subscribe = "subscribe",
   unsubscribe = "unsubscribe"

@@ -1,7 +1,7 @@
 import { delay, HttpResponse, HttpResponseResolver, http } from 'msw'
+import { db } from '@services/mock/db'
 import { SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
-import { db } from '../mock/db'
-import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from './utils'
+import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from '@services/mock/utils'
 import { endpoints } from './stream.endpoints'
 
 const mockHandlers = [

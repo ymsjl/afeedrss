@@ -1,9 +1,9 @@
 import { delay, HttpResponse, http } from 'msw'
 import { FeedActionType } from "./subscription.types"
-import { db } from '../mock/db'
+import { db } from '@services/mock/db'
 import { getTagNameFromId } from '@/app/(main)/_components/feed-side-nav/create-nav';
-import { joinBewteenFeedAndTag } from '../mock/utils'
-import { readerBaseUrl } from './constants'
+import { joinBewteenFeedAndTag } from '@services/mock/utils'
+import { readerBaseUrl } from "../constants";
 
 const mockHandlers = [
   http.get(`${readerBaseUrl}/subscription/edit`, function (...args) {

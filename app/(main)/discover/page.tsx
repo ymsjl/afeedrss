@@ -5,10 +5,10 @@ import { SearchBox, Card, CardHeader, CardFooter, SearchBoxChangeEvent, InputOnC
 import { useStyles } from './discover.style'; // 从样式文件中导入 useStyles
 import { Add12Filled } from '@fluentui/react-icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
+import { subscriptionsQueryOptions } from '@/services/subscription/subscription.rquery';
 import { denormalize } from 'normalizr';
-import { Subscription } from '@services/inoreader/subscription.types';
-import { subscriptionSchema } from "@/services/inoreader/subscription.entity";
+import { Subscription } from '@/services/subscription';
+import { subscriptionSchema } from "@/services/subscription/subscription.entity";
 import { useCommonClasses } from '@/theme/commonStyles';
 
 const FeedGallery = React.memo(() => {

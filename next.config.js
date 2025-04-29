@@ -1,4 +1,3 @@
-
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -33,7 +32,9 @@ const nextConfig = {
       "@fluentui/react-icons",
       "@reactuses/core",
     ],
-    swcPlugins: [['fluentui-next-appdir-directive', { paths: ['@griffel', '@fluentui'] }]],
+    swcPlugins: [
+      ["fluentui-next-appdir-directive", { paths: ["@griffel", "@fluentui"] }],
+    ],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -62,8 +63,9 @@ const nextConfig = {
     return [
       {
         source: "/api/inoreader/:path*",
-        destination: `${process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
-          }/:path*`,
+        destination: `${
+          process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
+        }/:path*`,
       },
     ];
   },

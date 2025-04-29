@@ -1,4 +1,4 @@
-import { FolderWithChildren, Tag, Subscription } from "@services/inoreader/subscription.types";
+import { FolderWithChildren, Tag, Subscription } from "@/services/subscription";
 import { isSubscription, isTag, isFolderWithChildren } from "@features/subscription-source/utils";
 
 export function getTagNameFromId(tagId: string) {

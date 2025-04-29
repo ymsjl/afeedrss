@@ -3,7 +3,7 @@ import { Button } from '@fluentui/react-components';
 import { bundleIcon, Settings20Filled, Settings20Regular } from '@fluentui/react-icons';
 import { useSearchParams } from 'next/navigation';
 import {  useSuspenseQuery } from '@tanstack/react-query';
-import { subscriptionsQueryOptions } from '@services/inoreader/subscription.rquery';
+import { subscriptionsQueryOptions } from '@/services/subscription/subscription.rquery';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useClasses } from './mobile-bottom-bar.style';
 import Link from 'next/link';

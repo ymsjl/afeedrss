@@ -1,8 +1,8 @@
 import { useStreamContentQueryKey } from "@/features/stream-content/stream-content-query-key-context";
-import { makeStreamContentQueryOptions } from "@services/inoreader/stream.rquery";
+import { makeStreamContentQueryOptions } from "@/services/stream/stream.rquery";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { StreamContentItem, SystemStreamIDs } from "@services/inoreader/stream.types";
+import { StreamContentItem, SystemStreamIDs } from "@/services/stream";
 
 export interface StreamContentItemWithPageIndex extends StreamContentItem {
   pageIndex: number;

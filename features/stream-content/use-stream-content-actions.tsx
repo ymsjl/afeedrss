@@ -1,8 +1,8 @@
-import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import services from "@services/index";
-import { StreamContentsResponse, SystemStreamIDs } from "@services/inoreader/stream.types";
 import { useCallback, useMemo } from "react";
 import produce from "immer";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { api as streamApi } from "@/services/stream";
+import { StreamContentsResponse, SystemStreamIDs } from "@/services/stream";
 import { useStreamContentQueryKey } from "./stream-content-query-key-context";
 import { StreamContentItemWithPageIndex } from "./use-stream-contents-query";
 
@@ -28,7 +28,7 @@ export const useStreamContentActions = () => {
         })
       );
       try {
-        await services.inoreader.editArticleTag(target.id, tag, tagIndex < 0);
+        await streamApi.editArticleTag(target.id, tag, tagIndex < 0);
       } catch (e) {
         queryClient.setQueryData(queryKey, previousData);
         throw e;
@@ -75,7 +75,7 @@ export const useStreamContentActions = () => {
       );
 
       try {
-        await services.inoreader.editArticleTag(pendingIds, tag, isRead);
+        await streamApi.editArticleTag(pendingIds, tag, isRead);
       } catch (e) {
         queryClient.setQueryData(queryKey, previousData);
         throw e;
