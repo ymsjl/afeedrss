@@ -230,7 +230,18 @@ export const useCommonClasses = makeStyles({
     transitionTimingFunction: "ease-in-out",
   },
 
+  fillFullHeight: {
+    display: "flex",
+    flexDirection: "column",
+    flex: 1,
+    overflowY: "hidden",
+    height: "100%",
+  },
+
   // 滚动容器
+  overflowHidden: {
+    overflow: "hidden",
+  },
   scrollY: {
     overflowY: "auto",
     overflowX: "hidden",

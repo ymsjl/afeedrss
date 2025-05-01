@@ -8,7 +8,7 @@ import {
   BreadcrumbItem,
   mergeClasses,
 } from "@fluentui/react-components";
-import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
+import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 
 interface Props {
@@ -25,6 +25,7 @@ export function SettingsPageLayout({
 }: Props) {
   const textClasses = useTextClasses();
   const flexClasses = useFlexClasses();
+  const commonClasses = useCommonClasses();
   const pageLayoutClasses = usePageLayoutClasses();
 
   return (
@@ -50,7 +51,7 @@ export function SettingsPageLayout({
           </div>
           <div className={flexClasses.flexDisableShrink}>{tailElem}</div>
         </div>
-        <div className={flexClasses.flexGrow}>
+        <div className={mergeClasses(flexClasses.flexGrow, commonClasses.overflowHidden)}>
           {children ?? (
             <StatusCard status={Status.EMPTY} content="这里空无一物" />
           )}

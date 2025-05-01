@@ -4,13 +4,22 @@ import { USER_ID } from '../mock/seed-db'
 import { endpoints } from './user.endpoints';
 
 const mockHandlers = [
+  // http.post(endpoints.authorization, authorization),
   http.post(endpoints.getAccessToken, getAccessTokenMock),
-  http.get(endpoints.getUserInfo, getUserInfoMock),
+  // http.get(endpoints.getUserInfo, getUserInfoMock),
 ];
 
 export default mockHandlers;
 
+function authorization() {
+  return new Response(null, {
+    status: 302,
+    headers: { Location: `${process.env.REDIRECT_URI}?code=mock-code`, },
+  });
+}
+
 function getAccessTokenMock() {
+  console.log('getAccessTokenMock')
   const oauthResponse = {
     access_token: '1000000',
     token_type: "bearer",
@@ -22,6 +31,7 @@ function getAccessTokenMock() {
 }
 
 function getUserInfoMock() {
+  console.log('getUserInfoMock')
   const user = db.user.findFirst({
     where: {
       id: { equals: USER_ID },

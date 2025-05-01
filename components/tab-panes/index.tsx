@@ -51,8 +51,10 @@ export function TabPanel({ children, className, value }: PropsWithChildren<Class
 }
 
 const useTabClasses = makeStyles({
-  tabPanes: {},
-  tabPane: {},
+  tabPanes: {
+  },
+  tabPane: {
+  },
   tabPaneActived: {
     display: 'block',
   },

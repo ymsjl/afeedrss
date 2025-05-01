@@ -4,7 +4,6 @@ import React from "react";
 import { List, mergeClasses, ListItem, Skeleton, SkeletonItem } from "@fluentui/react-components";
 import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
 import { useClasses } from "../../useClasses";
-import { SubscriptionTabList } from "../subscription-tab-list";
 import { useFlexClasses, useCommonClasses } from "@/theme/commonStyles";
 
 export const SubscriptionPageContentSkeleton = React.memo(() => {
@@ -12,16 +11,13 @@ export const SubscriptionPageContentSkeleton = React.memo(() => {
   const listClasses = useListClasses();
 
   return (
-    <>
-      <SubscriptionTabList />
-      <List className={mergeClasses(listClasses.list, classes.tabContent)}>
-        {Array(5).fill(null).map(
-          (_, index) => <ListItem className={listClasses.listItem} key={index}>
-            <ListItemSkeleton />
-          </ListItem>
-        )}
-      </List>
-    </>
+    <List className={mergeClasses(listClasses.list, classes.tabContent)}>
+      {Array(5).fill(null).map(
+        (_, index) => <ListItem className={listClasses.listItem} key={index}>
+          <ListItemSkeleton />
+        </ListItem>
+      )}
+    </List>
   );
 })
 

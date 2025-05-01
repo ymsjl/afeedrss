@@ -3,6 +3,7 @@ import { readerBaseUrl } from "../constants";
 import { UserInfoResponse } from "./user.types";
 
 export const endpoints = {
+  authorization: `${process.env.INOREADER_SERVER_URL}/oauth2/auth`,
   getAccessToken: `${process.env.INOREADER_SERVER_URL}/oauth2/token`,
   getUserInfo: `${readerBaseUrl}/user-info`,
 };

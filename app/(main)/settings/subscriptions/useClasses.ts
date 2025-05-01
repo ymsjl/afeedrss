@@ -1,6 +1,9 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
 
 export const useClasses = makeStyles({
+  root: {
+    gap: tokens.spacingVerticalL,
+  },
   formItem: {
     display: "flex",
     flexDirection: "column",
@@ -19,7 +22,9 @@ export const useClasses = makeStyles({
     width: "100%",
   },
   tabContent: {
-    marginBlockStart: tokens.spacingVerticalL,
+    height: "100%",
+    overflowY: "auto",
+    paddingBlockEnd: tokens.spacingVerticalXXL,
   },
   listItemSkeleton: {}
 });

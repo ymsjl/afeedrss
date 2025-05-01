@@ -8,7 +8,7 @@ import {
   Caption1,
   Body1Strong
 } from "@fluentui/react-components";
-import { Circle20Regular, CheckmarkCircle20Filled } from "@fluentui/react-icons";
+import { Circle20Regular, CheckmarkCircle20Filled, ImageOff20Regular, } from "@fluentui/react-icons";
 import Swipeout from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@utils/filterImgSrcfromHtmlStr";
 import dayjs from "@utils/dayjs";
@@ -85,13 +85,13 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
         {showFeedThumbnail ? (
           <>
             <div className={classes.thumbnailWrapper}>
-              {src && (
+              {src ? (
                 <Image
                   src={src}
                   className={mergeClasses(classes.thumbnail, classes.thumbnailBackground)}
                   alt=""
                 />
-              )}
+              ) : <ImageOff20Regular className={classes.imageOff} />}
             </div>
             <div className={classes.contentWrapper}>
               <div className={classes.titleWrapper}>

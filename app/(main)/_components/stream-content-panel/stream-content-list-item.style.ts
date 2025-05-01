@@ -37,8 +37,8 @@ export const useClasses = makeStyles({
   thumbnail: {
     width: "80px",
     height: "60px",
-    objectFit: "cover",
     borderRadius: tokens.borderRadiusMedium,
+    objectFit: "cover",
   },
   thumbnailBackground: {
     backgroundColor: tokens.colorNeutralBackground1,
@@ -77,7 +77,17 @@ export const useClasses = makeStyles({
     alignItems: "center",
   },
   thumbnailWrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     flexShrink: 0,
+    width: "80px",
+    height: "60px",
+    borderRadius: tokens.borderRadiusMedium,
+    backgroundColor: tokens.colorNeutralBackground3,
+  },
+  imageOff: {
+    color: tokens.colorNeutralForegroundDisabled,
   },
   contentWrapper: {
     flexGrow: 1,
