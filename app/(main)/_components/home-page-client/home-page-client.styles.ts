@@ -35,12 +35,11 @@ export const useClasses = makeStyles({
   articelPanel: {
     position: "absolute",
     ...shorthands.inset("0"),
-    zIndex: tokens.zIndexOverlay,
+    zIndex: tokens.zIndexContent,
     display: "flex",
     flexDirection: "column",
     height: "100%",
     maxWidth: '100%',
-    marginBlockStart: tokens.spacingHorizontalXS,
     backgroundColor: tokens.colorNeutralBackground1,
     [appTokens.breakpoints.medium]: {
       marginInline: tokens.spacingHorizontalXS,
