@@ -126,4 +126,3 @@ export const removeTagFromArticle = (articleId: string, tagId: string) => {
     db.articleTag.delete({ where: { id: { equals: articleId }, tagId: { equals: tagId } } });
   }
 };
-

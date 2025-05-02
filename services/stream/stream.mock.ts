@@ -3,22 +3,23 @@ import { db } from '@services/mock/db'
 import { SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
 import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from '@services/mock/utils'
 import { endpoints } from './stream.endpoints'
+import { fullInoreaderEndpoint } from '@services/fetch'
 
 const mockHandlers = [
-  http.get(`${endpoints.getStreamContents}/*`, getStreamContentsMock),
+  http.get(fullInoreaderEndpoint(`${endpoints.getStreamContents}/*`), getStreamContentsMock),
 
-  http.get(endpoints.getStreamPreferenceList, getStreamPreferenceListMock),
+  http.get(fullInoreaderEndpoint(endpoints.getStreamPreferenceList), getStreamPreferenceListMock),
 
-  http.post(endpoints.markAllAsRead, markAllAsReadMock),
+  http.post(fullInoreaderEndpoint(endpoints.markAllAsRead), markAllAsReadMock),
 
-  http.post(endpoints.editArticleTag, (...args) => editTag(...args)),
+  http.post(fullInoreaderEndpoint(endpoints.editArticleTag), (...args) => editTag(...args)),
 ];
 
 export default mockHandlers
 
 async function getStreamContentsMock({ request }: Parameters<HttpResponseResolver>[0]) {
   const url = new URL(request.url);
-  const streamId = url.pathname.split('/').pop() || ''
+  const streamId = decodeURIComponent(url.pathname.split('/').pop() || '')
 
   // 解析请求参数
   const excludeTarget = url.searchParams.get('xt') || ''

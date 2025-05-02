@@ -6,7 +6,7 @@ import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-st
 
 export type AppTheme = 'light' | 'dark';
 
-export type LayoutType = 'default' | 'split' | 'compact'
+export type LayoutType = 'default' | 'split' | 'compact' | 'pictureOnBottom' | 'textOnly'
 
 export interface AppState {
   session: Session | null;

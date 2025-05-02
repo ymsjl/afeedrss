@@ -19,14 +19,12 @@ export const useListClasses = makeStyles({
     transition: "all",
     ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
     backgroundColor: tokens.colorNeutralBackground1,
-    "&:hover": {
-      backgroundColor: tokens.colorBrandBackground2Hover,
-    },
     [appTokens.breakpoints.medium]: {
       ...shorthands.borderRadius(tokens.borderRadiusMedium),
       boxShadow: tokens.shadow2,
 
       "&:hover": {
+        backgroundColor: tokens.colorBrandBackground2Hover,
         boxShadow: tokens.shadow4,
       }
     },
@@ -105,7 +103,6 @@ export const useClasses = makeStyles({
     alignItems: "center",
   },
   sourceInfo: {
-    flexGrow: 1,
     color: tokens.colorNeutralForeground4,
   },
   readButton: {

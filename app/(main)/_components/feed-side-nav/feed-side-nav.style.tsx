@@ -45,18 +45,12 @@ export const useClasses = makeStyles({
   skeletonItem: {
     height: '40px',
   },
-
-  avatar: {
-    display: 'inline-block',
-    width: '32px',
-    height: '32px',
-    ...shorthands.borderRadius('9999px'),
-  },
   footerButtons: {
     display: 'flex',
     gap: tokens.spacingHorizontalS,
     width: '100%',
     paddingBlock: tokens.spacingVerticalS,
+    overflowX: "scroll",
     [appTokens.breakpoints.medium]: {
       paddingBlockEnd: tokens.spacingVerticalXL,
     }

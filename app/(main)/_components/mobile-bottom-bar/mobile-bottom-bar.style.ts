@@ -3,7 +3,7 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 export const useClasses = makeStyles({
   root: {
     position: "fixed",
-    zIndex: tokens.zIndexPopup,
+    zIndex: tokens.zIndexOverlay,
     bottom: 0,
     left: 0,
     right: 0,

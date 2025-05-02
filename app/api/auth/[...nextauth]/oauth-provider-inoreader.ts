@@ -10,7 +10,7 @@ export const inoreaderOauthProvider: Provider = {
     params: { scope: "read write" },
   },
   token: userEndpoints.getAccessToken,
-  userinfo: `${process.env.INOREADER_SERVER_URL}/${userEndpoints.getUserInfo}`,
+  userinfo: `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}/${userEndpoints.getUserInfo}`,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   profile(profile: {

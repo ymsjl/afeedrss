@@ -35,6 +35,7 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
   const isScrollingElement = useRef<boolean>(false);
   const scrollParentScrollTop = useRef<number | null>(null);
   const scrollableParentRef = useRef<HTMLElement | null>(null);
+  const maskRef = useRef<HTMLDivElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
   const originalBodyOverflow = useRef<string>('');
   const originalBodyPosition = useRef<string>('');
@@ -51,10 +52,10 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
       originalBodyPosition.current = style.position;
       originalBodyTop.current = style.top;
       originalBodyWidth.current = style.width;
-      
+
       // 保存当前滚动位置
       scrollY.current = window.scrollY;
-      
+
       // 设置body样式，阻止滚动
       style.overflow = 'hidden';
       style.position = 'fixed';
@@ -72,7 +73,7 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
       style.position = originalBodyPosition.current;
       style.top = originalBodyTop.current;
       style.width = originalBodyWidth.current;
-      
+
       // 恢复滚动位置
       window.scrollTo(0, scrollY.current);
     }
@@ -123,15 +124,15 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
   // 直接设置元素的 transform 和 transition 样式
   const setModalTransform = useCallback((y: number, withTransition = false) => {
     if (!modalRef.current) return;
-    
+
     currentTranslateY.current = y;
-    
+
     if (withTransition) {
       modalRef.current.style.transition = 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
     } else {
       modalRef.current.style.transition = '';
     }
-    
+
     modalRef.current.style.transform = `translate3d(0px, ${y}px, 0px)`;
   }, []);
 
@@ -140,24 +141,15 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
     if (isOpen && !isVisible) {
       // 禁用页面滚动
       disablePageScroll();
-      
+
       setIsVisible(true);
       // 使用 requestAnimationFrame 而不是 setTimeout 更加平滑
       requestAnimationFrame(() => {
         setModalTransform(0, true);
       });
     } else if (!isOpen && isVisible) {
-      setModalTransform(window.innerHeight, true);
-      // 使用 transitionend 事件或 setTimeout 处理动画结束
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        setModalTransform(0, false);
-        
-        // 恢复页面滚动
-        enablePageScroll();
-      }, 250);
-
-      return () => clearTimeout(timer);
+      enablePageScroll();
+      setIsVisible(false);
     }
   }, [isOpen, isVisible, setModalTransform, disablePageScroll, enablePageScroll]);
 
@@ -192,13 +184,13 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
     const target = e.target as HTMLElement;
     scrollableParentRef.current = findScrollableParent(target);
     isScrollingElement.current = scrollableParentRef.current !== null;
-    if (isScrollingElement.current){
+    if (isScrollingElement.current) {
       scrollParentScrollTop.current = scrollableParentRef.current?.scrollTop ?? 0;
     }
     touchStartY.current = e.touches[0].clientY;
     touchStartTime.current = Date.now();
 
-    
+
     // 直接移除过渡效果
     if (modalRef.current) {
       modalRef.current.style.transition = '';
@@ -217,16 +209,15 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
     // 如果是在可滚动元素上滑动
     if (isScrollingElement.current && scrollableParentRef.current) {
       // 只有当滚动到顶部并且向下滑动时，才处理模态框的拖动
-      const canHandleModalDrag = isScrollingDown &&
-      isAtScrollBoundary(scrollableParentRef.current, 'up');
-      
+      const canHandleModalDrag = isScrollingDown && isAtScrollBoundary(scrollableParentRef.current, 'up');
+
       if (!canHandleModalDrag) {
         return; // 不处理模态框的拖动
       } else {
         deltaY -= scrollParentScrollTop.current ?? 0;
       }
     }
-    
+
     // 只允许向下拖动
     if (deltaY < 0) return;
 
@@ -239,7 +230,11 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
       // 直接设置 transform 样式
       if (modalRef.current) {
         modalRef.current.style.transform = `translate3d(0px, ${deltaY}px, 0px)`;
+
         currentTranslateY.current = deltaY;
+      }
+      if (maskRef.current) {
+        maskRef.current.style.opacity = `${1 - deltaY / window.innerHeight}`;
       }
       animationFrameId.current = null;
     });
@@ -284,7 +279,11 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
         modalRef.current.style.transform = `translate3d(0px, ${window.innerHeight}px, 0px)`;
         currentTranslateY.current = window.innerHeight;
       }
-      
+
+      if (maskRef.current) {
+        maskRef.current.style.opacity = '0';
+      }
+
       const timer = setTimeout(() => {
         onClose();
       }, 250);
@@ -294,6 +293,9 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
         modalRef.current.style.transform = `translate3d(0px, 0px, 0px)`;
         currentTranslateY.current = 0;
       }
+      if (maskRef.current) {
+        maskRef.current.style.opacity = '1';
+      }
     }
 
     touchStartY.current = null;
@@ -301,17 +303,11 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
   }, [onClose]);
 
   // 处理点击遮罩关闭
-  const handleOverlayClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMaskClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnOverlayClick && e.target === e.currentTarget) {
       onClose();
     }
   }, [closeOnOverlayClick, onClose]);
-
-  // 仅计算遮罩层样式
-  const overlayStyle = useMemo(() => ({
-    opacity: isVisible ? 1 : 0,
-  }), [isVisible]);
-
 
   // 如果不可见并且关闭状态，则不需要渲染
   if (!isVisible && !isOpen) {
@@ -319,11 +315,8 @@ export const HalfScreenModal: React.FC<HalfScreenModalProps> = ({
   }
 
   return (
-    <div
-      className={classes.overlay}
-      onClick={handleOverlayClick}
-      style={overlayStyle}
-    >
+    <div className={classes.overlay}>
+      <div className={classes.mask} ref={maskRef} onClick={handleMaskClick}></div>
       <div
         ref={modalRef}
         className={mergeClasses(

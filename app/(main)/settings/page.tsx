@@ -29,7 +29,7 @@ export interface NavListItem {
   url: string;
 }
 
-const NAV_LIST: NavListItem[] = [
+export const NAV_LIST: NavListItem[] = [
   {
     key: "account",
     name: "账户",

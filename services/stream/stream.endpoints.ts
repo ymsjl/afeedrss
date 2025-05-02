@@ -1,13 +1,12 @@
 import fetch from "@services/fetch";
-import { readerBaseUrl } from "../constants";
 import { StreamContentsParams, StreamPreferenceListResponse, StreamContentsResponse, StreamItemsIdsResponse, MarkArticleParmas, StreamItemsIdsParams } from "./stream.types";
 
 export const endpoints = {
-  getStreamContents: `${readerBaseUrl}/stream/contents`,
-  getStreamItemIds: `${readerBaseUrl}/stream/items/ids`,
-  getStreamPreferenceList: `${readerBaseUrl}/preference/stream/list`,
-  markAllAsRead: `${readerBaseUrl}/mark-all-as-read`,
-  editArticleTag: `${readerBaseUrl}/edit-tag`,
+  getStreamContents: `/stream/contents`,
+  getStreamItemIds: `/stream/items/ids`,
+  getStreamPreferenceList: `/preference/stream/list`,
+  markAllAsRead: `/mark-all-as-read`,
+  editArticleTag: `/edit-tag`,
 }
 
 /**

@@ -2,17 +2,18 @@ import React from 'react';
 import { Button } from '@fluentui/react-components';
 import { bundleIcon, Settings20Filled, Settings20Regular } from '@fluentui/react-icons';
 import { useSearchParams } from 'next/navigation';
-import {  useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { subscriptionsQueryOptions } from '@/services/subscription/subscription.rquery';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useClasses } from './mobile-bottom-bar.style';
-import Link from 'next/link';
 import { RefreshButton } from '../refresh-button';
 import Swipeout from '@/components/swipe-out';
+import { ArticleListSettingsModal } from '../article-list-settings-modal';
 
 const SettingsIcon = bundleIcon(Settings20Filled, Settings20Regular);
 
 export const ArticleListBottomBar = React.memo(() => {
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = React.useState(false)
   const classes = useClasses();
   const searchParams = useSearchParams();
   const streamId = searchParams.get("streamId");
@@ -23,9 +24,7 @@ export const ArticleListBottomBar = React.memo(() => {
 
   return (
     <>
-      <Link href="/settings" passHref>
-        <Button icon={<SettingsIcon />} size="large" />
-      </Link>
+      <Button icon={<SettingsIcon />} size="large" onClick={() => setIsSettingsModalOpen(true)} />
       <Swipeout
         className={classes.titleContainer}
         overswipeRatio={0.32}
@@ -45,6 +44,7 @@ export const ArticleListBottomBar = React.memo(() => {
         <Button className={classes.title} onClick={toggleFeedSideNav} size="large">{subscription?.title}</Button>
       </Swipeout>
       <RefreshButton size="large" />
+      <ArticleListSettingsModal isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)} />
     </>
   );
 });

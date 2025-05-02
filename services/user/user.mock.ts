@@ -2,11 +2,12 @@ import { HttpResponse, http } from 'msw'
 import { db } from '../mock/db'
 import { USER_ID } from '../mock/seed-db'
 import { endpoints } from './user.endpoints';
+import { fullInoreaderEndpoint } from '@services/fetch';
 
 const mockHandlers = [
   // http.post(endpoints.authorization, authorization),
-  http.post(endpoints.getAccessToken, getAccessTokenMock),
-  // http.get(endpoints.getUserInfo, getUserInfoMock),
+  // http.post(endpoints.getAccessToken, getAccessTokenMock),
+  http.get(fullInoreaderEndpoint(endpoints.getUserInfo), getUserInfoMock),
 ];
 
 export default mockHandlers;
@@ -19,7 +20,6 @@ function authorization() {
 }
 
 function getAccessTokenMock() {
-  console.log('getAccessTokenMock')
   const oauthResponse = {
     access_token: '1000000',
     token_type: "bearer",
@@ -31,7 +31,6 @@ function getAccessTokenMock() {
 }
 
 function getUserInfoMock() {
-  console.log('getUserInfoMock')
   const user = db.user.findFirst({
     where: {
       id: { equals: USER_ID },

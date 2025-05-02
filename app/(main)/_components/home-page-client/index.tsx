@@ -59,7 +59,7 @@ export default function Home({ streamContentQueryKey }: Props) {
   const handleCloseArticle = useCallback(() => {
     if (!isArticlePanelOpen) return;
     closeArticlePanel();
-    navigateWithSearch('/', { streamId: null, articleId: null });
+    navigateWithSearch('/', { articleId: null });
   }, [navigateWithSearch]);
 
   useStateChangeEffect(searchParams.get('streamId'), handleCloseArticle)

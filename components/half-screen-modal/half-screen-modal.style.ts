@@ -4,8 +4,7 @@ export const useHalfScreenModalStyles = makeStyles({
   overlay: {
     position: "fixed",
     ...shorthands.inset(0),
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 1000,
+    zIndex: tokens.zIndexPopup,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
@@ -17,13 +16,21 @@ export const useHalfScreenModalStyles = makeStyles({
     }
   },
 
+  mask: {
+    position: "absolute",
+    ...shorthands.inset(0),
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    touchAction: "none",
+    willChange: 'opacity'
+  },
+
   modal: {
     position: "relative",
     overflow: "hidden",
     ...shorthands.borderRadius(tokens.borderRadiusXLarge, tokens.borderRadiusXLarge, 0, 0),
     width: "100%",
     paddingInline: tokens.spacingVerticalM,
-    paddingBlockEnd: '48px',
+    paddingBlockEnd: tokens.spacingVerticalM,
     display: "flex",
     flexDirection: "column",
     touchAction: "none",

@@ -3,47 +3,117 @@ import qs from "query-string";
 import { clientStore } from '@/store/initialize-app-store';
 import { HttpError } from "./http-error";
 
-const BASE_URL = process.env.INOREADER_SERVER_URL || "/api/inoreader";
+const PROXY_PATHNAME = "http://localhost:3000/api/inoreader";
+export const READER_BASE_URL = `/reader/api/0`;
 const TIMEOUT = 60 * 60 * 1000;
+
+export const fullInoreaderEndpoint = (pathname: string) => `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}${READER_BASE_URL}${pathname}`;
 
 type RequestSearchParams = Record<string, any>;
 
 type RequestOptions<P extends RequestSearchParams = {}> = RequestInit & {
   params?: P;
+  url: string
 }
 
-type RequestWithoutBodyOptions<P extends RequestSearchParams = {}> = Omit<RequestOptions<P>, 'body'>
+type RequestWithoutBodyOptions<P extends RequestSearchParams = {}> = Omit<RequestOptions<P>, 'body' | 'url'>
 
-// 创建带超时的 fetch
-const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-      cache: 'no-store'
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
+const makeFetch = () => {
+  const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        cache: 'no-store'
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  };
+
+  const makeInterceptor = <T = any, M extends (opt: T) => T | Promise<T> = ((opt: T) => T | Promise<T>)>() => {
+    const callbacks: M[] = [];
+    const add = (cb: M) => callbacks.push(cb);
+    const run = async (opt: T) => {
+      let newOpt = opt;
+      for (const cb of callbacks) {
+        newOpt = await cb(newOpt);
+      }
+      return newOpt;
+    };
+    return { add, run, };
+  };
+
+
+  const isGoodResponse = (response: Response) => {
+    return (response.status >= 200 && response.status < 300) || response.status === 304;
   }
-};
 
-// 自定义 fetch 函数
-const customFetch = async <TResponse = any>(url: string, options: RequestOptions = {}): Promise<{ data: TResponse, status: number, statusText: string }> => {
-  // 处理查询参数
-  const { params, ...restOptions } = options;
-  let fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
-  if (params) {
-    const queryString = qs.stringify(params, { skipNull: true, skipEmptyString: true });
-    fullUrl = `${fullUrl}${fullUrl.includes('?') ? '&' : '?'}${queryString}`;
+  const interceptors = {
+    request: makeInterceptor<RequestOptions>(),
   }
 
-  // 获取 session 并添加认证头
+  const customFetch = async <TResponse = any>(options: RequestOptions): Promise<{ data: TResponse, status: number, statusText: string }> => {
+    const requestEnhanced = await interceptors.request.run(options);
+    const { url, ...restOptions } = requestEnhanced;
+    const response = await fetchWithTimeout(url, restOptions);
+    if (!isGoodResponse(response)) {
+      const responseText = await response.text();
+      throw new HttpError(response.status, response.statusText, responseText);
+    }
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      const data = await response.json();
+      return { data, status: response.status, statusText: response.statusText };
+    }
+    return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
+  };
+
+  const shortHands = {
+    get: <TResponse = any, TParams extends RequestSearchParams = {}>(url: string, options?: RequestWithoutBodyOptions<TParams>) =>
+      customFetch<TResponse>({ url, ...options, method: 'GET' }),
+
+    post: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
+      customFetch<TResponse>({ url, ...options, method: 'POST', body: data }),
+
+    put: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
+      customFetch<TResponse>({ url, ...options, method: 'PUT', body: data }),
+
+    delete: <TResponse = any>(url: string, options?: RequestWithoutBodyOptions) =>
+      customFetch<TResponse>({ url, ...options, method: 'DELETE' }),
+  }
+
+  return {
+    shortHands,
+    interceptors,
+  };
+}
+
+const fetchInstance = makeFetch();
+
+fetchInstance.interceptors.request.add((options) => {
+  const { url: originUrl, ...restOptions } = options;
+  const url = originUrl.startsWith('http') ? originUrl : `${PROXY_PATHNAME}${READER_BASE_URL}${originUrl}`;
+  return { url, ...restOptions };
+});
+
+fetchInstance.interceptors.request.add((options) => {
+  const { url: originUrl, params, ...restOptions } = options;
+  if (!params) return options;
+  const queryString = qs.stringify(params, { skipNull: true, skipEmptyString: true });
+  const url = `${originUrl}${originUrl.includes('?') ? '&' : '?'}${queryString}`;
+  return { url, ...restOptions };
+});
+
+fetchInstance.interceptors.request.add(async (options) => {
+  const { headers: originHeaders, ...restOptions } = options;
   let session: any;
   if (typeof window === 'undefined') {
     const { getServerSession } = await import("next-auth");
@@ -52,47 +122,13 @@ const customFetch = async <TResponse = any>(url: string, options: RequestOptions
     session = clientStore?.getState()?.session;
   }
 
-  const headers = new Headers(restOptions.headers);
+  const headers = new Headers(originHeaders);
   if (session?.accessToken) {
     headers.set('Authorization', `Bearer ${session.accessToken}`);
   }
+  return { ...restOptions, headers };
+});
 
-  const response = await fetchWithTimeout(fullUrl, {
-    ...restOptions,
-    headers
-  });
+const fetchShortHands = fetchInstance.shortHands;
 
-  // 处理响应
-  if ((response.status >= 200 && response.status < 300) || response.status === 304) {
-    const contentType = response.headers.get('content-type');
-    if (contentType?.includes('application/json')) {
-      const data = await response.json();
-      return { data, status: response.status, statusText: response.statusText };
-    }
-    // 对于非 JSON 响应，将文本作为 any 类型处理
-    return { data: await response.text() as TResponse, status: response.status, statusText: response.statusText };
-  } else {
-    const responseText = await response.text();
-    console.log('Error response:', responseText);
-    // 使用自定义 HttpError 类抛出错误
-    throw new HttpError(
-      response.status,
-      response.statusText,
-      responseText
-    );
-  }
-};
-
-export default {
-  get: <TResponse = any, TParams extends RequestSearchParams = {}>(url: string, options?: RequestWithoutBodyOptions<TParams>) =>
-    customFetch<TResponse>(url, { ...options, method: 'GET' }),
-
-  post: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
-    customFetch<TResponse>(url, { ...options, method: 'POST', body: data }),
-
-  put: <TRequest extends (BodyInit | null), TResponse = any>(url: string, data?: TRequest, options?: RequestWithoutBodyOptions) =>
-    customFetch<TResponse>(url, { ...options, method: 'PUT', body: data }),
-
-  delete: <TResponse = any>(url: string, options?: RequestWithoutBodyOptions) =>
-    customFetch<TResponse>(url, { ...options, method: 'DELETE' }),
-};
+export default fetchShortHands;

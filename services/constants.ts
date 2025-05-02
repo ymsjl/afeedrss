@@ -5,5 +5,3 @@ export const QUERY_KEYS = {
   STREAM_PREFERENCES: "STREAM_PREFERENCES",
   FOLDER: "FOLDER",
 };
-
-export const readerBaseUrl = `/reader/api/0`;

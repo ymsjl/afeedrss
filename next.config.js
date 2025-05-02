@@ -59,13 +59,12 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  async rewrites() {
+  rewrites(...args) {
+    console.log("rewrites", args);
     return [
       {
         source: "/api/inoreader/:path*",
-        destination: `${
-          process.env.INOREADER_SERVER_URL || "https://api.inoreader.com"
-        }/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}/:path*`,
       },
     ];
   },

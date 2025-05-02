@@ -1,14 +1,11 @@
 import fetch from "@services/fetch";
-import { readerBaseUrl } from "../constants";
 import { FeedActionType } from "./subscription.types";
 import { SubscriptionEditParams, SubscriptionListResponse, FolderTagListParams, InoreaderTagListResponse } from "./subscription.types";
 
 export const endpoints = {
-  addSubscription: `${readerBaseUrl}/subscription/edit`,
-  unsubscription: `${readerBaseUrl}/subscription/edit`,
-  renameSubscription: `${readerBaseUrl}/subscription/edit`,
-  getSubscriptionList: `${readerBaseUrl}/subscription/list`,
-  getFolderOrTagList: `${readerBaseUrl}/tag/list`,
+  editSubscriptionTag: `/subscription/edit`,
+  getSubscriptionList: `/subscription/list`,
+  getFolderOrTagList: `/tag/list`,
 };
 
 /**
@@ -23,7 +20,7 @@ function addSubscription(url: string, folder?: string) {
     s: url,
     a: folder || "",
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.addSubscription, { params });
+  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
 }
 
 /**
@@ -36,7 +33,7 @@ function unsubscription(streamId: string) {
     ac: FeedActionType.unsubscribe,
     s: streamId,
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.unsubscription, { params });
+  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
 }
 
 /**
@@ -51,7 +48,7 @@ function renameSubscription(streamId: string, title: string) {
     s: streamId,
     t: title,
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.renameSubscription, { params });
+  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
 }
 
 /**
