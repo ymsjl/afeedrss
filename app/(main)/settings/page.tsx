@@ -3,8 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  List,
-  ListItem,
   Text,
   makeStyles,
   mergeClasses,
@@ -12,14 +10,11 @@ import {
 } from "@fluentui/react-components";
 import { SettingsPageLayout } from "@/app/(main)/settings/_components/settings-page-layout";
 import {
-  PersonAccounts20Regular,
-  EyeLines20Regular,
-  News20Regular,
-  Info20Regular,
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
 import { useListClasses } from "../_components/stream-content-panel/stream-content-list-item.style";
+import { NAV_LIST } from "./NAV_LIST";
 
 export interface NavListItem {
   key: string;
@@ -28,37 +23,6 @@ export interface NavListItem {
   icon?: React.ReactNode;
   url: string;
 }
-
-export const NAV_LIST: NavListItem[] = [
-  {
-    key: "account",
-    name: "账户",
-    desc: "注销登录",
-    icon: <PersonAccounts20Regular />,
-    url: "/settings/account",
-  },
-  {
-    key: "interface",
-    name: "界面",
-    desc: "自定义界面",
-    icon: <EyeLines20Regular />,
-    url: "/settings/interface",
-  },
-  {
-    key: "subscription_source",
-    name: "订阅源",
-    desc: "管理订阅源,订阅新的 RSS 源",
-    icon: <News20Regular />,
-    url: "/settings/subscriptions",
-  },
-  {
-    key: "about",
-    name: "关于",
-    desc: "关于此应用的基本信息",
-    icon: <Info20Regular />,
-    url: "/settings/about",
-  },
-];
 
 export default function Settings() {
   const classes = useClasses();

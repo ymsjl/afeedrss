@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useSearchParamNavigation } from '@/utils/use-search-param-navigation';
 import { MoonIcon, SunIcon } from "../feed-side-nav/feed-side-nav-desktop";
 import { StreamItemDisplayType } from "@/store/app-store";
-import { NAV_LIST } from "../../settings/page";
+import { NAV_LIST } from "../../settings/NAV_LIST";
 
 const UnreadOnlyIcon = bundleIcon(
   EyeLines20Filled,
