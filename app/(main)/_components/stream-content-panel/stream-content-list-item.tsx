@@ -25,7 +25,6 @@ import { useAppStore } from "@/app/providers/app-store-provider";
 interface StreamContentListItemProps {
   item: StreamContentItemWithPageIndex;
   isSelected: boolean;
-  showFeedThumbnail: boolean;
   onMarkAsRead: (item: StreamContentItemWithPageIndex) => void;
   onMarkAsStar: (item: StreamContentItemWithPageIndex) => void;
   onMarkAboveAsRead: (
@@ -38,7 +37,6 @@ interface StreamContentListItemProps {
 const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   item,
   isSelected,
-  showFeedThumbnail,
   onMarkAsRead,
   onMarkAsStar,
   onMarkAboveAsRead,
@@ -48,7 +46,7 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   const classes = useClasses();
   const flexClasses = useFlexClasses();
   const listItemClasses = useListClasses();
-  const layoutType = useAppStore(state => state.layoutType);
+  const streamItemDisplayType = useAppStore(state => state.streamItemDisplayType);
 
   const onRead: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -64,7 +62,7 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
 
   const src = filterImgSrcfromHtmlStr(item.summary.content);
 
-  if (layoutType === 'pictureOnBottom') {
+  if (streamItemDisplayType === 'pictureOnBottom') {
     return (
       <TwitterLikeItem
         userName={item.origin.title}
@@ -85,10 +83,10 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
     const containerClassName = mergeClasses(
       classes.articleContainer,
       !isSelected && item?.isRead && classes.readArticle,
-      showFeedThumbnail ? classes.withThumbnail : classes.withoutThumbnail
+      streamItemDisplayType === 'textOnly' ? classes.withoutThumbnail : classes.withThumbnail
     );
-    
-    if (layoutType === 'textOnly') {
+
+    if (streamItemDisplayType === 'textOnly') {
       return (
         <div
           className={containerClassName}

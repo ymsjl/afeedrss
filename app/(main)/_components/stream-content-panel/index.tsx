@@ -5,7 +5,6 @@ import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-st
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';
 import StatusCard, { Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
-import { useAppStore } from "@/app/providers/app-store-provider";
 import StreamContentListItem from "./stream-content-list-item";
 import { useListClasses } from "./stream-content-list-item.style";
 
@@ -19,7 +18,6 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
   const listClasses = useListClasses();
   const { markAboveAsRead, markItemAsRead, markItemAsStar } = useStreamContentActions();
   const { data: items, isFetching, isFetched, error } = useStreamContentsQuery();
-  const showFeedThumbnail = useAppStore(store => store.preferences.showFeedThumbnail);
   const classes = useClasses();
   const commonClasses = useCommonClasses()
   const flexClasses = useFlexClasses()
@@ -52,7 +50,6 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
               <StreamContentListItem
                 item={item}
                 isSelected={curArticleId === item.id}
-                showFeedThumbnail={showFeedThumbnail}
                 onMarkAsRead={markItemAsRead}
                 onMarkAsStar={markItemAsStar}
                 onMarkAboveAsRead={markAboveAsRead}

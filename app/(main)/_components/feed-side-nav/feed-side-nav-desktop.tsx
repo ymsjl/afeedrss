@@ -1,8 +1,8 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { Button, mergeClasses, ToggleButton } from '@fluentui/react-components';
-import { NavDivider, NavDrawer, NavDrawerBody, NavDrawerFooter, NavDrawerHeader, NavItem, NavSectionHeader } from '@fluentui/react-nav-preview';
+import { Button, Menu, MenuButton, MenuGroup, MenuGroupHeader, MenuItemRadio, MenuList, MenuPopover, MenuProps, MenuTrigger, mergeClasses, ToggleButton } from '@fluentui/react-components';
+import { NavDivider, NavDrawer, NavDrawerBody, NavDrawerFooter, NavDrawerHeader, NavSectionHeader } from '@fluentui/react-nav-preview';
 import { Props } from "./feed-side-nav.types";
 import { useFeeSideNavState } from './use-feed-side-nav-state';
 import { FeedNavList } from './feed-nav-list';
@@ -12,10 +12,14 @@ import {
   bundleIcon,
   LayoutColumnOneThirdLeft20Regular,
   LayoutColumnOneThirdLeft20Filled,
-  EyeLines20Filled,
-  EyeLines20Regular,
   Image20Filled,
   Image20Regular,
+  SlideContent24Filled,
+  SlideContent24Regular,
+  AppsListDetail20Filled,
+  AppsListDetail20Regular,
+  EyeLines20Filled,
+  EyeLines20Regular,
   WeatherSunny20Filled,
   WeatherSunny20Regular,
   WeatherMoon20Filled,
@@ -36,11 +40,6 @@ const UnreadOnlyIcon = bundleIcon(
   EyeLines20Regular
 );
 
-const HideImageIcon = bundleIcon(
-  Image20Filled,
-  Image20Regular
-);
-
 export const SunIcon = bundleIcon(
   WeatherSunny20Filled,
   WeatherSunny20Regular
@@ -51,22 +50,42 @@ export const MoonIcon = bundleIcon(
   WeatherMoon20Regular
 );
 
+export const ImageIcon = bundleIcon(
+  Image20Filled,
+  Image20Regular
+);
+
+export const ListContentIcon = bundleIcon(
+  AppsListDetail20Filled,
+  AppsListDetail20Regular,
+);
+
 
 const FeedSideNavDesktop = React.memo(({ className }: Props) => {
   const classes = useClasses();
   const { isOpen, selectedValue, handleLinkClick, onOpenChange } = useFeeSideNavState();
+  const streamItemDisplayType = useAppStore((state) => state.streamItemDisplayType);
+  const setStreamItemDisplayType = useAppStore((state) => state.setStreamItemDisplayType);
   const layoutTypeSelected = useAppStore((state) => state.layoutType);
   const toggleLayoutType = useAppStore((state) => state.toggleLayoutType);
   const theme = useAppStore((state) => state.theme);
   const toggleTheme = useAppStore((state) => state.toggleTheme);
-  const showFeedThumbnail = useAppStore((state) => state.preferences.showFeedThumbnail);
-  const toggleIsShowFeedThumbnaill = useAppStore((state) => state.toggleIsShowFeedThumbnaill);
   const isLargeThenMobile = useLargeThenMobile()
   const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
   const searchParams = useSearchParams();
   const unreadOnly = searchParams.get("unreadOnly") === 'true'
   const navigateWithSearch = useSearchParamNavigation();
   const onToggleUnreadOnly = () => navigateWithSearch('/', { unreadOnly: unreadOnly ? null : 'true' });
+
+  const onChange: MenuProps["onCheckedValueChange"] = (
+    e,
+    { name, checkedItems }
+  ) => {
+    if (name === "streamItemDisplayType") {
+      setStreamItemDisplayType(checkedItems[0] as any);
+    }
+  };
+
 
   return (
     <NavDrawer
@@ -89,10 +108,36 @@ const FeedSideNavDesktop = React.memo(({ className }: Props) => {
       <NavDivider />
       <NavDrawerFooter>
         <div className={classes.footerButtons}>
+          <Menu checkedValues={{ streamItemDisplayType: [streamItemDisplayType] }} onCheckedValueChange={onChange}>
+            <MenuTrigger disableButtonEnhancement>
+              <MenuButton className={classes.footerButton} icon={streamItemDisplayType === 'pictureOnBottom' ? <ImageIcon /> : <ListContentIcon />}></MenuButton>
+            </MenuTrigger>
+
+            <MenuPopover>
+              <MenuList>
+                <MenuGroup>
+                  <MenuGroupHeader >文章卡片布局</MenuGroupHeader>
+                  <MenuItemRadio
+                    icon={<ListContentIcon />}
+                    name="streamItemDisplayType"
+                    value="default"
+                  >
+                    默认
+                  </MenuItemRadio>
+                  <MenuItemRadio
+                    icon={<ImageIcon />}
+                    name="streamItemDisplayType"
+                    value="pictureOnBottom"
+                  >
+                    大图
+                  </MenuItemRadio>
+                </MenuGroup>
+              </MenuList>
+            </MenuPopover>
+          </Menu>
           <Button className={classes.footerButton} icon={theme === 'light' ? <SunIcon /> : <MoonIcon />} onClick={toggleTheme} title="夜间模式" size="large" />
           <ToggleButton className={classes.footerButton} icon={<LayoutIcon />} checked={layoutType === 'split'} onClick={toggleLayoutType} title="分栏视图" size="large" />
           <ToggleButton className={classes.footerButton} icon={<UnreadOnlyIcon filled={unreadOnly} />} checked={unreadOnly} onClick={onToggleUnreadOnly} title="仅看未读" size="large" />
-          <ToggleButton className={classes.footerButton} icon={<HideImageIcon filled={showFeedThumbnail} />} checked={showFeedThumbnail} onClick={toggleIsShowFeedThumbnaill} title="展示封面" size="large" />
         </div>
       </NavDrawerFooter>
     </NavDrawer>

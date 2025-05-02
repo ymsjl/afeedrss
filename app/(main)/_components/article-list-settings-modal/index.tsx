@@ -3,7 +3,7 @@
 import HalfScreenModal from "@/components/half-screen-modal";
 import React from "react";
 import { useClasses } from "./article-list-settings-modal.style";
-import { Button, Label, mergeClasses, Radio, RadioGroup, Switch, ToggleButton } from "@fluentui/react-components";
+import { Button, mergeClasses, Radio, RadioGroup, Switch, ToggleButton } from "@fluentui/react-components";
 import { useAppStore } from "@/app/providers/app-store-provider";
 
 import {
@@ -11,13 +11,11 @@ import {
   ChevronRight20Regular,
   EyeLines20Filled,
   EyeLines20Regular,
-  Image20Filled,
-  Image20Regular
 } from "@fluentui/react-icons";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSearchParamNavigation } from '@/utils/use-search-param-navigation';
 import { MoonIcon, SunIcon } from "../feed-side-nav/feed-side-nav-desktop";
-import { LayoutType } from "@/store/app-store";
+import { StreamItemDisplayType } from "@/store/app-store";
 import { NAV_LIST } from "../../settings/page";
 
 const UnreadOnlyIcon = bundleIcon(
@@ -25,17 +23,10 @@ const UnreadOnlyIcon = bundleIcon(
   EyeLines20Regular
 );
 
-const HideImage = bundleIcon(
-  Image20Filled,
-  Image20Regular
-);
-
 export const ArticleListSettingsModal = React.memo(({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const classes = useClasses();
-  const showFeedThumbnail = useAppStore((state) => state.preferences.showFeedThumbnail);
-  const toggleIsShowFeedThumbnaill = useAppStore((state) => state.toggleIsShowFeedThumbnaill);
-  const layoutType = useAppStore((state) => state.layoutType);
-  const setLayoutType = useAppStore((state) => state.setLayoutType);
+  const streamItemDisplayType = useAppStore((state) => state.streamItemDisplayType);
+  const setStreamItemDisplayType = useAppStore((state) => state.setStreamItemDisplayType);
   const theme = useAppStore((state) => state.theme);
   const toggleTheme = useAppStore((state) => state.toggleTheme);
 
@@ -85,7 +76,7 @@ export const ArticleListSettingsModal = React.memo(({ isOpen, onClose }: { isOpe
           })}
         </div>
         <div className={classes.sectionHeader}>列表布局</div>
-        <RadioGroup className={classes.list} value={layoutType} onChange={(e, data) => setLayoutType(data.value as LayoutType)}  >
+        <RadioGroup className={classes.list} value={streamItemDisplayType} onChange={(e, data) => setStreamItemDisplayType(data.value as StreamItemDisplayType)}  >
           <Radio value="default" label="默认" labelPosition='after' className={mergeClasses(classes.listItem, classes.radio)} input={{ className: classes.radioInput }} />
           <Radio value="pictureOnBottom" label="大图" labelPosition='after' className={mergeClasses(classes.listItem, classes.radio)} input={{ className: classes.radioInput }} />
         </RadioGroup>
