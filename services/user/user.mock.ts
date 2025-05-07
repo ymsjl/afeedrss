@@ -7,7 +7,7 @@ import { makeInoreaderUrl } from "../make-inoreader-url";
 const mockHandlers = [
   // http.post(endpoints.authorization, authorization),
   // http.post(endpoints.getAccessToken, getAccessTokenMock),
-  http.get(makeInoreaderUrl({pathname: endpoints.getUserInfo, proxy: false}), getUserInfoMock),
+  http.get(makeInoreaderUrl({ pathname: endpoints.getUserInfo }, false), getUserInfoMock),
 ];
 
 export default mockHandlers;
