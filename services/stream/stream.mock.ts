@@ -3,16 +3,16 @@ import { db } from '@services/mock/db'
 import { SystemStreamIDs, IdValuePair, StreamContentsResponse } from "./stream.types"
 import { addTagToArticle, removeTagFromArticle, isArticleRead, isArticleStarred } from '@services/mock/utils'
 import { endpoints } from './stream.endpoints'
-import { fullInoreaderEndpoint } from '@services/fetch'
+import { makeInoreaderUrl } from "../make-inoreader-url"
 
 const mockHandlers = [
-  http.get(fullInoreaderEndpoint(`${endpoints.getStreamContents}/*`), getStreamContentsMock),
+  http.get(makeInoreaderUrl(`${endpoints.getStreamContents}/*`, false), getStreamContentsMock),
 
-  http.get(fullInoreaderEndpoint(endpoints.getStreamPreferenceList), getStreamPreferenceListMock),
+  http.get(makeInoreaderUrl(endpoints.getStreamPreferenceList, false), getStreamPreferenceListMock),
 
-  http.post(fullInoreaderEndpoint(endpoints.markAllAsRead), markAllAsReadMock),
+  http.post(makeInoreaderUrl(endpoints.markAllAsRead, false), markAllAsReadMock),
 
-  http.post(fullInoreaderEndpoint(endpoints.editArticleTag), (...args) => editTag(...args)),
+  http.post(makeInoreaderUrl(endpoints.editArticleTag, false), (...args) => editTag(...args)),
 ];
 
 export default mockHandlers

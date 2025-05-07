@@ -4,6 +4,12 @@ import { inoreaderOauthProvider } from "./oauth-provider-inoreader";
 export const authOptions: NextAuthOptions = {
   providers: [inoreaderOauthProvider],
   secret: process.env.NEXTAUTH_SECRET,
+  debug: true, // 添加此行以启用 next-auth 的调试日志
+  logger: { // 添加此 logger 配置以捕获更详细的日志
+    error(code, metadata) {
+      console.error(`NextAuth Error - Code: ${code}`, metadata);
+    },
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -24,5 +30,5 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
-  }
+  },
 };

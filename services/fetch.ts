@@ -3,11 +3,7 @@ import qs from "query-string";
 import { clientStore } from '@/store/initialize-app-store';
 import { HttpError } from "./http-error";
 
-const PROXY_PATHNAME = "http://localhost:3000/api/inoreader";
-export const READER_BASE_URL = `/reader/api/0`;
 const TIMEOUT = 60 * 60 * 1000;
-
-export const fullInoreaderEndpoint = (pathname: string) => `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}${READER_BASE_URL}${pathname}`;
 
 type RequestSearchParams = Record<string, any>;
 
@@ -97,12 +93,6 @@ const makeFetch = () => {
 }
 
 const fetchInstance = makeFetch();
-
-fetchInstance.interceptors.request.add((options) => {
-  const { url: originUrl, ...restOptions } = options;
-  const url = originUrl.startsWith('http') ? originUrl : `${PROXY_PATHNAME}${READER_BASE_URL}${originUrl}`;
-  return { url, ...restOptions };
-});
 
 fetchInstance.interceptors.request.add((options) => {
   const { url: originUrl, params, ...restOptions } = options;

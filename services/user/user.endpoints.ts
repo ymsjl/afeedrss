@@ -1,14 +1,15 @@
 import fetch from "../fetch";
+import { makeInoreaderUrl } from "../make-inoreader-url";
 import { UserInfoResponse } from "./user.types";
 
 export const endpoints = {
-  authorization: `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}/oauth2/auth`,
-  getAccessToken: `${process.env.NEXT_PUBLIC_INOREADER_SERVER_URL}/oauth2/token`,
-  getUserInfo: `/user-info`,
+  authorization: '/oauth2/auth',
+  getAccessToken: '/oauth2/token',
+  getUserInfo: '/user-info',
 };
 
 function getUserInfo() {
-  return fetch.get<UserInfoResponse>(endpoints.getUserInfo);
+  return fetch.get<UserInfoResponse>(makeInoreaderUrl(endpoints.getUserInfo) );
 }
 
 export default {

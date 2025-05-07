@@ -2,12 +2,12 @@ import { HttpResponse, http } from 'msw'
 import { db } from '../mock/db'
 import { USER_ID } from '../mock/seed-db'
 import { endpoints } from './user.endpoints';
-import { fullInoreaderEndpoint } from '@services/fetch';
+import { makeInoreaderUrl } from "../make-inoreader-url";
 
 const mockHandlers = [
   // http.post(endpoints.authorization, authorization),
   // http.post(endpoints.getAccessToken, getAccessTokenMock),
-  http.get(fullInoreaderEndpoint(endpoints.getUserInfo), getUserInfoMock),
+  http.get(makeInoreaderUrl({pathname: endpoints.getUserInfo, proxy: false}), getUserInfoMock),
 ];
 
 export default mockHandlers;

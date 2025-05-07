@@ -1,11 +1,12 @@
 import fetch from "@services/fetch";
 import { FeedActionType } from "./subscription.types";
 import { SubscriptionEditParams, SubscriptionListResponse, FolderTagListParams, InoreaderTagListResponse } from "./subscription.types";
+import { makeInoreaderUrl } from "../make-inoreader-url";
 
 export const endpoints = {
-  editSubscriptionTag: `/subscription/edit`,
-  getSubscriptionList: `/subscription/list`,
-  getFolderOrTagList: `/tag/list`,
+  editSubscriptionTag: '/subscription/edit',
+  getSubscriptionList: '/subscription/list',
+  getFolderOrTagList: '/tag/list',
 };
 
 /**
@@ -20,7 +21,7 @@ function addSubscription(url: string, folder?: string) {
     s: url,
     a: folder || "",
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
+  return fetch.get<string, SubscriptionEditParams>(makeInoreaderUrl(endpoints.editSubscriptionTag), { params });
 }
 
 /**
@@ -33,7 +34,7 @@ function unsubscription(streamId: string) {
     ac: FeedActionType.unsubscribe,
     s: streamId,
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
+  return fetch.get<string, SubscriptionEditParams>(makeInoreaderUrl(endpoints.editSubscriptionTag), { params });
 }
 
 /**
@@ -48,7 +49,7 @@ function renameSubscription(streamId: string, title: string) {
     s: streamId,
     t: title,
   };
-  return fetch.get<string, SubscriptionEditParams>(endpoints.editSubscriptionTag, { params });
+  return fetch.get<string, SubscriptionEditParams>(makeInoreaderUrl(endpoints.editSubscriptionTag), { params });
 }
 
 /**
@@ -56,7 +57,7 @@ function renameSubscription(streamId: string, title: string) {
  * @returns
  */
 function getSubscriptionList() {
-  return fetch.get<SubscriptionListResponse>(endpoints.getSubscriptionList);
+  return fetch.get<SubscriptionListResponse>(makeInoreaderUrl(endpoints.getSubscriptionList));
 }
 
 /**
@@ -67,7 +68,7 @@ function getSubscriptionList() {
  * @returns 
  */
 function getFolderOrTagList(params?: FolderTagListParams) {
-  return fetch.get<InoreaderTagListResponse, FolderTagListParams>(endpoints.getFolderOrTagList, { params });
+  return fetch.get<InoreaderTagListResponse, FolderTagListParams>(makeInoreaderUrl(endpoints.getFolderOrTagList), { params });
 }
 
 export default {

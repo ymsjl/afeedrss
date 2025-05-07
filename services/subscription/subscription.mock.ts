@@ -4,10 +4,11 @@ import { db } from '@services/mock/db'
 import { getTagNameFromId } from '@/app/(main)/_components/feed-side-nav/create-nav';
 import { joinBewteenFeedAndTag } from '@services/mock/utils'
 import { endpoints } from './subscription.endpoints';
-import { fullInoreaderEndpoint } from '@services/fetch'
+import { makeInoreaderUrl } from "../make-inoreader-url";
+
 
 const mockHandlers = [
-  http.get(fullInoreaderEndpoint(endpoints.editSubscriptionTag), function (...args) {
+  http.get(makeInoreaderUrl({ pathname: endpoints.editSubscriptionTag, proxy: false }), function (...args) {
     const { request } = args[0];
     const url = new URL(request.url);
     const action = url.searchParams.get('ac');
@@ -24,8 +25,8 @@ const mockHandlers = [
         return new HttpResponse(null, { status: 400 });
     }
   }),
-  http.get(fullInoreaderEndpoint(endpoints.getSubscriptionList), getSubscriptionListMock),
-  http.get(fullInoreaderEndpoint(endpoints.getFolderOrTagList), getFolderOrTagListMock),
+  http.get(makeInoreaderUrl({ pathname: endpoints.getSubscriptionList, proxy: false }), getSubscriptionListMock),
+  http.get(makeInoreaderUrl({ pathname: endpoints.getFolderOrTagList, proxy: false }), getFolderOrTagListMock),
 ];
 
 export default mockHandlers

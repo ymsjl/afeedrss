@@ -1,12 +1,13 @@
 import fetch from "@services/fetch";
 import { StreamContentsParams, StreamPreferenceListResponse, StreamContentsResponse, StreamItemsIdsResponse, MarkArticleParmas, StreamItemsIdsParams } from "./stream.types";
+import { makeInoreaderUrl } from "../make-inoreader-url";
 
 export const endpoints = {
-  getStreamContents: `/stream/contents`,
-  getStreamItemIds: `/stream/items/ids`,
-  getStreamPreferenceList: `/preference/stream/list`,
-  markAllAsRead: `/mark-all-as-read`,
-  editArticleTag: `/edit-tag`,
+  getStreamContents: '/stream/contents',
+  getStreamItemIds: '/stream/items/ids',
+  getStreamPreferenceList: '/preference/stream/list',
+  markAllAsRead: '/mark-all-as-read',
+  editArticleTag: '/edit-tag',
 }
 
 /**
@@ -17,7 +18,7 @@ function getStreamContents(
   { exclude, continuation }: any | undefined
 ) {
   return fetch.get<StreamContentsResponse, StreamContentsParams>(
-    `${endpoints.getStreamContents}/${encodeURIComponent(streamId)}`,
+    makeInoreaderUrl(`${endpoints.getStreamContents}/${encodeURIComponent(streamId)}`),
     {
       params: {
         n: 20,
@@ -42,7 +43,7 @@ function getStreamItemIds(
   { exclude, continuation }: any | undefined
 ) {
   return fetch.get<StreamItemsIdsResponse, StreamItemsIdsParams>(
-    endpoints.getStreamItemIds,
+    makeInoreaderUrl(endpoints.getStreamItemIds),
     {
       params: {
         n: 20,
@@ -61,7 +62,7 @@ function getStreamItemIds(
  * @returns 流偏好字典，包含了所有的流 ID 和对应偏好属性
  */
 function getStreamPreferenceList() {
-  return fetch.get<StreamPreferenceListResponse>(endpoints.getStreamPreferenceList);
+  return fetch.get<StreamPreferenceListResponse>(makeInoreaderUrl((endpoints.getStreamPreferenceList)));
 }
 
 /**
@@ -70,7 +71,7 @@ function getStreamPreferenceList() {
  * @returns 
  */
 function markAllAsRead(streamId: string) {
-  return fetch.post(endpoints.markAllAsRead, null, {
+  return fetch.post(makeInoreaderUrl(endpoints.markAllAsRead), null, {
     params: {
       ts: Date.now(),
       s: streamId,
@@ -86,7 +87,7 @@ function markAllAsRead(streamId: string) {
 function editArticleTag(id: string | string[], tag: string, addOrRemove: boolean) {
   const params: MarkArticleParmas = { i: id };
   params[addOrRemove ? "a" : "r"] = tag;
-  return fetch.post(endpoints.editArticleTag, null, {
+  return fetch.post(makeInoreaderUrl(endpoints.editArticleTag), null, {
     params: params,
   });
 }
