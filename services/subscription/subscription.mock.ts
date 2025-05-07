@@ -8,7 +8,7 @@ import { makeInoreaderUrl } from "../make-inoreader-url";
 
 
 const mockHandlers = [
-  http.get(makeInoreaderUrl({ pathname: endpoints.editSubscriptionTag, proxy: false }), function (...args) {
+  http.get(makeInoreaderUrl({ pathname: endpoints.editSubscriptionTag }, false), function (...args) {
     const { request } = args[0];
     const url = new URL(request.url);
     const action = url.searchParams.get('ac');
@@ -25,8 +25,8 @@ const mockHandlers = [
         return new HttpResponse(null, { status: 400 });
     }
   }),
-  http.get(makeInoreaderUrl({ pathname: endpoints.getSubscriptionList, proxy: false }), getSubscriptionListMock),
-  http.get(makeInoreaderUrl({ pathname: endpoints.getFolderOrTagList, proxy: false }), getFolderOrTagListMock),
+  http.get(makeInoreaderUrl({ pathname: endpoints.getSubscriptionList }, false), getSubscriptionListMock),
+  http.get(makeInoreaderUrl({ pathname: endpoints.getFolderOrTagList }, false), getFolderOrTagListMock),
 ];
 
 export default mockHandlers
