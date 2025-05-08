@@ -7,7 +7,7 @@ export const useClasses = makeStyles({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '48px',
+    height: '56px',
     backgroundColor: tokens.colorNeutralBackground2,
     display: 'flex',
     alignItems: 'center',

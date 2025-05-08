@@ -50,7 +50,6 @@ export const useClasses = makeStyles({
     gap: tokens.spacingHorizontalS,
     width: '100%',
     paddingBlock: tokens.spacingVerticalS,
-    overflowX: "scroll",
     [appTokens.breakpoints.medium]: {
       paddingBlockEnd: tokens.spacingVerticalXL,
     }

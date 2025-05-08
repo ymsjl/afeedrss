@@ -34,11 +34,11 @@ export const useClasses = makeStyles({
   },
   articelPanel: {
     position: "absolute",
-    ...shorthands.inset("0"),
+    ...shorthands.inset(tokens.spacingVerticalS, 0, 0, 0),
     zIndex: tokens.zIndexContent,
     display: "flex",
     flexDirection: "column",
-    height: "100%",
+    height: `calc(100% - ${tokens.spacingVerticalS})`,
     maxWidth: '100%',
     backgroundColor: tokens.colorNeutralBackground1,
     [appTokens.breakpoints.medium]: {
