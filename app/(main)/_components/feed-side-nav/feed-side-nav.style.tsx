@@ -44,20 +44,5 @@ export const useClasses = makeStyles({
   },
   skeletonItem: {
     height: '40px',
-  },
-  footerButtons: {
-    display: 'flex',
-    gap: tokens.spacingHorizontalS,
-    width: '100%',
-    paddingBlock: tokens.spacingVerticalS,
-    [appTokens.breakpoints.medium]: {
-      paddingBlockEnd: tokens.spacingVerticalXL,
-    }
-  },
-  footerButton: {
-    maxWidth: "100%",
-    flexGrow: 1,
-    flexDirection: 'column',
-    fontSize: tokens.fontSizeBase200
   }
 });
