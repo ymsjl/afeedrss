@@ -39,10 +39,4 @@ export const useClasses = makeStyles({
       ...shorthands.borderRadius(0, 0, tokens.borderRadiusMedium, tokens.borderRadiusMedium),
     },
   },
-  skeleton: {
-    marginBlockEnd: tokens.spacingVerticalXXS
-  },
-  skeletonItem: {
-    height: '40px',
-  }
 });

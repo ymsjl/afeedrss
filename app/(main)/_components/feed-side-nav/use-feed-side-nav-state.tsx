@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useLayoutEffect } from "react";
+import { useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { DialogOpenChangeEvent } from "@fluentui/react-components";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { useSearchParamNavigation } from "@/utils/use-search-param-navigation";
 import { INavItem } from "./create-nav";
-import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 
 export const useFeeSideNavState = () => {
   const isFeedSideNavOpen = useAppStore(store => store.isFeedSideNavOpen);

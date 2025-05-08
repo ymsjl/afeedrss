@@ -1,7 +1,7 @@
 "use client";
-import { useFeedSideNavData } from "@/features/subscription-source/use-feed-side-nav-data";
+
 import { NavCategory, NavCategoryItem, NavSubItemGroup, NavSubItem, NavItem } from "@fluentui/react-nav-preview";
-import React, { ComponentProps } from "react";
+import React from "react";
 import {
   Folder20Filled,
   Folder20Regular,
@@ -9,12 +9,12 @@ import {
   Rss20Filled,
   bundleIcon,
 } from "@fluentui/react-icons";
-import { INavItem } from "./create-nav";
+import { INavItem } from "../feed-side-nav/create-nav";
 
 const Folder = bundleIcon(Folder20Filled, Folder20Regular);
 const RssIcon = bundleIcon(Rss20Filled, Rss20Regular);
 
-const FeedNavItem = React.memo(({ link, onClick, itemClassName }: { itemClassName?: string, link: INavItem; onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void; }) => {
+export const FeedNavItem = React.memo(({ link, onClick, itemClassName }: { itemClassName?: string, link: INavItem; onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void; }) => {
   if (link.type === "folder") {
     return (
       <NavCategory value={link.key!}>
@@ -51,11 +51,3 @@ const FeedNavItem = React.memo(({ link, onClick, itemClassName }: { itemClassNam
 })
 
 FeedNavItem.displayName = "FeedNavItem";
-
-
-export const FeedNavList = React.memo(({ onClick, itemClassName }: { onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>, item: INavItem) => void; } & Pick<ComponentProps<typeof FeedNavItem>, 'itemClassName'>) => {
-  const { data } = useFeedSideNavData();
-  return <>{data?.map((link) => <FeedNavItem key={link.key} link={link} onClick={onClick} itemClassName={itemClassName} />)}</>;
-})
-
-FeedNavList.displayName = "FeedNavList";

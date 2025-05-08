@@ -4,21 +4,17 @@ import React, { useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   mergeClasses,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbButton,
-  BreadcrumbDivider,
   Button,
   Text,
+  Title3,
 } from "@fluentui/react-components";
-
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 
 import { StreamContentPanel } from "@/app/(main)/_components/stream-content-panel";
 import { StreamContentPanelSkeleton } from "@/app/(main)/_components/stream-content-panel/stream-content-panel-skeleton";
 import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { FeedSideNav } from "@/app/(main)/_components/feed-side-nav";
+
 import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
 import { useAppStore } from "../../../providers/app-store-provider";
 import { ChevronLeft20Regular } from "@fluentui/react-icons";
@@ -31,17 +27,24 @@ import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-st
 import { RefreshButton } from "../refresh-button";
 import { ArticleListLayout } from "./article-list-layout";
 
+import { ArticleLayoutMenuButton } from "../article-layout-menu-button";
+import { ThemeToggleButton } from "../theme-toggle-button";
+import { LayoutToggleButton } from "../layout-toggle-button";
+import { UnreadOnlyToggleButton } from "../unread-only-toggle-button";
+import dynamic from "next/dynamic";
 
 interface Props {
   streamContentQueryKey?: string[];
 }
 
+const FeedSideNavDesktop = dynamic(() => import("@/app/(main)/_components/feed-side-nav"), { ssr: false })
+
 export default function Home({ streamContentQueryKey }: Props) {
   const classes = useClasses();
   const pageLayoutClasses = usePageLayoutClasses();
-  const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
   const textClasses = useTextClasses();
+  const commonClasses = useCommonClasses();
 
   const curArticle = useAppStore(store => store.currentArticle);
   const isArticlePanelOpen = useAppStore(store => store.isArticlePanelOpen)
@@ -79,34 +82,24 @@ export default function Home({ streamContentQueryKey }: Props) {
   );
 
   const header = () => {
+    const isArticlePanelFloat = layoutType !== "split" && isLargeThenMobile && curArticle;
     return (
       <div className={pageLayoutClasses.header}>
         <div className={mergeClasses(classes.title, flexClasses.flexRow)}>
-          <Breadcrumb size="large">
-            <BreadcrumbItem>
-              <BreadcrumbButton
-                onClick={handleCloseArticle}
-                className={textClasses.textLg}
-              >
-                {unreadOnly ? "未读文章" : "全部文章"}
-              </BreadcrumbButton>
-            </BreadcrumbItem>
-            {layoutType !== "split" && curArticle ? (
-              <>
-                <BreadcrumbDivider />
-                <BreadcrumbItem>
-                  <BreadcrumbButton className={textClasses.textLg}>
-                    {curArticle?.title}
-                  </BreadcrumbButton>
-                </BreadcrumbItem>
-              </>
-            ) : null}
-          </Breadcrumb>
-
+          {isArticlePanelFloat
+            ? <Title3>{curArticle?.title}</Title3>
+            : <Title3 onClick={handleCloseArticle} className={textClasses.textLg}>{unreadOnly ? "未读文章" : "全部文章"}</Title3>
+          }
           <div className={flexClasses.flexGrow}></div>
-          <div className={flexClasses.flexDisableShrink}>
-            <RefreshButton />
-          </div>
+          {!isArticlePanelFloat &&
+            <div className={mergeClasses(flexClasses.flexDisableShrink, commonClasses.spaceX2)}>
+              <ArticleLayoutMenuButton />
+              <ThemeToggleButton />
+              <LayoutToggleButton />
+              <UnreadOnlyToggleButton />
+              <RefreshButton />
+            </div>
+          }
         </div>
       </div>
     )
@@ -114,7 +107,7 @@ export default function Home({ streamContentQueryKey }: Props) {
 
   return (
     <div className={classes.root}>
-      <FeedSideNav />
+      {isLargeThenMobile && <FeedSideNavDesktop />}
       {!isLargeThenMobile && <MobileBottomBar onCloseArticle={handleCloseArticle} />}
       <div className={pageLayoutClasses.main}>
         <div
