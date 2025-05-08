@@ -1,4 +1,4 @@
-const PROXY_PATHNAME = `${process.env.NEXT_PUBLIC_HOST_URL}/${process.env.NEXT_PUBLIC_PROXY_PATHNAME}`;
+const PROXY_PATHNAME = `${process.env.NEXT_PUBLIC_HOST_URL}${process.env.NEXT_PUBLIC_PROXY_PATHNAME}`;
 const READER_BASE_URL = `/reader/api/0`;
 
 export const makeInoreaderUrl = (url: string | { pathname: string, baseUrl?: string }, proxy = (typeof window !== 'undefined')) => {
