@@ -5,25 +5,22 @@ import Swipeout from '@/components/swipe-out';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useStreamContentActions } from '@/features/stream-content/use-stream-content-actions';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
-import { useSearchParamNavigation } from '@utils/use-search-param-navigation';
 import { useClasses } from './mobile-bottom-bar.style'; // Assuming you create this style file
+import { useArticleReadPanelControl } from '../article-read-panel/article-read-panel-control-context';
 
 const StarIcon = bundleIcon(Star20Filled, Star20Regular);
 
 interface ReaderBottomBarProps {
-  onCloseArticle: () => void;
 }
 
-export const ReaderBottomBar = React.memo(({
-  onCloseArticle,
-}: ReaderBottomBarProps) => {
+export const ReaderBottomBar = React.memo(({ }: ReaderBottomBarProps) => {
   const classes = useClasses();
-  const navigateWithSearch = useSearchParamNavigation();
   const currentArticle = useAppStore(store => store.currentArticle);
   const setCurrentArticle = useAppStore(store => store.setCurrentArticle);
   const curArticleIndex = useAppStore(store => store.currentArticleIndex);
   const { data: items } = useStreamContentsQuery();
   const { markItemAsStar } = useStreamContentActions();
+  const { openArticlePanel, closeArticlePanel } = useArticleReadPanelControl(); // For navigating to next/prev article
 
   const changePage = useCallback((getPageIndex: (curIndex: number, length: number) => number) => {
     if (curArticleIndex < 0 || !currentArticle) return;
@@ -31,10 +28,9 @@ export const ReaderBottomBar = React.memo(({
     const nextIndex = getPageIndex(curArticleIndex, items.length);
     const nextArticle = items?.[nextIndex];
     if (nextArticle) {
-      setCurrentArticle(nextArticle, nextIndex);
-      navigateWithSearch(`/`, { articleId: nextArticle.id }, true);
+      openArticlePanel(nextArticle, nextIndex); // Use context to open/navigate
     }
-  }, [curArticleIndex, currentArticle, items, setCurrentArticle, navigateWithSearch]);
+  }, [curArticleIndex, currentArticle, items, openArticlePanel]);
 
   const onPrev = () => changePage((curIndex) => Math.max(curIndex - 1, 0));
 
@@ -58,7 +54,7 @@ export const ReaderBottomBar = React.memo(({
       <Button
         size='large'
         icon={<ChevronLeft20Regular />}
-        onClick={onCloseArticle}
+        onClick={closeArticlePanel}
       />
       <Swipeout
         className={classes.titleContainer}

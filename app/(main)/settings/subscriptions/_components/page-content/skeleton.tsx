@@ -2,7 +2,7 @@
 
 import React from "react";
 import { List, mergeClasses, ListItem, Skeleton, SkeletonItem } from "@fluentui/react-components";
-import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
+import { useListClasses } from "@/app/(main)/_components/article-list-panel/article-list-item.style"
 import { useClasses } from "../../useClasses";
 import { useFlexClasses, useCommonClasses } from "@/theme/commonStyles";
 

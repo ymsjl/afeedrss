@@ -1,35 +1,34 @@
 import React, { useCallback } from "react";
-import { Spinner, mergeClasses, makeStyles } from "@fluentui/react-components";
+import { Spinner, mergeClasses, makeStyles, Divider, tokens } from "@fluentui/react-components";
 import { useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';
 import StatusCard, { Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
-import StreamContentListItem from "./stream-content-list-item";
-import { useListClasses } from "./stream-content-list-item.style";
+import ArticleListItem from "./article-list-item";
+import { useListClasses } from "./article-list-item.style";
+import { useArticleReadPanelControl } from "../article-read-panel/article-read-panel-control-context";
+import { useAppStore } from "@/app/providers/app-store-provider";
 
-interface StreamContentPanelProps {
-  curArticleId: string | null;
-  onStreamContentItemClick: (item: StreamContentItemWithPageIndex, index: number) => void;
-}
+interface ArticleListProps { }
 
-export function StreamContentPanel(props: StreamContentPanelProps) {
-  const { curArticleId, onStreamContentItemClick } = props;
+export function ArticleList(props: ArticleListProps) {
   const listClasses = useListClasses();
   const { markAboveAsRead, markItemAsRead, markItemAsStar } = useStreamContentActions();
   const { data: items, isFetching, isFetched, error } = useStreamContentsQuery();
   const classes = useClasses();
   const commonClasses = useCommonClasses()
   const flexClasses = useFlexClasses()
-
+  const { openArticlePanel } = useArticleReadPanelControl();
+  const getArticleIsSelected = useAppStore(store => store.getArticleIsSelected)
   const onSelectArticle = useCallback(
     (item: StreamContentItemWithPageIndex, index: number) => {
-      onStreamContentItemClick(item, index);
+      openArticlePanel(item, index);
       if (!item.isRead) {
         markItemAsRead(item);
       }
     },
-    [onStreamContentItemClick, markItemAsRead]
+    [openArticlePanel, markItemAsRead]
   );
 
   if (isFetched) {
@@ -47,9 +46,9 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
           if (!item) return null;
           return (
             <li key={item.id}>
-              <StreamContentListItem
+              <ArticleListItem
                 item={item}
-                isSelected={curArticleId === item.id}
+                isSelected={getArticleIsSelected(item.id)}
                 onMarkAsRead={markItemAsRead}
                 onMarkAsStar={markItemAsStar}
                 onMarkAboveAsRead={markAboveAsRead}
@@ -62,6 +61,7 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
       <div className={mergeClasses(flexClasses.flexCenter, commonClasses.w100, classes.spinnerContainer)}>
         {isFetching && <Spinner />}
       </div>
+      <Divider className={classes.divider}>完</Divider>
     </>
   );
 }
@@ -69,5 +69,11 @@ export function StreamContentPanel(props: StreamContentPanelProps) {
 const useClasses = makeStyles({
   spinnerContainer: {
     height: '400px',
-  }
+  },
+  divider: {
+    paddingBlockStart: tokens.spacingVerticalXXXL,
+    paddingBlockEnd: '80px',
+    marginInline: tokens.spacingHorizontalL,
+    width: 'auto'
+  },
 });

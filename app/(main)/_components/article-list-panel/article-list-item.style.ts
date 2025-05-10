@@ -112,4 +112,47 @@ export const useClasses = makeStyles({
       display: "block",
     },
   },
+});export const useTwitterLikeItemStyles = makeStyles({
+  root: {
+    display: "flex",
+    gap: tokens.spacingVerticalM,
+    cursor: "pointer",
+  },
+  sourceRow: {
+    display: "flex",
+  },
+  contentColum: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalS,
+    paddingBlockEnd: tokens.spacingVerticalM,
+  },
+  coverImage: {
+    borderRadius: tokens.borderRadiusLarge,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    objectFit: "cover",
+    maxWidth: "400px",
+    width: "100%",
+    height: '200px',
+    [appTokens.breakpoints.medium]: {
+      height: '250px',
+    }
+  },
+  titleRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: tokens.spacingVerticalS,
+  },
+  userName: {
+    flex: 1
+  },
+  actionRow: {
+    display: "flex",
+    gap: tokens.spacingHorizontalS,
+  },
+  highlight: {
+    color: tokens.colorPaletteYellowForeground3,
+  }
 });
+

@@ -2,15 +2,11 @@
 
 import React from "react";
 import {
-  Menu,
-  MenuButton,
-  MenuGroup,
-  MenuGroupHeader,
-  MenuItemRadio,
-  MenuList,
-  MenuPopover,
-  MenuProps,
-  MenuTrigger,
+  ButtonProps,
+  makeStyles,
+  Tab,
+  TabList,
+  tokens,
 } from "@fluentui/react-components";
 import {
   bundleIcon,
@@ -20,16 +16,15 @@ import {
   AppsListDetail20Regular,
 } from "@fluentui/react-icons";
 import { useAppStore } from "@/app/providers/app-store-provider";
-
-interface ArticleLayoutMenuButtonProps {
-  className?: string;
-}
+import { StreamItemDisplayType } from "@/store/app-store";
 
 const ImageIcon = bundleIcon(Image20Filled, Image20Regular);
 
 const ListContentIcon = bundleIcon(AppsListDetail20Filled, AppsListDetail20Regular);
 
-export const ArticleLayoutMenuButton = ({ className }: ArticleLayoutMenuButtonProps) => {
+export const ArticleLayoutMenuButton: React.FC<ButtonProps> = (props) => {
+  const classes = useClasses();
+
   const streamItemDisplayType = useAppStore(
     (state) => state.streamItemDisplayType
   );
@@ -37,51 +32,32 @@ export const ArticleLayoutMenuButton = ({ className }: ArticleLayoutMenuButtonPr
     (state) => state.setStreamItemDisplayType
   );
 
-  const onChange: MenuProps["onCheckedValueChange"] = (
-    e,
-    { name, checkedItems }
-  ) => {
-    if (name === "streamItemDisplayType") {
-      setStreamItemDisplayType(checkedItems[0] as any);
-    }
-  };
-
   return (
-    <Menu
-      checkedValues={{ streamItemDisplayType: [streamItemDisplayType] }}
-      onCheckedValueChange={onChange}
-    >
-      <MenuTrigger disableButtonEnhancement>
-        <MenuButton
-          className={className}
-          icon={streamItemDisplayType === "pictureOnBottom" ? <ImageIcon /> : <ListContentIcon />}
-          title="文章卡片布局"
-        />
-      </MenuTrigger>
-
-      <MenuPopover>
-        <MenuList>
-          <MenuGroup>
-            <MenuGroupHeader>文章卡片布局</MenuGroupHeader>
-            <MenuItemRadio
-              icon={<ListContentIcon />}
-              name="streamItemDisplayType"
-              value="default"
-            >
-              默认
-            </MenuItemRadio>
-            <MenuItemRadio
-              icon={<ImageIcon />}
-              name="streamItemDisplayType"
-              value="pictureOnBottom"
-            >
-              大图
-            </MenuItemRadio>
-          </MenuGroup>
-        </MenuList>
-      </MenuPopover>
-    </Menu>
-  );
+    <TabList className={classes.root} selectedValue={streamItemDisplayType} size='small' onTabSelect={(_, { value }) => setStreamItemDisplayType(value as StreamItemDisplayType)}>
+      <Tab className={classes.tab} icon={<ListContentIcon />} value='default' title='默认' />
+      <Tab className={classes.tab} icon={<ImageIcon />} value='pictureOnBottom' title='大图' />
+    </TabList>
+  )
 };
 
 ArticleLayoutMenuButton.displayName = "ArticleLayoutMenuButton";
+
+
+const useClasses = makeStyles({
+  root: {
+    display: "inline-flex",
+    backgroundColor: tokens.colorNeutralBackground1Selected,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalXXS,
+    border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,
+  },
+  tab: {
+    backgroundColor: 'transparent',
+    borderRadius: tokens.borderRadiusSmall,
+    padding: '3px',
+    "[aria-selected='true']": {
+      backgroundColor: tokens.colorNeutralBackground2,
+      boxShadow: tokens.shadow4,
+    }
+  }
+})

@@ -6,12 +6,12 @@ import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-st
 
 export type AppTheme = 'light' | 'dark';
 
-export type LayoutType = 'default' | 'split'
+export type HomePageLayoutType = 'default' | 'split'
 export type StreamItemDisplayType = 'default' | 'pictureOnBottom' | 'textOnly'
 
 export interface AppState {
   session: Session | null;
-  layoutType: LayoutType;
+  homePageLayoutType: HomePageLayoutType;
   streamItemDisplayType: StreamItemDisplayType;
   isMobileSSR: boolean;
   isFeedSideNavOpen: boolean;
@@ -29,9 +29,9 @@ export interface AppState {
 
 export interface AppActions {
   setSession: (session: Session | null) => void;
-  setLayoutType: (type: LayoutType) => void;
+  setHomePageLayoutType: (type: HomePageLayoutType) => void;
   setStreamItemDisplayType: (type: StreamItemDisplayType) => void;
-  toggleLayoutType: () => void;
+  toggleHomePageLayoutType: () => void;
   setIsArticlePanelOpen: (open: boolean) => void;
   setCurrentArticle: (article: StreamContentItemWithPageIndex | null, index: number) => void;
   toggleFeedSideNav: () => void;
@@ -44,6 +44,7 @@ export interface AppActions {
     key: K,
     value: AppState['preferences'][K]
   ) => void;
+  getArticleIsSelected: (id: string) => boolean
 }
 
 export type AppStore = AppState & AppActions
@@ -51,7 +52,7 @@ export type AppStore = AppState & AppActions
 export const defaultInitState: AppState = {
   session: null,
   isMobileSSR: false,
-  layoutType: 'default',
+  homePageLayoutType: 'default',
   streamItemDisplayType: 'default',
   isFeedSideNavOpen: false,
   isArticlePanelOpen: false,
@@ -89,9 +90,9 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
       (set, get) => ({
         ...({ ...defaultInitState, ...initState }),
         setSession: (session) => set({ session }),
-        setLayoutType: (type) => set({ layoutType: type }),
+        setHomePageLayoutType: (type) => set({ homePageLayoutType: type }),
         setStreamItemDisplayType: (type) => set({ streamItemDisplayType: type }),
-        toggleLayoutType: () => set({ layoutType: get().layoutType === 'default' ? 'split' : 'default' }),
+        toggleHomePageLayoutType: () => set({ homePageLayoutType: get().homePageLayoutType === 'default' ? 'split' : 'default' }),
         setIsArticlePanelOpen: (open) => set({ isArticlePanelOpen: open }),
         articleListPageChange: (direct: number) => set({ articleListScrollPage: get().articleListScrollPage + direct }),
         setCurrentArticle: (article, index) => set({ currentArticle: article, currentArticleIndex: index }),
@@ -102,6 +103,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
             set({ currentArticle: null, currentArticleIndex: -1 });
           }, 300);
         },
+        getArticleIsSelected: (id) => get().currentArticle?.id === id,
         setIsFeedSideNavOpen: (open) => set({ isFeedSideNavOpen: open }),
         toggleFeedSideNav: () => set(({ isFeedSideNavOpen }) => ({ isFeedSideNavOpen: !isFeedSideNavOpen })),
         toggleTheme: () => set({ theme: get().theme === 'light' ? 'dark' : 'light' }),
@@ -122,7 +124,7 @@ export const createAppStore = (initState: Partial<AppState> = {}) => {
           } : cookiesStorage),
         partialize: (state) => ({
           streamItemDisplayType: state.streamItemDisplayType,
-          layoutType: state.layoutType,
+          homePageLayoutType: state.homePageLayoutType,
           theme: state.theme,
           preferences: state.preferences
         }),

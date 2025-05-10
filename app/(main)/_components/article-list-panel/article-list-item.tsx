@@ -6,23 +6,20 @@ import {
   Image,
   mergeClasses,
   Caption1,
-  Body1Strong,
-  tokens
+  Body1
 } from "@fluentui/react-components";
 import { Circle20Regular, CheckmarkCircle20Filled, Star20Regular, Star20Filled, ImageOff20Regular, } from "@fluentui/react-icons";
 import Swipeout from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@utils/filterImgSrcfromHtmlStr";
 import dayjs from "@utils/dayjs";
-import { useClasses, useListClasses } from "./stream-content-list-item.style";
+import { useClasses, useListClasses, useTwitterLikeItemStyles } from "./article-list-item.style";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 import { useFlexClasses } from "@/theme/commonStyles";
 import { Avatar, Text } from "@fluentui/react-components";
-import { makeStyles } from "@fluentui/react-components";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { appTokens } from "@/theme/tokens";
 import { useAppStore } from "@/app/providers/app-store-provider";
 
-interface StreamContentListItemProps {
+interface ArticleListItemProps {
   item: StreamContentItemWithPageIndex;
   isSelected: boolean;
   onMarkAsRead: (item: StreamContentItemWithPageIndex) => void;
@@ -34,7 +31,7 @@ interface StreamContentListItemProps {
   onSelectArticle: (item: StreamContentItemWithPageIndex) => void;
 }
 
-const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
+const ArticleListItem: React.FC<ArticleListItemProps> = ({
   item,
   isSelected,
   onMarkAsRead,
@@ -92,14 +89,14 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
           className={containerClassName}
           onClick={() => onSelectArticle(item)}
         >
-          <Body1Strong
+          <Body1
             className={mergeClasses(classes.title, flexClasses.flexGrow)}
             block
             truncate
             wrap={false}
           >
             {title}
-          </Body1Strong>
+          </Body1>
           <Caption1 className={mergeClasses(classes.sourceInfo, flexClasses.flexDisableShrink)} block wrap={false}>
             {`${item.origin.title}/ ${dayjs(
               item?.published * 1000
@@ -132,9 +129,9 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
         </div>
         <div className={classes.contentWrapper}>
           <div className={classes.titleWrapper}>
-            <Body1Strong className={classes.title} block>
+            <Body1 className={classes.title} block>
               {title}
-            </Body1Strong>
+            </Body1>
           </div>
           <div className={classes.metaInfo}>
             <Caption1 className={mergeClasses(classes.sourceInfo, flexClasses.flexGrow)}>
@@ -182,7 +179,7 @@ const StreamContentListItem: React.FC<StreamContentListItemProps> = ({
   );
 };
 
-export default StreamContentListItem;
+export default ArticleListItem;
 
 interface TwitterItemProps {
   userName: string;
@@ -196,50 +193,6 @@ interface TwitterItemProps {
   onRead?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onStar?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
-
-const useTwitterLikeItemStyles = makeStyles({
-  root: {
-    display: "flex",
-    gap: tokens.spacingVerticalM,
-    cursor: "pointer",
-  },
-  sourceRow: {
-    display: "flex",
-  },
-  contentColum: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: tokens.spacingVerticalS,
-    paddingBlockEnd: tokens.spacingVerticalM,
-  },
-  coverImage: {
-    borderRadius: tokens.borderRadiusLarge,
-    border: `1px solid ${tokens.colorNeutralStroke1}`,
-    objectFit: "cover",
-    maxWidth: "400px",
-    width: "100%",
-    height: '200px',
-    [appTokens.breakpoints.medium]: {
-      height: '250px',
-    }
-  },
-  titleRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: tokens.spacingVerticalS,
-  },
-  userName: {
-    flex: 1
-  },
-  actionRow: {
-    display: "flex",
-    gap: tokens.spacingHorizontalS,
-  },
-  highlight: {
-    color: tokens.colorPaletteYellowForeground3,
-  }
-});
 
 const TwitterLikeItem: React.FC<TwitterItemProps> = (props) => {
   const isLargeThenMobile = useLargeThenMobile();

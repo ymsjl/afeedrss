@@ -1,5 +1,30 @@
 import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
 
+export const scrollYAndNoScrollbar = {
+  overflowY: "scroll",
+  scrollbarWidth: "none",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+} as const
+
+export const flexColumnFullHeight = {
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+} as const;
+
+export const layout = {
+  headerBody: (direction: 'column' | 'row' = 'column') => ({
+    display: "flex",
+    flexDirection: direction,
+    "&>*:last-child": {
+      flex: 1,
+    }
+  }),
+
+}
+
 export const useFlexClasses = makeStyles({
   // 弹性布局工具类
   flexRow: {
@@ -53,6 +78,13 @@ export const useFlexClasses = makeStyles({
   },
   justifyBetween: {
     justifyContent: "space-between",
+  },
+
+  headerBodyRow: {
+    ...layout.headerBody("row"),
+  },
+  headerBodyColumn: {
+    ...layout.headerBody("column"),
   },
 })
 
@@ -311,4 +343,13 @@ export const useCommonClasses = makeStyles({
   cursorNotAllowed: {
     cursor: "not-allowed",
   },
+
+  fullHeightNoScroll:{
+    height: "100%",
+    overflowY: "hidden",
+  },
+  fullHeightScrollHideScrollbar:{
+    height: "100%",
+    ...scrollYAndNoScrollbar,
+  }
 });

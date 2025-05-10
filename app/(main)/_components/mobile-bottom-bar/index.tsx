@@ -4,7 +4,7 @@ import { useAppStore } from '@/app/providers/app-store-provider';
 import { ReaderBottomBar } from './reader-bottom-bar';
 import { ArticleListBottomBar } from './article-list-bottom-bar';
 
-export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle: () => void }) => {
+export const MobileBottomBar = React.memo(({}) => {
   const classes = useClasses();
   const isArticlePanelOpen = useAppStore(store => store.isArticlePanelOpen);
 
@@ -12,7 +12,7 @@ export const MobileBottomBar = React.memo(({ onCloseArticle }: { onCloseArticle:
     if (!isArticlePanelOpen) {
       return <ArticleListBottomBar />;
     } else {
-      return <ReaderBottomBar onCloseArticle={onCloseArticle} />
+      return <ReaderBottomBar />
     }
   }
 

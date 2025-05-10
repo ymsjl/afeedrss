@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Image, mergeClasses, Text } from "@fluentui/react-components";
 import { Folder20Regular, Delete20Filled, Delete20Regular, bundleIcon } from "@fluentui/react-icons";
 
-import { useListClasses } from "@/app/(main)/_components/stream-content-panel/stream-content-list-item.style"
+import { useListClasses } from "@/app/(main)/_components/article-list-panel/article-list-item.style"
 import { Subscription, api as subscriptionApi } from "@/services/subscription";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useClasses as useSubscriptionPageClasses } from "../../useClasses";

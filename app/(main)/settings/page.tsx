@@ -13,7 +13,7 @@ import {
   ChevronRight20Regular,
 } from "@fluentui/react-icons";
 import { useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { useListClasses } from "../_components/stream-content-panel/stream-content-list-item.style";
+import { useListClasses } from "../_components/article-list-panel/article-list-item.style";
 import { NAV_LIST } from "./NAV_LIST";
 
 export interface NavListItem {

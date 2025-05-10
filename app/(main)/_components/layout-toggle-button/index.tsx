@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  ButtonProps,
   ToggleButton,
 } from "@fluentui/react-components";
 import { useAppStore } from "@/app/providers/app-store-provider";
@@ -12,28 +13,21 @@ import {
   LayoutColumnOneThirdLeft20Filled,
 } from "@fluentui/react-icons";
 
-interface LayoutToggleButtonProps {
-  className?: string;
-}
+const LayoutIcon = bundleIcon(LayoutColumnOneThirdLeft20Filled, LayoutColumnOneThirdLeft20Regular);
 
-const LayoutIcon = bundleIcon(
-  LayoutColumnOneThirdLeft20Filled,
-  LayoutColumnOneThirdLeft20Regular
-);
-
-export const LayoutToggleButton = ({ className }: LayoutToggleButtonProps) => {
-  const layoutTypeSelected = useAppStore((state) => state.layoutType);
-  const toggleLayoutType = useAppStore((state) => state.toggleLayoutType);
+export const LayoutToggleButton: React.FC<ButtonProps> = (props) => {
+  const homePageLayoutTypeSelected = useAppStore((state) => state.homePageLayoutType);
+  const toggleHomePageLayoutType = useAppStore((state) => state.toggleHomePageLayoutType);
   const isLargeThenMobile = useLargeThenMobile();
-  const layoutType = isLargeThenMobile ? layoutTypeSelected : "default";
+  const homePageLayoutType = isLargeThenMobile ? homePageLayoutTypeSelected : "default";
 
   return (
     <ToggleButton
-      className={className}
-      icon={<LayoutIcon />}
-      checked={layoutType === "split"}
-      onClick={toggleLayoutType}
+      icon={<LayoutIcon filled={homePageLayoutType === "split"} />}
+      checked={homePageLayoutType === "split"}
+      onClick={toggleHomePageLayoutType}
       title="分栏视图"
+      {...props}
     />
   );
 };

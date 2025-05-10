@@ -1,23 +1,23 @@
 import { List, ListItem, makeStyles, mergeClasses, Skeleton, SkeletonItem } from "@fluentui/react-components";
-import { useListClasses } from "./stream-content-list-item.style";
-import { useClasses } from "./stream-content-list-item.style";
+import { useListClasses } from "./article-list-item.style";
+import { useClasses } from "./article-list-item.style";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import React from "react";
 
-export const StreamContentPanelSkeleton = React.memo(() => {
+export const ArticleListSkeleton = React.memo(() => {
   const listClasses = useListClasses();
   return (
     <List className={listClasses.list}>
       {Array(5).fill(null).map((_, index) => (
         <ListItem className={listClasses.listItem} key={index}>
-          <StreamContentListItemSkeleton />
+          <ArticleListItemSkeleton />
         </ListItem>
       ))}
     </List>
   )
 })
 
-export const StreamContentListItemSkeleton = React.memo(() => {
+export const ArticleListItemSkeleton = React.memo(() => {
   const classes = useClasses()
   const flexClasses = useFlexClasses()
   const commonClasses = useCommonClasses();
