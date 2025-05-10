@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from "react";
 import {
   mergeClasses,
   Divider,
@@ -6,21 +7,22 @@ import {
 } from "@fluentui/react-components";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import dayjs from "@utils/dayjs";
-import { useProseClasses } from "./prose.styles";
 import { StatusCard, Status } from "@/components/status-card";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { ChevronLeft20Regular, WindowNew20Regular } from "@fluentui/react-icons";
-import React, { useRef, useEffect } from "react";
+import { WindowNew20Regular } from "@fluentui/react-icons";
 import { useAppStore } from "@/app/providers/app-store-provider";
-import { useArticleReadPanelControl } from "./article-read-panel-control-context";
 import { ActionsBarLayout } from '../actions-bar-layout';
+import { StarButton } from "../star-button";
 import { useClasses } from "./article-read-panel.styles";
+import { useProseClasses } from "./prose.styles";
+import { CloseArticleReadPanelButton } from "../close-article-read-panel-button";
 
 interface ArticleReadPanelProps {
   className?: string;
+  showBackButton?: boolean;
 }
 
-export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ className }) => {
+export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ className, showBackButton = true }) => {
   const classes = useClasses();
   const proseClasses = useProseClasses();
   const flexClasses = useFlexClasses();
@@ -28,7 +30,6 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
   const isLargeThenMobile = useLargeThenMobile();
   const articleScrollContainerRef = useRef<HTMLDivElement>(null);
   const curArticle = useAppStore(store => store.currentArticle);
-  const { closeArticlePanel } = useArticleReadPanelControl();
 
   useEffect(() => {
     if (articleScrollContainerRef.current) {
@@ -38,16 +39,14 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
 
   const articleReadPanelToolbar = isLargeThenMobile && (
     <ActionsBarLayout>
-      <Button
-        icon={<ChevronLeft20Regular />}
-        onClick={closeArticlePanel}
-      />
-      <div className={flexClasses.flexGrow}></div>
+      {showBackButton && <CloseArticleReadPanelButton />}
+      <StarButton />
       <Button
         icon={<WindowNew20Regular />}
         onClick={() => window.open(curArticle?.canonical[0]?.href)}
         title="在新标签页打开"
       />
+      <div className={flexClasses.flexGrow}></div>
     </ActionsBarLayout>
   );
 

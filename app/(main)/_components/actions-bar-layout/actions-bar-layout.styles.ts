@@ -4,9 +4,9 @@ export const useClasses = makeStyles({
   root: {
     display: "flex",
     alignItems: "center",
-    gap: tokens.spacingHorizontalS,
-    paddingInline: tokens.spacingVerticalXS,
-    paddingBlock: tokens.spacingVerticalS,
+    gap: tokens.spacingHorizontalXS,
+    paddingInline: tokens.spacingVerticalS,
+    paddingBlock: tokens.spacingVerticalMNudge,
   },
   sticky: {
     position: "sticky",

@@ -7,7 +7,7 @@ import { StatusCard, Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 import ArticleListItem from "./article-list-item";
 import { useListClasses } from "./article-list-item.style";
-import { useArticleReadPanelControl } from "../article-read-panel/article-read-panel-control-context";
+import { useArticleReadPanelControl } from "../article-read-panel";
 import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface ArticleListProps { }

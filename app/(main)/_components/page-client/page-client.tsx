@@ -18,8 +18,7 @@ import { useClasses } from "./page-client.styles";
 
 import { MobileBottomBar } from "../mobile-bottom-bar";
 import { ArticleListPanel } from "../article-list-panel";
-import { ArticleReadPanelControlProvider, useArticleReadPanelControl } from "../article-read-panel/article-read-panel-control-context";
-import { ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
+import { ArticleReadPanelControlProvider, useArticleReadPanelControl, ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { ZStackLayout, ZStackLayoutProps } from "@components/z-stack-layout";
 
 interface Props {
@@ -65,7 +64,7 @@ export function HomePageClient({ streamContentQueryKey }: Props) {
 
             {homePageLayoutType === "split" && (
               <div className={mergeClasses(sharedPageLayoutClasses.fullHeightColumnLayout, classes.columnGrow)}>
-                <ArticleReadPanel />
+                <ArticleReadPanel showBackButton={false} />
               </div>
             )}
           </div>

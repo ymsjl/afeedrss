@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
-import { useArticleReadPanelControl } from '../article-read-panel/article-read-panel-control-context';
+import { useArticleReadPanelControl } from '../article-read-panel';
 
 export function useArticleNavigation() {
   const currentArticle = useAppStore(store => store.currentArticle);

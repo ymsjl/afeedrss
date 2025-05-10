@@ -15,17 +15,11 @@ export const useClasses = makeStyles({
     paddingBlock: tokens.spacingVerticalS,
     paddingInline: tokens.spacingHorizontalM,
   },
-  titleContainer:{
-    flex: 1,
-  },
   title: {
     borderRadius: tokens.borderRadiusMedium,
+    width: '100%',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    width: '100%',
   },
-  highlight: {
-    color: tokens.colorPaletteYellowForeground3,
-  }
 })
