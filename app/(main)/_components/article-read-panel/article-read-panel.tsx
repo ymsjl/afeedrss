@@ -7,7 +7,7 @@ import {
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import dayjs from "@utils/dayjs";
 import { useProseClasses } from "./prose.styles";
-import StatusCard, { Status } from "@/components/status-card";
+import { StatusCard, Status } from "@/components/status-card";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { ChevronLeft20Regular, WindowNew20Regular } from "@fluentui/react-icons";
 import React, { useRef, useEffect } from "react";

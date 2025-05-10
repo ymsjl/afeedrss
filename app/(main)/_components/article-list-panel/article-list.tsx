@@ -3,7 +3,7 @@ import { Spinner, mergeClasses, makeStyles, Divider, tokens } from "@fluentui/re
 import { useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';
-import StatusCard, { Status } from "@components/status-card";
+import { StatusCard, Status } from "@components/status-card";
 import { useCommonClasses, useFlexClasses } from '@/theme/commonStyles';
 import ArticleListItem from "./article-list-item";
 import { useListClasses } from "./article-list-item.style";

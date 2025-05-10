@@ -1,7 +1,7 @@
 "use client";
 
-import HalfScreenModal from "@/components/half-screen-modal";
 import React from "react";
+import { HalfScreenModal } from "@/components/half-screen-modal";
 import { useClasses } from "./article-list-settings-modal.style";
 import { Button, mergeClasses, Radio, RadioGroup, Switch } from "@fluentui/react-components";
 import { useAppStore } from "@/app/providers/app-store-provider";

@@ -9,7 +9,7 @@ import {
   Body1
 } from "@fluentui/react-components";
 import { Circle20Regular, CheckmarkCircle20Filled, Star20Regular, Star20Filled, ImageOff20Regular, } from "@fluentui/react-icons";
-import Swipeout from "@components/swipe-out";
+import { Swipeout } from "@components/swipe-out";
 import { filterImgSrcfromHtmlStr } from "@utils/filterImgSrcfromHtmlStr";
 import dayjs from "@utils/dayjs";
 import { useClasses, useListClasses, useTwitterLikeItemStyles } from "./article-list-item.style";

@@ -1,6 +1,6 @@
 "use client";
 
-import HalfScreenModal from "@/components/half-screen-modal";
+import { HalfScreenModal } from "@/components/half-screen-modal";
 import { NavDrawer, NavDrawerBody, NavSectionHeader } from "@fluentui/react-nav-preview";
 import React, { Suspense } from "react";
 import { INavItem } from "./feed-nav-item.types";
@@ -13,7 +13,7 @@ import { mergeClasses } from "@fluentui/react-components";
 export const FeedNavModal = React.memo(() => {
   const classes = useClasses();
   const { isOpen, onClose, selectedValue, handleLinkClick, } = useFeedSideNavPanelState();
-  
+
   const handleNavItemClick = (
     e?: React.MouseEvent<HTMLElement>,
     item?: INavItem

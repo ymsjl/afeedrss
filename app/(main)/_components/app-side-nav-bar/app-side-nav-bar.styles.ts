@@ -1,4 +1,4 @@
-import { makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
 export const useClasses = makeStyles({
   root: {},
@@ -36,5 +36,8 @@ export const useClasses = makeStyles({
   },
   navItemIcon: {
     fontSize: tokens.fontSizeBase600,
+  },
+  footer: {
+    ...shorthands.padding(0, tokens.spacingHorizontalXS, tokens.spacingHorizontalMNudge, tokens.spacingHorizontalMNudge)
   }
 });

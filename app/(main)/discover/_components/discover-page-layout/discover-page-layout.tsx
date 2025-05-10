@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from 'react';
 import { useSharedPageLayoutClasses } from '@/styles/shared-page-layout.styles';
 import { mergeClasses } from '@fluentui/react-components'
 ;
-const DiscoverPageLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const DiscoverPageLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const sharedPageLayoutClasses = useSharedPageLayoutClasses();
 
   return (
@@ -13,5 +13,3 @@ const DiscoverPageLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     </div>
   );
 };
-
-export default DiscoverPageLayout;

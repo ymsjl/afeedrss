@@ -1,0 +1,1 @@
+export { FoldersTabContent } from './folders-tab-content'

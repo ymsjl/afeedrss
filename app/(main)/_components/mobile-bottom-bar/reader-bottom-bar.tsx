@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Button } from '@fluentui/react-components';
 import { bundleIcon, ChevronLeft20Regular, Star20Filled, Star20Regular } from '@fluentui/react-icons';
-import Swipeout from '@/components/swipe-out';
+import { Swipeout } from '@/components/swipe-out';
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useStreamContentActions } from '@/features/stream-content/use-stream-content-actions';
 import { useStreamContentsQuery } from '@/features/stream-content/use-stream-contents-query';
@@ -62,7 +62,7 @@ export const ReaderBottomBar = React.memo(({ }: ReaderBottomBarProps) => {
       <Button
         icon={<StarIcon filled={isArticleStarred} className={isArticleStarred ? classes.highlight : ''} />}
         disabled={!currentArticle}
-        onClick={() => currentArticle && markItemAsStar(currentArticle)} 
+        onClick={() => currentArticle && markItemAsStar(currentArticle)}
         size='large'
       />
     </>

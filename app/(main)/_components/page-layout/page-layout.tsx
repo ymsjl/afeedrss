@@ -12,7 +12,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export default function Layout({ children }: Props) {
+export function HomePageLayout({ children }: Props) {
   const classes = useClasses();
   const flexClasses = useFlexClasses();
   const isLargeThenMobile = useLargeThenMobile();

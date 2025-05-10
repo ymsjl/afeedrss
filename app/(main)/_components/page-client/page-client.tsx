@@ -28,7 +28,7 @@ interface Props {
 
 const FeedSideNavPanel = dynamic(() => import("@/app/(main)/_components/feed-side-nav-panel"), { ssr: false })
 
-export default function Home({ streamContentQueryKey }: Props) {
+export function HomePageClient({ streamContentQueryKey }: Props) {
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();

@@ -1,0 +1,1 @@
+export { DiscoverPageLayout } from './discover-page-layout'

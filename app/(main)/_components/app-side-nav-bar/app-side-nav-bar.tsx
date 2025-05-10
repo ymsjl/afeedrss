@@ -42,7 +42,6 @@ export const AppSideNavBar: React.FC<Props> = React.memo(({ className }) => {
       type="inline"
       selectedValue={pathname}
       className={mergeClasses(classes.nav, className)}
-
     >
       <NavDrawerHeader className={classes.header}>
         <Tooltip content="Close Navigation" relationship="label">
@@ -57,11 +56,11 @@ export const AppSideNavBar: React.FC<Props> = React.memo(({ className }) => {
           发现
         </NavItem>
       </NavDrawerBody>
-      <NavDrawerFooter>
+      <div className={classes.footer}>
         <NavItem icon={<SettingsIcon className={classes.navItemIcon} />} as="a" href="/settings" value='/settings' className={classes.navItem}>
           设置
         </NavItem>
-      </NavDrawerFooter>
+      </div>
     </NavDrawer>
   );
 })

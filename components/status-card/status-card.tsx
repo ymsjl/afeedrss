@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function StatusCard({ content, status }: Props) {
+export function StatusCard({ content, status }: Props) {
   const classes = useStyles();
   return (
     <div className={classes.container}>

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import DiscoverPageLayout from './_components/discover-page-layout';
+import { DiscoverPageLayout } from './_components/discover-page-layout';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 
 const DiscoverLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {

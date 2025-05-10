@@ -1,0 +1,1 @@
+export { TabPanels, TabPanel, TabContextProvider, useIsTabActived, useTab } from './tab-panes'

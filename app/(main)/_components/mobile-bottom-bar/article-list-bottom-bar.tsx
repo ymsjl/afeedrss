@@ -7,7 +7,7 @@ import { subscriptionsQueryOptions } from '@/services/subscription/subscription.
 import { useAppStore } from '@/app/providers/app-store-provider';
 import { useClasses } from './mobile-bottom-bar.style';
 import { RefreshButton } from '../refresh-button';
-import Swipeout from '@/components/swipe-out';
+import { Swipeout } from '@/components/swipe-out';
 import { ArticleListSettingsModal } from '../article-list-settings-modal';
 import { FeedNavModal } from '../feed-side-nav-panel/feed-nav-modal';
 
