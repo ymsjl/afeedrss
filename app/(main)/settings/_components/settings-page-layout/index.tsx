@@ -8,8 +8,8 @@ import {
   BreadcrumbItem,
   mergeClasses,
 } from "@fluentui/react-components";
-import { useCommonClasses, useFlexClasses, useTextClasses } from "@/theme/commonStyles";
-import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
+import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
+import { useSharedPageLayoutClasses } from '@/styles/shared-page-layout.styles';
 
 interface Props {
   title?: string;
@@ -23,25 +23,24 @@ export function SettingsPageLayout({
   breadcrumbItems,
   tailElem,
 }: Props) {
-  const textClasses = useTextClasses();
   const flexClasses = useFlexClasses();
   const commonClasses = useCommonClasses();
-  const pageLayoutClasses = usePageLayoutClasses();
+  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
 
   return (
-    <div className={pageLayoutClasses.main}>
-      <div className={pageLayoutClasses.content}>
-        <div className={mergeClasses(pageLayoutClasses.header, flexClasses.justifyBetween)}>
+    <div className={mergeClasses(sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)}>
+      <div className={mergeClasses(sharedPageLayoutClasses.content, sharedPageLayoutClasses.fullHeightColumnLayout, flexClasses.headerBodyColumn)}>
+        <div className={mergeClasses(sharedPageLayoutClasses.pageTitle, flexClasses.flexRow, flexClasses.justifyBetween)}>
           <div className={flexClasses.flexGrow}>
             <Breadcrumb size="large">
               <BreadcrumbItem>
-                <BreadcrumbButton href="/settings" className={textClasses.textLg}>设置</BreadcrumbButton>
+                <BreadcrumbButton href="/settings">设置</BreadcrumbButton>
               </BreadcrumbItem>
               {breadcrumbItems?.map((item) => (
                 <React.Fragment key={item.key}>
                   <BreadcrumbDivider />
                   <BreadcrumbItem key={item.key}>
-                    <BreadcrumbButton href={item.href} className={textClasses.textLg}>
+                    <BreadcrumbButton href={item.href} >
                       {item.title}
                     </BreadcrumbButton>
                   </BreadcrumbItem>
@@ -51,7 +50,7 @@ export function SettingsPageLayout({
           </div>
           <div className={flexClasses.flexDisableShrink}>{tailElem}</div>
         </div>
-        <div className={mergeClasses(flexClasses.flexGrow, commonClasses.overflowHidden)}>
+        <div className={mergeClasses(commonClasses.overflowHidden)}>
           {children ?? (
             <StatusCard status={Status.EMPTY} content="这里空无一物" />
           )}

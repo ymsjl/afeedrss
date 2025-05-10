@@ -1,5 +1,5 @@
 "use client";
-import { usePageLayoutClasses } from "@/styles/usePageLayouClasses";
+import { useSharedPageLayoutClasses } from '@/styles/shared-page-layout.styles';
 import { useFlexClasses } from "@/theme/commonStyles";
 import {
   Button,
@@ -33,7 +33,7 @@ export default function Error({
 }) {
   const router = useRouter();
   const classes = useClasses();
-  const pageLayoutClasses = usePageLayoutClasses();
+  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
   const flexClasses = useFlexClasses();
   const setSession = useAppStore(store => store.setSession)
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -71,8 +71,8 @@ export default function Error({
   };
 
   return (
-    <div className={mergeClasses(pageLayoutClasses.main, classes.errorRoot)}>
-      <div className={mergeClasses(pageLayoutClasses.content, flexClasses.flexCol, flexClasses.flexCenter, classes.errorContainer)}>
+    <div className={mergeClasses(sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)}>
+      <div className={mergeClasses(sharedPageLayoutClasses.content, sharedPageLayoutClasses.fullHeightColumnLayout, flexClasses.flexCol, flexClasses.flexCenter, classes.errorContainer)}>
         <Image
           src={getErrorImage()}
           alt="Error illustration"
@@ -133,9 +133,6 @@ export default function Error({
 }
 
 const useClasses = makeStyles({
-  errorRoot:{
-    width: '100%'
-  },
   errorContainer: {
     flexGrow: 1,
     gap: tokens.spacingVerticalM,

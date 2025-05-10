@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { Spinner, makeStyles, tokens, Text } from '@fluentui/react-components';
-import { usePageLayoutClasses } from '@/styles/usePageLayouClasses';
+import { Spinner, makeStyles, tokens, Text, mergeClasses } from '@fluentui/react-components';
+import { useSharedPageLayoutClasses } from '@/styles/shared-page-layout.styles';
 
 const useStyles = makeStyles({
   content: {
@@ -19,10 +19,10 @@ const useStyles = makeStyles({
 
 export default function Loading() {
   const styles = useStyles();
-  const pageLayoutClasses = usePageLayoutClasses();
+  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
   return (
-    <div className={pageLayoutClasses.main}>
-      <div className={pageLayoutClasses.content}>
+    <div className={mergeClasses(sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)}>
+      <div className={mergeClasses(sharedPageLayoutClasses.content, sharedPageLayoutClasses.fullHeightColumnLayout)}>
         <div className={styles.content}>
           <Spinner size="large" />
           <Text size={400} className={styles.text}>Loading...</Text>

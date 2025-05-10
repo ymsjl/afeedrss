@@ -1,12 +1,7 @@
 import { appTokens } from "@/theme/tokens";
 import { makeStyles, tokens, shorthands } from "@fluentui/react-components";
 
-export const useClasses = makeStyles({
-  root: {
-    [appTokens.breakpoints.medium]: {
-      gap: tokens.spacingHorizontalM,
-    }
-  },
+export const useSharedPageLayoutClasses = makeStyles({
   mainLayout: {
     overflow: 'hidden',
     gap: tokens.spacingHorizontalM,
@@ -28,6 +23,8 @@ export const useClasses = makeStyles({
     },
   },
   pageTitle: {
+    display: "flex",
+    alignItems: "center",
     marginBlock: tokens.spacingVerticalXS,
   },
   pageTitleCenter: {
@@ -41,22 +38,11 @@ export const useClasses = makeStyles({
     overflowX: "hidden",
     [appTokens.breakpoints.medium]: {
       maxWidth: "65rem",
+      marginInline: "auto",
     },
   },
   fullHeightColumnLayout: {
     height: "100%",
     width: "100%",
-    marginInline: "auto",
-  },
-  columnNoShrink: {
-    flexShrink: 0,
-    marginInline: 0,
-    [appTokens.breakpoints.medium]: {
-      maxWidth: "32rem",
-    },
-  },
-  columnGrow: {
-    marginInline: 0,
-    maxWidth: "unset",
   },
 });

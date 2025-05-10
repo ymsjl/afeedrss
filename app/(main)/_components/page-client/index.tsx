@@ -13,7 +13,8 @@ import {
 import { useLargeThenMobile } from "@utils/use-large-then-mobile";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
-import { useClasses } from "./page-client.styles";
+import { useSharedPageLayoutClasses } from "@/styles/shared-page-layout.styles";
+import { useClasses } from "./home-page-client.styles";
 
 import { MobileBottomBar } from "../mobile-bottom-bar";
 import { ArticleListPanel } from "../article-list-panel";
@@ -28,6 +29,7 @@ interface Props {
 const FeedSideNavDesktop = dynamic(() => import("@/app/(main)/_components/feed-side-nav"), { ssr: false })
 
 export default function Home({ streamContentQueryKey }: Props) {
+  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
@@ -42,12 +44,12 @@ export default function Home({ streamContentQueryKey }: Props) {
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow, commonClasses.fullHeightNoScroll)}>
         {isLargeThenMobile && <FeedSideNavDesktop />}
         <div className={mergeClasses(flexClasses.headerBodyColumn, commonClasses.fullHeightNoScroll)}>
-          {isLargeThenMobile && <PageHeader className={mergeClasses(classes.pageTitle, homePageLayoutType === 'default' && classes.pageTitleCenter)} />}
-          <div className={mergeClasses(flexClasses.headerBodyRow, classes.mainLayout, classes.mainSurface)} aria-label="main">
+          {isLargeThenMobile && <PageHeader className={mergeClasses(sharedPageLayoutClasses.pageTitle, homePageLayoutType === 'default' && sharedPageLayoutClasses.pageTitleCenter)} />}
+          <div className={mergeClasses(flexClasses.headerBodyRow, sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)} aria-label="main">
             <ArticlePanelZStackLayout
               className={mergeClasses(
-                homePageLayoutType === "split" ? classes.columnNoShrink : classes.content,
-                classes.fullHeightColumnLayout,
+                homePageLayoutType === "split" ? classes.columnNoShrink : sharedPageLayoutClasses.content,
+                sharedPageLayoutClasses.fullHeightColumnLayout,
               )}
             >
               {({ firstChildClassName, secondChildClassName }) => (
@@ -62,7 +64,7 @@ export default function Home({ streamContentQueryKey }: Props) {
             </ArticlePanelZStackLayout>
 
             {homePageLayoutType === "split" && (
-              <div className={mergeClasses(classes.fullHeightColumnLayout, classes.columnGrow)}>
+              <div className={mergeClasses(sharedPageLayoutClasses.fullHeightColumnLayout, classes.columnGrow)}>
                 <ArticleReadPanel />
               </div>
             )}
