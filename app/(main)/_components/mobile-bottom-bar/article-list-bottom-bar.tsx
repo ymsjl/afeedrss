@@ -9,7 +9,7 @@ import { useClasses } from './mobile-bottom-bar.style';
 import { RefreshButton } from '../refresh-button';
 import Swipeout from '@/components/swipe-out';
 import { ArticleListSettingsModal } from '../article-list-settings-modal';
-import { FeedSideNavMobile } from '../feed-nav-modal';
+import { FeedNavModal } from '../feed-side-nav-panel/feed-nav-modal';
 
 const SettingsIcon = bundleIcon(Settings20Filled, Settings20Regular);
 
@@ -46,7 +46,7 @@ export const ArticleListBottomBar = React.memo(() => {
       </Swipeout>
       <RefreshButton size="large" />
       <ArticleListSettingsModal isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)} />
-      <FeedSideNavMobile />
+      <FeedNavModal />
     </>
   );
 });

@@ -1,4 +1,4 @@
-import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { makeStyles, tokens } from "@fluentui/react-components";
 
 export const useClasses = makeStyles({
   root: {

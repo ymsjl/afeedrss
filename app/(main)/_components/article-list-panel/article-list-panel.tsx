@@ -1,9 +1,9 @@
 "use client";
+import React, { Suspense } from "react";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { mergeClasses } from "@fluentui/react-components";
-import React, { Suspense } from "react";
 import { ArticleLayoutMenuButton } from "../article-layout-menu-button";
 import { LayoutToggleButton } from "../layout-toggle-button";
 import { RefreshButton } from "../refresh-button";

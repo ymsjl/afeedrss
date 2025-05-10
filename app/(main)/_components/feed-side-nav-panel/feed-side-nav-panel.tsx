@@ -3,15 +3,14 @@
 import React, { Suspense } from 'react';
 import { mergeClasses } from '@fluentui/react-components';
 import { NavDrawer, NavDrawerBody, NavDrawerHeader, NavSectionHeader } from '@fluentui/react-nav-preview';
-import { Props } from "./feed-side-nav.types";
-import { useFeeSideNavState } from './use-feed-side-nav-state';
-import { FeedNavTree } from '../feed-nav-tree';
-import { FeedNavListSkeleton } from '../feed-nav-tree/feed-nav-tree-skeleton';
-import { useClasses } from './feed-side-nav.style';
+import { useFeedSideNavPanelState } from './use-feed-side-nav-panel-state';
+import { FeedNavTree } from './feed-nav-tree';
+import { FeedNavListSkeleton } from './feed-nav-tree-skeleton';
+import { useClasses } from './feed-side-nav-panel.style';
 
-const FeedSideNav = React.memo(({ className }: Props) => {
+export const FeedSideNavPanel = React.memo(() => {
   const classes = useClasses();
-  const { isOpen, selectedValue, handleLinkClick, onOpenChange } = useFeeSideNavState();
+  const { isOpen, selectedValue, handleLinkClick, onOpenChange } = useFeedSideNavPanelState();
 
   return (
     <NavDrawer
@@ -19,7 +18,7 @@ const FeedSideNav = React.memo(({ className }: Props) => {
       type='inline'
       onOpenChange={onOpenChange}
       selectedValue={selectedValue}
-      className={mergeClasses(classes.nav, className)}
+      className={mergeClasses(classes.nav)}
     >
       <NavDrawerHeader>
       </NavDrawerHeader>
@@ -33,6 +32,4 @@ const FeedSideNav = React.memo(({ className }: Props) => {
   )
 });
 
-FeedSideNav.displayName = "FeedSideNav";
-
-export default FeedSideNav
+FeedSideNavPanel.displayName = "FeedSideNavPanel";

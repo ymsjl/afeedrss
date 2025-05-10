@@ -40,12 +40,14 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
     <ActionsBarLayout>
       <Button
         icon={<ChevronLeft20Regular />}
-        onClick={closeArticlePanel} />
+        onClick={closeArticlePanel}
+      />
       <div className={flexClasses.flexGrow}></div>
       <Button
         icon={<WindowNew20Regular />}
         onClick={() => window.open(curArticle?.canonical[0]?.href)}
-        title="在新标签页打开" />
+        title="在新标签页打开"
+      />
     </ActionsBarLayout>
   );
 

@@ -14,7 +14,7 @@ import { useLargeThenMobile } from "@utils/use-large-then-mobile";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useSharedPageLayoutClasses } from "@/styles/shared-page-layout.styles";
-import { useClasses } from "./home-page-client.styles";
+import { useClasses } from "./page-client.styles";
 
 import { MobileBottomBar } from "../mobile-bottom-bar";
 import { ArticleListPanel } from "../article-list-panel";
@@ -26,13 +26,13 @@ interface Props {
   streamContentQueryKey?: string[];
 }
 
-const FeedSideNavDesktop = dynamic(() => import("@/app/(main)/_components/feed-side-nav"), { ssr: false })
+const FeedSideNavPanel = dynamic(() => import("@/app/(main)/_components/feed-side-nav-panel"), { ssr: false })
 
 export default function Home({ streamContentQueryKey }: Props) {
-  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
   const classes = useClasses();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
+  const sharedPageLayoutClasses = useSharedPageLayoutClasses();
 
   const homePageLayoutTypeSelected = useAppStore((state) => state.homePageLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
@@ -42,7 +42,7 @@ export default function Home({ streamContentQueryKey }: Props) {
     <ArticleReadPanelControlProvider>
       {!isLargeThenMobile && <MobileBottomBar />}
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow, commonClasses.fullHeightNoScroll)}>
-        {isLargeThenMobile && <FeedSideNavDesktop />}
+        {isLargeThenMobile && <FeedSideNavPanel />}
         <div className={mergeClasses(flexClasses.headerBodyColumn, commonClasses.fullHeightNoScroll)}>
           {isLargeThenMobile && <PageHeader className={mergeClasses(sharedPageLayoutClasses.pageTitle, homePageLayoutType === 'default' && sharedPageLayoutClasses.pageTitleCenter)} />}
           <div className={mergeClasses(flexClasses.headerBodyRow, sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)} aria-label="main">

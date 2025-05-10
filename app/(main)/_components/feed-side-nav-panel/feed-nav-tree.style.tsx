@@ -1,15 +1,13 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
 export const useClasses = makeStyles({
-  navDrawerMobile: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'unset'
+  skeleton: {
+    marginBlockEnd: tokens.spacingVerticalXXS
   },
-  navDrawerBody: {
-    overscrollBehaviorY: 'contain',
+  skeletonItem: {
+    height: '40px',
   },
-  navItemMobile: {
+  navItemFilled: {
     backgroundColor: tokens.colorNeutralBackground1,
     borderRadius: 0,
 
@@ -24,5 +22,5 @@ export const useClasses = makeStyles({
     ':last-child': {
       ...shorthands.borderRadius(0, 0, tokens.borderRadiusMedium, tokens.borderRadiusMedium),
     },
-  },
+  }
 });

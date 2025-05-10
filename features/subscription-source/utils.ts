@@ -31,3 +31,8 @@ export const isTag = (item: any): item is Tag => {
 export const isFolderWithChildren = (item: any): item is FolderWithChildren => {
   return isFolder(item) && 'children' in item && Array.isArray(item.children);
 };
+
+export function getTagNameFromId(tagId: string) {
+  const slice: string[] = tagId.split("/");
+  return slice[slice.length - 1];
+};

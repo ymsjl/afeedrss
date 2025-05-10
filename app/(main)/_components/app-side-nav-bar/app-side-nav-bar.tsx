@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import { makeStyles, mergeClasses, tokens, Tooltip } from "@fluentui/react-components";
+import { mergeClasses, Tooltip } from "@fluentui/react-components";
 import {
   Hamburger,
   NavDrawer,
   NavDrawerBody,
+  NavDrawerFooter,
   NavDrawerHeader,
   NavItem,
 } from "@fluentui/react-nav-preview";
@@ -20,6 +21,7 @@ import {
 } from "@fluentui/react-icons";
 import { usePathname } from "next/navigation";
 import { useAppStore } from "@/app/providers/app-store-provider";
+import { useClasses } from "./app-side-nav-bar.styles";
 
 export interface Props {
   className?: string;
@@ -29,7 +31,7 @@ const NewsIcon = bundleIcon(News24Filled, News24Regular);
 const SettingsIcon = bundleIcon(Settings24Filled, Settings24Regular);
 const DiscoverIcon = bundleIcon(SearchSparkle24Filled, SearchSparkle24Regular);
 
-export const AppSideNav: React.FC<Props> = React.memo(({ className }) => {
+export const AppSideNavBar: React.FC<Props> = React.memo(({ className }) => {
   const classes = useClasses();
   const pathname = usePathname()
   const toggleFeedSideNav = useAppStore(store => store.toggleFeedSideNav);
@@ -55,49 +57,11 @@ export const AppSideNav: React.FC<Props> = React.memo(({ className }) => {
           发现
         </NavItem>
       </NavDrawerBody>
-      <NavItem icon={<SettingsIcon className={classes.navItemIcon} />} as="a" href="/settings" value='/settings' className={classes.navItem}>
-        设置
-      </NavItem>
+      <NavDrawerFooter>
+        <NavItem icon={<SettingsIcon className={classes.navItemIcon} />} as="a" href="/settings" value='/settings' className={classes.navItem}>
+          设置
+        </NavItem>
+      </NavDrawerFooter>
     </NavDrawer>
   );
 })
-
-const useClasses = makeStyles({
-  root: {
-  },
-  header: {
-    paddingLeft: tokens.spacingHorizontalXL,
-    paddingRight: tokens.spacingVerticalMNudge,
-    paddingBlock: tokens.spacingVerticalM,
-  },
-  hamburger: {
-    maxWidth: '100%',
-  },
-  invisible: {
-    visibility: "hidden",
-  },
-  nav: {
-    flexShrink: 0,
-    maxWidth: '80px',
-    zIndex: tokens.zIndexFloating,
-  },
-  navItem: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    gap: tokens.spacingVerticalXS,
-    fontSize: tokens.fontSizeBase200,
-    alignItems: "center",
-    "::after": {
-      left: "0",
-      top: "0",
-      bottom: "0",
-      marginInlineStart: "0",
-      marginBlock: "auto",
-      height: "32px",
-    }
-  },
-  navItemIcon: {
-    fontSize: tokens.fontSizeBase600,
-  }
-});

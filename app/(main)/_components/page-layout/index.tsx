@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 
-import { AppSideNav } from "../app-side-nav";
+import { AppSideNavBar } from "../app-side-nav-bar";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { useClasses } from "./page-layout.styles";
 import { mergeClasses } from "@fluentui/react-components";
@@ -19,7 +19,7 @@ export default function Layout({ children }: Props) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow)}>
-        {isLargeThenMobile ? <AppSideNav /> : null}
+        {isLargeThenMobile ? <AppSideNavBar /> : null}
         {children}
       </div>
     </Suspense>

@@ -2,7 +2,7 @@
 
 import { Skeleton, SkeletonItem } from "@fluentui/react-components";
 import React from "react";
-import { useClasses } from "./feed-side-nav.style";
+import { useClasses } from "./feed-nav-tree.style";
 
 export const FeedNavListSkeleton = React.memo(() => {
   const classes = useClasses();

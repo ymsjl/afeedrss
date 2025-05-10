@@ -2,7 +2,7 @@
 
 import React from "react"
 import { List, ListItem, Text } from "@fluentui/react-components"
-import { getTagNameFromId } from "@/app/(main)/_components/feed-side-nav/create-nav"
+import { getTagNameFromId } from "@/features/subscription-source/utils"
 import { useListClasses } from "@/app/(main)/_components/article-list-panel/article-list-item.style"
 import { Folder } from "@/services/subscription"
 
