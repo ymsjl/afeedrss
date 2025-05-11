@@ -36,14 +36,13 @@ export function HomePageClient({ streamContentQueryKey }: Props) {
   const homePageLayoutTypeSelected = useAppStore((state) => state.homePageLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
   const homePageLayoutType = isLargeThenMobile ? homePageLayoutTypeSelected : "default";
-
   return (
     <ArticleReadPanelControlProvider>
       {!isLargeThenMobile && <MobileBottomBar />}
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow, commonClasses.fullHeightNoScroll)}>
         {isLargeThenMobile && <FeedSideNavPanel />}
         <div className={mergeClasses(flexClasses.headerBodyColumn, commonClasses.fullHeightNoScroll)}>
-          {isLargeThenMobile && <PageHeader className={mergeClasses(sharedPageLayoutClasses.pageTitle, homePageLayoutType === 'default' && sharedPageLayoutClasses.pageTitleCenter)} />}
+          {/* {isLargeThenMobile && <PageHeader className={mergeClasses(sharedPageLayoutClasses.pageTitle, homePageLayoutType === 'default' && sharedPageLayoutClasses.pageTitleCenter)} />} */}
           <div className={mergeClasses(flexClasses.headerBodyRow, sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)} aria-label="main">
             <ArticlePanelZStackLayout
               className={mergeClasses(

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Spinner, mergeClasses, makeStyles, Divider, tokens } from "@fluentui/react-components";
+import { Spinner, mergeClasses, makeStyles, Divider, tokens, createPresenceComponent, motionTokens } from "@fluentui/react-components";
 import { useStreamContentActions } from "@features/stream-content/use-stream-content-actions";
 import { StreamContentItemWithPageIndex } from "@/features/stream-content/use-stream-contents-query";
 import { useStreamContentsQuery } from '@features/stream-content/use-stream-contents-query';
@@ -12,8 +12,44 @@ import { useAppStore } from "@/app/providers/app-store-provider";
 
 interface ArticleListProps { }
 
+const initialStyles = {
+  opacity: 0,
+  transform: "translate3D(0, 40px, 0)",
+}
+
+const endStyles = {
+  opacity: 1,
+  transform: "translate3D(0, 0, 0)",
+}
+
+const useAnimatedListItemClasses = makeStyles({
+  listItem: initialStyles
+})
+
+const ListItemFadeIn = createPresenceComponent<{ delay?: number }>(({ delay = 0 }) => {
+  const keyframes = [
+    initialStyles,
+    endStyles,
+  ];
+
+  return {
+    enter: {
+      keyframes,
+      duration: motionTokens.durationNormal,
+      easing: motionTokens.curveDecelerateMin,
+      delay,
+    },
+    exit: {
+      keyframes: [...keyframes].reverse(),
+      duration: motionTokens.durationSlow,
+      easing: motionTokens.curveAccelerateMin,
+    },
+  };
+})
+
 export function ArticleList(props: ArticleListProps) {
   const listClasses = useListClasses();
+  const animatedListItemClasses = useAnimatedListItemClasses();
   const { markAboveAsRead, markItemAsRead, markItemAsStar } = useStreamContentActions();
   const { data: items, isFetching, isFetched, error } = useStreamContentsQuery();
   const classes = useClasses();
@@ -45,16 +81,18 @@ export function ArticleList(props: ArticleListProps) {
         {items.map((item, index) => {
           if (!item) return null;
           return (
-            <li key={item.id}>
-              <ArticleListItem
-                item={item}
-                isSelected={getArticleIsSelected(item.id)}
-                onMarkAsRead={markItemAsRead}
-                onMarkAsStar={markItemAsStar}
-                onMarkAboveAsRead={markAboveAsRead}
-                onSelectArticle={(article) => onSelectArticle(article, index)}
-              />
-            </li>
+            <ListItemFadeIn appear visible key={item.id} delay={Math.min(12, index) * 40}>
+              <li key={item.id} className={animatedListItemClasses.listItem}>
+                <ArticleListItem
+                  item={item}
+                  isSelected={getArticleIsSelected(item.id)}
+                  onMarkAsRead={markItemAsRead}
+                  onMarkAsStar={markItemAsStar}
+                  onMarkAboveAsRead={markAboveAsRead}
+                  onSelectArticle={(article) => onSelectArticle(article, index)}
+                />
+              </li>
+            </ListItemFadeIn>
           );
         })}
       </ul>

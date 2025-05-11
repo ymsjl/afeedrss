@@ -57,7 +57,7 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
     onMarkAsStar(item);
   };
 
-  const src = filterImgSrcfromHtmlStr(item.summary.content);
+  const src = filterImgSrcfromHtmlStr(item?.summary?.content ?? '');
 
   if (streamItemDisplayType === 'pictureOnBottom') {
     return (

@@ -1,5 +1,4 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
-
 export const useClasses = makeStyles({
   root: {
     position: "fixed",
@@ -14,6 +13,7 @@ export const useClasses = makeStyles({
     gap: tokens.spacingHorizontalXS,
     paddingBlock: tokens.spacingVerticalS,
     paddingInline: tokens.spacingHorizontalM,
+    borderTop: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
   },
   title: {
     borderRadius: tokens.borderRadiusMedium,

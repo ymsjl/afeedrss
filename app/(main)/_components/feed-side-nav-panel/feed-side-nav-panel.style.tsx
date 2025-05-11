@@ -5,6 +5,9 @@ export const useClasses = makeStyles({
   nav: {
     flexShrink: 0,
     backgroundColor: tokens.colorNeutralBackground4,
+    position: "absolute",
+    left: '80px',
+    height: "100%",
     [appTokens.maxBreakpoints.small]: {
       width: '100%',
       ...shorthands.borderRadius(tokens.borderRadiusXLarge, tokens.borderRadiusXLarge, 0, 0),

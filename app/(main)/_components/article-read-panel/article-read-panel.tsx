@@ -26,7 +26,7 @@ interface ArticleReadPanelProps {
   showBackButton?: boolean;
 }
 
-const Fade = createMotionComponent({
+const FadeSlideUp = createMotionComponent({
   keyframes: [
     {
       opactity: 0,
@@ -37,8 +37,8 @@ const Fade = createMotionComponent({
       transform: "translateY(0)",
     }
   ],
-  duration: motionTokens.durationSlow,
-  easing: motionTokens.curveDecelerateMid,
+  duration: motionTokens.durationNormal,
+  easing: motionTokens.curveDecelerateMin,
   iterations: 1,
 
   reducedMotion: {
@@ -59,9 +59,9 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
   useEffect(() => {
     if (articleScrollContainerRef.current) {
       articleScrollContainerRef.current.scrollTop = 0;
-      motionRef.current?.setPlayState("running");
+      isLargeThenMobile && motionRef.current?.setPlayState("running");
     }
-  }, [curArticle?.id]);
+  }, [curArticle?.id, isLargeThenMobile]);
 
   const articleReadPanelToolbar = isLargeThenMobile && (
     <ActionsBarLayout>
@@ -89,11 +89,11 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
       <div className={mergeClasses(classes.articelPanelLayout, classes.articelPanelSurface)}>
         {curArticle
           ? (
-            <Fade imperativeRef={motionRef} >
+            <FadeSlideUp imperativeRef={motionRef} >
               <div>
                 <article className={mergeClasses(classes.articleLayout, proseClasses.root)}>
                   <h1>{curArticle?.title}</h1>
-                  <div className={flexClasses.flexCenter}>
+                  <div>
                     <Caption1 className={classes.caption}>
                       {`${curArticle?.origin.title}/${dayjs(curArticle?.published * 1000).fromNow()}`}
                     </Caption1>
@@ -102,7 +102,7 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
                 </article>
                 <Divider className={classes.divider}>完</Divider>
               </div>
-            </Fade>)
+            </FadeSlideUp>)
           : <StatusCard status={Status.EMPTY} content="尚未选择文章" />}
       </div>
     </div>
