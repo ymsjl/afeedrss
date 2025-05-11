@@ -123,6 +123,11 @@ const ArticleListItem: React.FC<ArticleListItemProps> = ({
           </Caption1>
           <div className={classes.readButton}>
             <Button
+              appearance="transparent"
+              icon={item.isStarred ? <Star20Filled /> : <Star20Regular />}
+              onClick={onStar}
+            />
+            <Button
               icon={item.isRead ? <CheckmarkCircle20Filled /> : <Circle20Regular />}
               appearance="transparent"
               onClick={onRead}

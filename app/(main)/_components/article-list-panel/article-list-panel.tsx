@@ -3,7 +3,7 @@ import React, { Suspense, useMemo } from "react";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { Body1Strong, mergeClasses } from "@fluentui/react-components";
+import { Body1Strong, Divider, mergeClasses } from "@fluentui/react-components";
 import { ArticleLayoutMenuButton, useArticleLayoutChangeEffect } from "../article-layout-menu-button";
 import { LayoutToggleButton } from "../layout-toggle-button";
 import { RefreshButton } from "../refresh-button";
@@ -12,7 +12,7 @@ import { ArticleListSkeleton } from "./article-list-skeleton";
 import { ThemeToggleButton } from "../theme-toggle-button";
 import { UnreadOnlyToggleButton } from "../unread-only-toggle-button";
 import { ArticleListScrollLayout } from "./article-list-scroll-layout";
-import { ActionsBarLayout } from '../actions-bar-layout';
+import { ActionsBarLayout, useActionBarLayoutClasses } from '../actions-bar-layout';
 import { useSearchParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { folderQueryOptions, subscriptionsQueryOptions } from "@/services/subscription/subscription.rquery";
@@ -27,6 +27,7 @@ export const ArticleListPanel: React.FC<ArticleListPanelProps> = ({ className, s
   const isLargeThenMobile = useLargeThenMobile();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
+  const actionBarLayoutClasses = useActionBarLayoutClasses();
 
   useArticleLayoutChangeEffect();
 
@@ -36,9 +37,11 @@ export const ArticleListPanel: React.FC<ArticleListPanelProps> = ({ className, s
         <StreamTitle />
       </Suspense>
       <div className={flexClasses.flexGrow} />
+      <ThemeToggleButton />
+      <Divider vertical className={actionBarLayoutClasses.divider} />
       <ArticleLayoutMenuButton />
       <LayoutToggleButton />
-      <ThemeToggleButton />
+      <Divider vertical className={actionBarLayoutClasses.divider} />
       <UnreadOnlyToggleButton />
       <RefreshButton />
     </ActionsBarLayout>

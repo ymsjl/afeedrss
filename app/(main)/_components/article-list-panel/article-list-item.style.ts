@@ -34,7 +34,23 @@ export const useListClasses = makeStyles({
     transition: "all",
     ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
     backgroundColor: tokens.colorNeutralBackground1,
+
+    "&::after": {
+      content: "''",
+      display: "block",
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: "1px",
+      backgroundColor: tokens.colorNeutralStroke1,
+      opacity: 0.75,
+      transform: "scaleY(0.5)",
+    },
     [appTokens.breakpoints.medium]: {
+      "&::after": {
+        content: "",
+      },
       ...shorthands.borderRadius(tokens.borderRadiusMedium),
       boxShadow: tokens.shadow2,
 
@@ -211,9 +227,9 @@ export const useGridItemClasses = makeStyles({
   },
 
   coverImagePlaceholder: {
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: tokens.colorNeutralBackground3
   },
 

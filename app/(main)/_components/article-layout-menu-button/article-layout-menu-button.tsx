@@ -16,6 +16,8 @@ import {
   AppsListDetail20Regular,
   SlideGrid20Filled,
   SlideGrid20Regular,
+  List20Filled,
+  List20Regular,
 } from "@fluentui/react-icons";
 import { useAppStore } from "@/app/providers/app-store-provider";
 import { StreamItemDisplayType } from "@/store/app-store";
@@ -26,6 +28,7 @@ import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 const ImageIcon = bundleIcon(Image20Filled, Image20Regular);
 const GridIcon = bundleIcon(SlideGrid20Filled, SlideGrid20Regular);
 const ListContentIcon = bundleIcon(AppsListDetail20Filled, AppsListDetail20Regular);
+const ListIcon = bundleIcon(List20Filled, List20Regular);
 
 export const useArticleLayoutChangeEffect = () => {
   const homePageLayoutType = useHomePageLayoutType();
@@ -65,6 +68,7 @@ export const ArticleLayoutMenuButton: React.FC<ButtonProps> = (props) => {
   return (
     <TabList className={classes.root} selectedValue={streamItemDisplayType} size='small' onTabSelect={(_, { value }) => setStreamItemDisplayType(value as StreamItemDisplayType)}>
       <Tab className={classes.tab} icon={<ListContentIcon />} value='default' title='默认' />
+      <Tab className={classes.tab} icon={<ListIcon />} value='textOnly' title='文本' />
       <Tab className={classes.tab} icon={<ImageIcon />} value='pictureOnBottom' title='社媒' />
       {homePageLayoutType !== 'split' && <Tab className={classes.tab} icon={<GridIcon />} value='grid' title='网格' />}
     </TabList>

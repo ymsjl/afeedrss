@@ -13,5 +13,9 @@ export const useClasses = makeStyles({
     top: 0,
     backgroundColor: tokens.colorNeutralBackground3,
     zIndex: tokens.zIndexContent,
+  },
+  divider: {
+    flexGrow: 0,
+    marginInline: tokens.spacingHorizontalXS,
   }
 });
