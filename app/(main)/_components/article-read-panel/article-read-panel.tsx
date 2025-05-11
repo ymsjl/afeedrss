@@ -4,6 +4,10 @@ import {
   Divider,
   Caption1,
   Button,
+  createMotionComponent,
+  motionTokens,
+  MotionImperativeRef,
+  createPresenceComponent,
 } from "@fluentui/react-components";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import dayjs from "@utils/dayjs";
@@ -22,6 +26,26 @@ interface ArticleReadPanelProps {
   showBackButton?: boolean;
 }
 
+const Fade = createMotionComponent({
+  keyframes: [
+    {
+      opactity: 0,
+      transform: "translateY(15%)",
+    },
+    {
+      opactity: 1,
+      transform: "translateY(0)",
+    }
+  ],
+  duration: motionTokens.durationSlow,
+  easing: motionTokens.curveDecelerateMid,
+  iterations: 1,
+
+  reducedMotion: {
+    iterations: 1,
+  },
+});
+
 export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ className, showBackButton = true }) => {
   const classes = useClasses();
   const proseClasses = useProseClasses();
@@ -30,10 +54,12 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
   const isLargeThenMobile = useLargeThenMobile();
   const articleScrollContainerRef = useRef<HTMLDivElement>(null);
   const curArticle = useAppStore(store => store.currentArticle);
+  const motionRef = React.useRef<MotionImperativeRef>();
 
   useEffect(() => {
     if (articleScrollContainerRef.current) {
       articleScrollContainerRef.current.scrollTop = 0;
+      motionRef.current?.setPlayState("running");
     }
   }, [curArticle?.id]);
 
@@ -62,18 +88,21 @@ export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ c
       {articleReadPanelToolbar}
       <div className={mergeClasses(classes.articelPanelLayout, classes.articelPanelSurface)}>
         {curArticle
-          ? (<>
-            <article className={mergeClasses(classes.articleLayout, proseClasses.root)}>
-              <h1>{curArticle?.title}</h1>
-              <div className={flexClasses.flexCenter}>
-                <Caption1 className={classes.caption}>
-                  {`${curArticle?.origin.title}/${dayjs(curArticle?.published * 1000).fromNow()}`}
-                </Caption1>
+          ? (
+            <Fade imperativeRef={motionRef} >
+              <div>
+                <article className={mergeClasses(classes.articleLayout, proseClasses.root)}>
+                  <h1>{curArticle?.title}</h1>
+                  <div className={flexClasses.flexCenter}>
+                    <Caption1 className={classes.caption}>
+                      {`${curArticle?.origin.title}/${dayjs(curArticle?.published * 1000).fromNow()}`}
+                    </Caption1>
+                  </div>
+                  <div dangerouslySetInnerHTML={{ __html: curArticle?.summary.content ?? "" }} />
+                </article>
+                <Divider className={classes.divider}>完</Divider>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: curArticle?.summary.content ?? "" }} />
-            </article>
-            <Divider className={classes.divider}>完</Divider>
-          </>)
+            </Fade>)
           : <StatusCard status={Status.EMPTY} content="尚未选择文章" />}
       </div>
     </div>
