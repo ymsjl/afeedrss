@@ -7,6 +7,7 @@ import { FluentSSRProvider } from "./providers/fluent-ssr-rrovider";
 import { cookies, headers } from "next/headers";
 import detectIsMobile from "ismobilejs";
 import { AppState, STORAGE_NAME } from "@/store/app-store";
+import { NProgressProvider } from "./providers/nprogress-provider"; // Added import
 
 export const metadata: Metadata = {
   title: "Home",
@@ -34,6 +35,7 @@ export default async function RootLayout({
         <Providers>
           <AppStoreProvider initialState={initialState}>
             <FluentSSRProvider>
+              <NProgressProvider /> {/* Added NProgressProvider */}
               {children}
             </FluentSSRProvider>
           </AppStoreProvider>

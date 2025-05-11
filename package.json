@@ -30,6 +30,7 @@
     "next-auth": "^4.24.11",
     "next-pwa": "^5.5.4",
     "normalizr": "^3.6.2",
+    "nprogress": "^0.2.0",
     "query-string": "^7.1.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@mswjs/data": "^0.16.2",
     "@types/node": "^22.15.3",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "18.0.6",
     "@types/react-dom": "18.0.2",
     "cross-env": "^7.0.3",

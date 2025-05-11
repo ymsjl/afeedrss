@@ -16,6 +16,7 @@ export function HomePageLayout({ children }: Props) {
   const classes = useClasses();
   const flexClasses = useFlexClasses();
   const isLargeThenMobile = useLargeThenMobile();
+  
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow)}>

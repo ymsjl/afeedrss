@@ -1,1 +1,5 @@
 @import './reset.css'; 
+
+body #nprogress .bar {
+  z-index: var(--zIndexFloating, 4000);
+}
