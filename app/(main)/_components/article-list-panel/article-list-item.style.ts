@@ -210,6 +210,13 @@ export const useGridItemClasses = makeStyles({
     objectFit: "cover",
   },
 
+  coverImagePlaceholder: {
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    backgroundColor: tokens.colorNeutralBackground3
+  },
+
   textContentFloat: {
     position: "absolute",
     zIndex: tokens.zIndexContent,

@@ -231,8 +231,8 @@ const GridItem: React.FC<GridItemProps> = (props) => {
             fit="cover"
           />
         ) : (
-          <div className={classes.coverImage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.colorNeutralBackground3 }}>
-            <ImageOff20Regular fontSize="48px" />
+          <div className={mergeClasses(classes.coverImagePlaceholder, classes.coverImage)}>
+            <ImageOff20Regular />
           </div>
         )}
       </div>
