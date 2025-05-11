@@ -1,9 +1,9 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useMemo } from "react";
 import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-content-query-key-context";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
-import { mergeClasses } from "@fluentui/react-components";
+import { Body1Strong, mergeClasses } from "@fluentui/react-components";
 import { ArticleLayoutMenuButton } from "../article-layout-menu-button";
 import { LayoutToggleButton } from "../layout-toggle-button";
 import { RefreshButton } from "../refresh-button";
@@ -13,6 +13,10 @@ import { ThemeToggleButton } from "../theme-toggle-button";
 import { UnreadOnlyToggleButton } from "../unread-only-toggle-button";
 import { ArticleListScrollLayout } from "./article-list-scroll-layout";
 import { ActionsBarLayout } from '../actions-bar-layout';
+import { useSearchParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { folderQueryOptions, subscriptionsQueryOptions } from "@/services/subscription/subscription.rquery";
+import { getTagNameFromId } from "@/features/subscription-source/utils";
 
 interface ArticleListPanelProps {
   className?: string;
@@ -26,6 +30,10 @@ export const ArticleListPanel: React.FC<ArticleListPanelProps> = ({ className, s
 
   const articleListToolbar = isLargeThenMobile && (
     <ActionsBarLayout sticky>
+      <Suspense fallback={null}>
+        <StreamTitle />
+      </Suspense>
+      <div className={flexClasses.flexGrow} />
       <ArticleLayoutMenuButton />
       <LayoutToggleButton />
       <ThemeToggleButton />
@@ -45,9 +53,39 @@ export const ArticleListPanel: React.FC<ArticleListPanelProps> = ({ className, s
       {articleListToolbar}
       <StreamContentQueryKeyProvider initValue={streamContentQueryKey}>
         <Suspense fallback={<ArticleListSkeleton />}>
-          <ArticleList/>
+          <ArticleList />
         </Suspense>
       </StreamContentQueryKeyProvider>
     </ArticleListScrollLayout>
   );
 };
+
+
+const StreamTitle: React.FC = () => {
+  const folderQuery = useSuspenseQuery(folderQueryOptions);
+  const subscriptionsQuery = useSuspenseQuery(subscriptionsQueryOptions);
+  const searchParams = useSearchParams();
+  const streamId = searchParams.get("streamId")
+  const unreadOnly = searchParams.get("unreadOnly") === 'true'
+  const subscriptionsData = subscriptionsQuery.data;
+  const folderData = folderQuery.data;
+  const streamTitle = useMemo(() => {
+    let result = unreadOnly ? "未读文章" : "全部文章";
+
+    if (streamId && subscriptionsData && folderData) {
+      const subscriptionsById = subscriptionsData?.entities?.subscription ?? {}
+      const foldsById = folderData?.entities?.folder ?? {}
+      if (streamId in subscriptionsById) {
+        result = subscriptionsById[streamId]?.title
+      } else if (streamId in foldsById) {
+        result = getTagNameFromId(foldsById[streamId]?.id)
+      }
+    }
+
+    return result
+  }, [unreadOnly, streamId, subscriptionsData && folderData]);
+
+  return (
+    <Body1Strong>{streamTitle}</Body1Strong>
+  )
+}

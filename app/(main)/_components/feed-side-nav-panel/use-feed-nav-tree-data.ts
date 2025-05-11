@@ -35,6 +35,7 @@ export const useFeedNavTreeData = () => {
       tagsById: folderData.entities.folder,
       streamPrefById: streamPreferencesData.streamprefs,
     })
+
     const navList = createNavList(feedTree);
     navList.unshift(createBuildInNavItem({ name: '星标文章', key: SystemStreamIDs.STARRED }))
     navList.unshift(createBuildInNavItem({ name: '全部文章', key: rootStreamId }))

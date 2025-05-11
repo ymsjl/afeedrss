@@ -56,7 +56,7 @@ export function HomePageClient({ streamContentQueryKey }: Props) {
                     streamContentQueryKey={streamContentQueryKey}
                     className={homePageLayoutType === "default" ? firstChildClassName : ''}
                   />
-                  {homePageLayoutType === "default" && <ArticleReadPanel className={secondChildClassName} />}
+                  {homePageLayoutType === "default" && <ArticleReadPanel className={secondChildClassName} animated={false} />}
                 </>
               )}
             </ArticlePanelZStackLayout>
