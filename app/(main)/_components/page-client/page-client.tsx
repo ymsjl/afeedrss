@@ -14,7 +14,6 @@ import { ArticleListPanel } from "../article-list-panel";
 import { ArticleReadPanelControlProvider, ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { ZStackLayout, ZStackLayoutProps } from "@components/z-stack-layout";
 import { useHomePageLayoutType } from "./use-home-page-layout-type";
-import { ArticleLayoutChangeEffect } from "../article-layout-menu-button";
 
 interface Props {
   streamContentQueryKey?: string[];

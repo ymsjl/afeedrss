@@ -43,8 +43,8 @@ export const useSharedPageLayoutClasses = makeStyles({
   },
   maxWidthUnset: {
     [appTokens.breakpoints.medium]: {
-      maxWidth: "unset",
-    }
+      maxWidth: "100rem",
+    },
   },
   fullHeightColumnLayout: {
     height: "100%",
