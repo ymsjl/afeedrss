@@ -18,7 +18,7 @@ export const ArticleReadPanelControlProvider: React.FC<PropsWithChildren<{}>> = 
   const searchParams = useSearchParams();
   const openArticleInReadingPanelStore = useAppStore(store => store.openArticleInReadingPanel);
   const closeArticlePanelStore = useAppStore(store => store.closeArticlePanel);
-  
+
   const navigateWithSearch = useSearchParamNavigation();
 
   const openArticlePanel = useCallback(
@@ -36,13 +36,12 @@ export const ArticleReadPanelControlProvider: React.FC<PropsWithChildren<{}>> = 
 
   useStateChangeEffect(searchParams.get('streamId'), closeArticlePanel)
 
+  useStateChangeEffect(searchParams.get('articleId'), (prevArticleId, currentArticleId) => {
+    if (prevArticleId && !currentArticleId) {
+      closeArticlePanelStore();
+    }
+  })
 
-    useStateChangeEffect(searchParams.get('articleId'), (prevArticleId, currentArticleId) => {
-      if (prevArticleId && !currentArticleId) {
-        closeArticlePanelStore();
-      }
-    })
-  
   return (
     <ArticleReadPanelControlContext.Provider value={{ openArticlePanel, closeArticlePanel }}>
       {children}

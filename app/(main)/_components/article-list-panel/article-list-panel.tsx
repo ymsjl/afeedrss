@@ -4,7 +4,7 @@ import { StreamContentQueryKeyProvider } from "@/features/stream-content/stream-
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import { useLargeThenMobile } from "@/utils/use-large-then-mobile";
 import { Body1Strong, mergeClasses } from "@fluentui/react-components";
-import { ArticleLayoutMenuButton } from "../article-layout-menu-button";
+import { ArticleLayoutMenuButton, useArticleLayoutChangeEffect } from "../article-layout-menu-button";
 import { LayoutToggleButton } from "../layout-toggle-button";
 import { RefreshButton } from "../refresh-button";
 import { ArticleList } from "./article-list";
@@ -27,6 +27,8 @@ export const ArticleListPanel: React.FC<ArticleListPanelProps> = ({ className, s
   const isLargeThenMobile = useLargeThenMobile();
   const commonClasses = useCommonClasses();
   const flexClasses = useFlexClasses();
+
+  useArticleLayoutChangeEffect();
 
   const articleListToolbar = isLargeThenMobile && (
     <ActionsBarLayout sticky>

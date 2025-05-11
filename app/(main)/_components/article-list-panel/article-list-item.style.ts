@@ -15,6 +15,21 @@ export const useListClasses = makeStyles({
       },
     },
   },
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+    ...shorthands.gap(tokens.spacingHorizontalM),
+    listStyle: 'none',
+    marginInline: tokens.strokeWidthThick,
+    ...shorthands.padding(0),
+    [appTokens.breakpoints.medium]: {
+      marginBlockStart: tokens.spacingVerticalXS,
+      "> li": {
+        marginInline: 0,
+        marginBlockEnd: 0,
+      },
+    },
+  },
   listItem: {
     transition: "all",
     ...shorthands.padding(tokens.spacingHorizontalM, tokens.spacingVerticalL),
@@ -112,7 +127,9 @@ export const useClasses = makeStyles({
       display: "block",
     },
   },
-});export const useTwitterLikeItemStyles = makeStyles({
+});
+
+export const useTwitterLikeItemStyles = makeStyles({
   root: {
     display: "flex",
     gap: tokens.spacingVerticalM,
@@ -149,6 +166,100 @@ export const useClasses = makeStyles({
   },
   actionRow: {
     display: "flex",
+    gap: tokens.spacingHorizontalS,
+  },
+  highlight: {
+    color: tokens.colorPaletteYellowForeground3,
+  }
+});
+
+export const useGridItemClasses = makeStyles({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    gap: tokens.spacingVerticalS,
+    cursor: "pointer",
+    ...shorthands.borderRadius(tokens.borderRadiusMedium),
+    backgroundColor: tokens.colorNeutralBackground1,
+    boxShadow: tokens.shadow2,
+    "&:hover": {
+      backgroundColor: tokens.colorBrandBackground2Hover,
+      boxShadow: tokens.shadow4,
+    },
+    ...shorthands.overflow("hidden"),
+  },
+  isRead: {
+    opacity: 0.7,
+  },
+  isSelected: {
+    outline: `2px solid ${tokens.colorBrandStroke1}`,
+    boxShadow: tokens.shadow8,
+  },
+  coverImageWrapper: {
+    position: "relative",
+    width: "100%",
+    height: "200  px", // Adjust height as needed
+    [appTokens.breakpoints.medium]: {
+      height: '200px',
+    }
+  },
+  coverImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+
+  textContentFloat: {
+    position: "absolute",
+    zIndex: tokens.zIndexContent,
+    left: tokens.spacingHorizontalS,
+    right: tokens.spacingHorizontalS,
+    bottom: tokens.spacingVerticalXS,
+    borderRadius: tokens.borderRadiusLarge,
+    border: `${tokens.strokeWidthThin} solid ${tokens.colorBrandStroke2}`,
+    backdropFilter: "blur(40px)",
+    backgroundColor: tokens.colorNeutralBackgroundAlpha2,
+    paddingBlockStart: tokens.spacingVerticalS,
+  },
+  textContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalXS,
+    ...shorthands.padding(tokens.spacingVerticalXXS, tokens.spacingHorizontalM, tokens.spacingVerticalM),
+  },
+  titleRow: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: tokens.spacingVerticalS,
+  },
+  title: {
+    flexGrow: 1,
+    display: "-webkit-box",
+    "-webkit-line-clamp": "2",
+    "-webkit-box-orient": "vertical",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    minHeight: `calc(${tokens.lineHeightBase300} * 2)`,
+  },
+  metaInfo: {
+    display: "flex",
+    gap: tokens.spacingVerticalXS,
+    color: tokens.colorNeutralForeground4,
+  },
+  sourceInfo: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  dateInfo: {
+  },
+  userName: {
+    flex: 1
+  },
+  actionRow: {
+    display: "flex",
+    justifyContent: "flex-end",
     gap: tokens.spacingHorizontalS,
   },
   highlight: {

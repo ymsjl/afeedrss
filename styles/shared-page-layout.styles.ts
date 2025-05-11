@@ -34,12 +34,17 @@ export const useSharedPageLayoutClasses = makeStyles({
       width: "100%",
     },
   },
-  content:{
+  content: {
     overflowX: "hidden",
     [appTokens.breakpoints.medium]: {
       maxWidth: "65rem",
       marginInline: "auto",
     },
+  },
+  maxWidthUnset: {
+    [appTokens.breakpoints.medium]: {
+      maxWidth: "unset",
+    }
   },
   fullHeightColumnLayout: {
     height: "100%",

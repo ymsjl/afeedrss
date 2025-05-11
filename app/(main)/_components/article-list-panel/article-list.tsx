@@ -57,6 +57,8 @@ export function ArticleList(props: ArticleListProps) {
   const flexClasses = useFlexClasses()
   const { openArticlePanel } = useArticleReadPanelControl();
   const getArticleIsSelected = useAppStore(store => store.getArticleIsSelected)
+  const streamItemDisplayType = useAppStore(state => state.streamItemDisplayType); // Get display type
+
   const onSelectArticle = useCallback(
     (item: StreamContentItemWithPageIndex, index: number) => {
       openArticlePanel(item, index);
@@ -77,12 +79,16 @@ export function ArticleList(props: ArticleListProps) {
 
   return (
     <>
-      <ul className={listClasses.list}>
+      <ul className={streamItemDisplayType === 'grid' ? listClasses.gridContainer : listClasses.list}>
         {items.map((item, index) => {
           if (!item) return null;
+          // When in grid mode, we might not want the fade-in animation per item,
+          // or want a different kind of animation. For now, let's keep it.
+          // The ListItemFadeIn might need adjustment if it causes layout issues with grid.
           return (
             <ListItemFadeIn appear visible key={item.id} delay={Math.min(12, index) * 40}>
-              <li key={item.id} className={animatedListItemClasses.listItem}>
+              {/* For grid, the li might not need animatedListItemClasses if root of GridItem handles all styling */}
+              <li key={item.id} className={streamItemDisplayType !== 'grid' ? animatedListItemClasses.listItem : undefined}>
                 <ArticleListItem
                   item={item}
                   isSelected={getArticleIsSelected(item.id)}

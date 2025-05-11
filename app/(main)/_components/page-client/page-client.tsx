@@ -1,14 +1,7 @@
 "use client";
 import React from "react";
 import dynamic from "next/dynamic";
-import { useSearchParams } from "next/navigation";
-import {
-  mergeClasses,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbButton,
-  BreadcrumbDivider,
-} from "@fluentui/react-components";
+import { mergeClasses } from "@fluentui/react-components";
 
 import { useLargeThenMobile } from "@utils/use-large-then-mobile";
 import { useAppStore } from "@/app/providers/app-store-provider";
@@ -18,8 +11,10 @@ import { useClasses } from "./page-client.styles";
 
 import { MobileBottomBar } from "../mobile-bottom-bar";
 import { ArticleListPanel } from "../article-list-panel";
-import { ArticleReadPanelControlProvider, useArticleReadPanelControl, ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
+import { ArticleReadPanelControlProvider, ArticleReadPanel } from "@/app/(main)/_components/article-read-panel";
 import { ZStackLayout, ZStackLayoutProps } from "@components/z-stack-layout";
+import { useHomePageLayoutType } from "./use-home-page-layout-type";
+import { ArticleLayoutChangeEffect } from "../article-layout-menu-button";
 
 interface Props {
   streamContentQueryKey?: string[];
@@ -33,20 +28,21 @@ export function HomePageClient({ streamContentQueryKey }: Props) {
   const flexClasses = useFlexClasses();
   const sharedPageLayoutClasses = useSharedPageLayoutClasses();
 
-  const homePageLayoutTypeSelected = useAppStore((state) => state.homePageLayoutType);
   const isLargeThenMobile = useLargeThenMobile()
-  const homePageLayoutType = isLargeThenMobile ? homePageLayoutTypeSelected : "default";
+  const homePageLayoutType = useHomePageLayoutType();
+  const streamItemDisplayType = useAppStore(state => state.streamItemDisplayType);
+
   return (
     <ArticleReadPanelControlProvider>
       {!isLargeThenMobile && <MobileBottomBar />}
       <div className={mergeClasses(classes.root, flexClasses.headerBodyRow, commonClasses.fullHeightNoScroll)}>
         {isLargeThenMobile && <FeedSideNavPanel />}
         <div className={mergeClasses(flexClasses.headerBodyColumn, commonClasses.fullHeightNoScroll)}>
-          {/* {isLargeThenMobile && <PageHeader className={mergeClasses(sharedPageLayoutClasses.pageTitle, homePageLayoutType === 'default' && sharedPageLayoutClasses.pageTitleCenter)} />} */}
           <div className={mergeClasses(flexClasses.headerBodyRow, sharedPageLayoutClasses.mainLayout, sharedPageLayoutClasses.mainSurface)} aria-label="main">
             <ArticlePanelZStackLayout
               className={mergeClasses(
                 homePageLayoutType === "split" ? classes.columnNoShrink : sharedPageLayoutClasses.content,
+                streamItemDisplayType === "grid" ? sharedPageLayoutClasses.maxWidthUnset : '',
                 sharedPageLayoutClasses.fullHeightColumnLayout,
               )}
             >
@@ -71,29 +67,6 @@ export function HomePageClient({ streamContentQueryKey }: Props) {
       </div>
     </ArticleReadPanelControlProvider>
   );
-}
-
-const PageHeader: React.FC<{ className?: string, }> = ({ className }) => {
-  const searchParams = useSearchParams();
-  const unreadOnly = searchParams.get("unreadOnly") === 'true'
-  const curArticle = useAppStore(store => store.currentArticle);
-  const { closeArticlePanel } = useArticleReadPanelControl();
-  return (
-    <Breadcrumb size="large" className={className}>
-      <BreadcrumbItem>
-        <BreadcrumbButton onClick={closeArticlePanel}>{unreadOnly ? "未读文章" : "全部文章"}</BreadcrumbButton>
-      </BreadcrumbItem>
-      {
-        curArticle &&
-        <>
-          <BreadcrumbDivider />
-          <BreadcrumbItem>
-            <BreadcrumbButton >{curArticle?.title}</BreadcrumbButton>
-          </BreadcrumbItem>
-        </>
-      }
-    </Breadcrumb>
-  )
 }
 
 const ArticlePanelZStackLayout: React.FC<Omit<ZStackLayoutProps, 'isOpen'>> = ({ children, className }) => {

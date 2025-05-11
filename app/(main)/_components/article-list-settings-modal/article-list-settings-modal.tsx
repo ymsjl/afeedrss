@@ -69,7 +69,7 @@ export const ArticleListSettingsModal = React.memo(({ isOpen, onClose }: { isOpe
         <div className={classes.sectionHeader}>列表布局</div>
         <RadioGroup className={classes.list} value={streamItemDisplayType} onChange={(e, data) => setStreamItemDisplayType(data.value as StreamItemDisplayType)}  >
           <Radio value="default" label="默认" labelPosition='after' className={mergeClasses(classes.listItem, classes.radio)} input={{ className: classes.radioInput }} />
-          <Radio value="pictureOnBottom" label="大图" labelPosition='after' className={mergeClasses(classes.listItem, classes.radio)} input={{ className: classes.radioInput }} />
+          <Radio value="pictureOnBottom" label="社媒" labelPosition='after' className={mergeClasses(classes.listItem, classes.radio)} input={{ className: classes.radioInput }} />
         </RadioGroup>
         <div className={classes.sectionHeader}>详细设置</div>
         <div className={classes.list}>
