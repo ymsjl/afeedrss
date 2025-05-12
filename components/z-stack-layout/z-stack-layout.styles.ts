@@ -2,7 +2,8 @@ import { makeStyles, tokens } from "@fluentui/react-components";
 
 export const useClasses = makeStyles({
   stackLayer: {
-    transition: "all 0.2s ease-in-out",
+    transition: "transform 0.2s ease-in-out",
+    willChange: "transform",
     transform: "translateX(0)",
     opacity: 1,
   },

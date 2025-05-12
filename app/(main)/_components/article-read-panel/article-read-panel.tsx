@@ -7,7 +7,6 @@ import {
   createMotionComponent,
   motionTokens,
   MotionImperativeRef,
-  createPresenceComponent,
 } from "@fluentui/react-components";
 import { useCommonClasses, useFlexClasses } from "@/theme/commonStyles";
 import dayjs from "@utils/dayjs";
@@ -48,7 +47,7 @@ const FadeSlideUp = createMotionComponent({
   },
 });
 
-export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ className, showBackButton = true, animated=true }) => {
+export const ArticleReadPanel: React.FC<ArticleReadPanelProps> = React.memo(({ className, showBackButton = true, animated = true }) => {
   const classes = useClasses();
   const proseClasses = useProseClasses();
   const flexClasses = useFlexClasses();
