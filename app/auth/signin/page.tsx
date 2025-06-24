@@ -4,6 +4,7 @@ import React from "react";
 import { signIn } from "next-auth/react";
 import {
   Button,
+  Text,
   makeStyles,
   mergeClasses,
   tokens,
@@ -11,11 +12,11 @@ import {
 import { useTextClasses, useFlexClasses } from "../../../theme/commonStyles";
 import Image from "next/image";
 import { Planet } from "./planet";
+import { appTokens } from "@/theme/tokens";
 
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    justifyContent: "center",
     flexDirection: "column",
     alignItems: "center",
     width: "100vw",
@@ -27,19 +28,27 @@ const useStyles = makeStyles({
     flexDirection: "column",
     textAlign: "center",
     gap: tokens.spacingVerticalL,
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderRadius: tokens.borderRadiusLarge,
-    boxShadow: tokens.shadow16,
     paddingInline: tokens.spacingHorizontalXXXL,
     paddingBlockStart: tokens.spacingVerticalXXL,
     paddingBlockEnd: tokens.spacingVerticalXXXL,
-    minHeight: "420px",
+    flex: '1',
+    height: '100%',
     minWidth: "350px",
+    [appTokens.breakpoints.medium]: {
+      flex: 'unset',
+      backgroundColor: tokens.colorNeutralBackground1,
+      borderRadius: tokens.borderRadiusXLarge,
+      marginBlockStart: "24vh",
+      border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
+      minHeight: "420px",
+    },
   },
   middle: {
     paddingBlock: tokens.spacingVerticalXL,
   },
-  title: {},
+  title: {
+    textAlign: 'center'
+  },
   button: {
     width: "100%",
   },
@@ -51,11 +60,9 @@ export default function SignIn() {
   const flexClassess = useFlexClasses();
 
   return (
-    <div className={mergeClasses(classes.container, flexClassess.flexCenter)}>
+    <div className={mergeClasses(classes.container)}>
       <div className={classes.authCard}>
-        <div className={mergeClasses(classes.title, textClasses.textLg)}>
-          登录
-        </div>
+        <Text className={mergeClasses(classes.title)} size={400}>登录</Text>
         <div className={mergeClasses(flexClassess.flexGrow, flexClassess.flexCenter, classes.middle)}>
           <Planet />
         </div>
